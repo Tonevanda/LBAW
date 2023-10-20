@@ -1,64 +1,51 @@
-PRAGMA foreign_keys = ON;
-
-DROP TABLE IF EXISTS user;
-DROP TABLE IF EXISTS admin;
-DROP TABLE IF EXISTS authenticated;
-DROP TABLE IF EXISTS currency;
-DROP TABLE IF EXISTS wallet;
-DROP TABLE IF EXISTS unblock_appeal;
-DROP TABLE IF EXISTS notification;
-DROP TABLE IF EXISTS authenticated_notification;
-DROP TABLE IF EXISTS product;
-DROP TABLE IF EXISTS shopping_cart;
-DROP TABLE IF EXISTS wishlist;
-DROP TABLE IF EXISTS purchase;
-DROP TABLE IF EXISTS payment;
-DROP TABLE IF EXISTS stage;
-DROP TABLE IF EXISTS purchase_history;
-DROP TABLE IF EXISTS statistic;
-DROP TABLE IF EXISTS product_statistic;
-DROP TABLE IF EXISTS category;
-DROP TABLE IF EXISTS product_category;
-DROP TABLE IF EXISTS review;
 DROP TABLE IF EXISTS review_report;
+DROP TABLE IF EXISTS review;
+DROP TABLE IF EXISTS product_category;
+DROP TABLE IF EXISTS product_statistic;
+DROP TABLE IF EXISTS purchase_product;
+DROP TABLE IF EXISTS purchase;
+DROP TABLE IF EXISTS wishlist;
+DROP TABLE IF EXISTS shopping_cart;
+DROP TABLE IF EXISTS product;
+DROP TABLE IF EXISTS authenticated_notification;
+DROP TABLE IF EXISTS unblock_appeal;
+DROP TABLE IF EXISTS wallet;
+DROP TABLE IF EXISTS authenticated;
+DROP TABLE IF EXISTS admin;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS category;
+DROP TABLE IF EXISTS statistic;
+DROP TABLE IF EXISTS stage;
+DROP TABLE IF EXISTS payment;
+DROP TABLE IF EXISTS currency;
+DROP TABLE IF EXISTS notification;
 
-CREATE TYPE notification_type AS ENUM ('PaymentNotification', 'InStockNotification', 'PurchaseInfoNotification', 'PriceChangeNotification');
-
-CREATE TYPE currency_type AS ENUM ('EuroCurrency', 'PoundCurrency', 'DollarCurrency', 'RupeeCurrency');
-
-CREATE TYPE payment_type AS ENUM ('StoreMoneyPayment', 'In stock', 'Purchase Info', 'Price change');
-
-CREATE TYPE stage_state AS ENUM ('PurchasedStage', 'In stock', 'Purchase Info', 'ArrivedStage');
-
-CREATE TYPE category_type AS ENUM ('FictionCategory', 'Non-FictionCategory', 'MysteryCategory', 'RomanceCategory' , 'ComicsCategory' , 'HorrorCategory');
-
-CREATE TABLE notification (
-    TYPE notification_type PRIMARY KEY,
+CREATE TABLE notification(
+    notification_type TEXT PRIMARY KEY,
     description TEXT NOT NULL
 );
 
-CREATE TABLE currency (
-    TYPE currency_type PRIMARY KEY
+CREATE TABLE currency(
+    currency_type TEXT PRIMARY KEY
 );
 
-CREATE TABLE payment (
-    TYPE payment_type PRIMARY KEY
+CREATE TABLE payment(
+    payment_type TEXT PRIMARY KEY
 );
 
-CREATE TABLE stage (
-    TYPE stage_state PRIMARY KEY
+CREATE TABLE stage(
+    stage_state TEXT PRIMARY KEY
 );
 
-CREATE TABLE statistic (
-    TYPE statistic_type PRIMARY KEY,
-    result INTEGER NOT NULL
+CREATE TABLE statistic(
+    statistic_type TEXT PRIMARY KEY
 );
 
-CREATE TABLE category (
-    TYPE category_type PRIMARY KEY
+CREATE TABLE category(
+    category_type TEXT PRIMARY KEY
 );
 
-CREATE TABLE user (
+CREATE TABLE users(
     id SERIAL PRIMARY KEY,
     name TEXT NOT NULL,
     password TEXT NOT NULL,
@@ -66,26 +53,26 @@ CREATE TABLE user (
     profile_picture TEXT
 );
 
-CREATE TABLE admin (
-    admin_id INTEGER PRIMARY KEY REFERENCES user (id) ON UPDATE CASCADE
+CREATE TABLE admin(
+    admin_id INTEGER PRIMARY KEY REFERENCES users (id) ON UPDATE CASCADE
 );
 
-CREATE TABLE authenticated (
-    user_id INTEGER PRIMARY KEY REFERENCES user (id) ON UPDATE CASCADE,
+CREATE TABLE authenticated(
+    user_id INTEGER PRIMARY KEY REFERENCES users (id) ON UPDATE CASCADE,
     adress TEXT,
     isBlocked BOOLEAN DEFAULT FALSE
 );
 
 
-CREATE TABLE wallet (
-    id INTEGER PRIMARY KEY REFERENCES authenticated (user_id) ON UPDATE CASCADE,
+CREATE TABLE wallet(
+    user_id INTEGER PRIMARY KEY REFERENCES authenticated (user_id) ON UPDATE CASCADE,
     money INTEGER DEFAULT 0,
-    TYPE currency_type NOT NULL REFERENCES currency (currency_type) ON UPDATE CASCADE,
+    currency_type TEXT NOT NULL REFERENCES currency (currency_type) ON UPDATE CASCADE,
     transaction_date TIMESTAMP WITH TIME ZONE
 );
 
 
-CREATE TABLE unblock_appeal (
+CREATE TABLE unblock_appeal(
     id SERIAL PRIMARY KEY,
     user_id INTEGER NOT NULL REFERENCES authenticated (user_id) ON UPDATE CASCADE,
     title TEXT NOT NULL,
@@ -94,13 +81,13 @@ CREATE TABLE unblock_appeal (
 );
 
 
-CREATE TABLE authenticated_notification (
+CREATE TABLE authenticated_notification(
     user_id INTEGER REFERENCES authenticated (user_id) ON UPDATE CASCADE,
-    TYPE notification_type REFERENCES notification (notification_type) ON UPDATE CASCADE,
+    notification_type TEXT REFERENCES notification (notification_type) ON UPDATE CASCADE,
     PRIMARY KEY (user_id, notification_type)
 );
 
-CREATE TABLE product (
+CREATE TABLE product(
     id SERIAL PRIMARY KEY,
     name TEXT NOT NULL,
     synopsis TEXT NOT NULL,
@@ -109,36 +96,36 @@ CREATE TABLE product (
     stock INTEGER NOT NULL CONSTRAINT stock_ck CHECK (stock >= 0),
     author TEXT DEFAULT 'anonymous' NOT NULL,
     editor TEXT DEFAULT 'self published' NOT NULL,
-    language NOT NULL,
-    image,
-    date TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL
+    language TEXT NOT NULL,
+    image TEXT
 );
 
-CREATE TABLE shopping_cart (
+CREATE TABLE shopping_cart(
     user_id INTEGER REFERENCES authenticated (user_id) ON UPDATE CASCADE,
     product_id INTEGER REFERENCES product (id) ON UPDATE CASCADE,
     PRIMARY KEY (user_id, product_id)
 );
 
-CREATE TABLE wishlist (
+CREATE TABLE wishlist(
     user_id INTEGER REFERENCES authenticated (user_id) ON UPDATE CASCADE,
     product_id INTEGER REFERENCES product (id) ON UPDATE CASCADE,
     PRIMARY KEY (user_id, product_id)
 );
 
-CREATE TABLE purchase (
+CREATE TABLE purchase(
     id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES authenticated (user_id) ON UPDATE CASCADE,
     price INTEGER NOT NULL,
-    quantity NOT NULL CONSTRAINT quantity_ck CHECK (quantity > 0),
-    TYPE payment_type NOT NULL,
+    quantity INTEGER NOT NULL CONSTRAINT quantity_ck CHECK (quantity > 0),
+    payment_type TEXT NOT NULL REFERENCES payment (payment_type) ON UPDATE CASCADE,
     destination TEXT NOT NULL,
-    TYPE stage_state NOT NULL,
+    stage_state TEXT NOT NULL REFERENCES stage (stage_state) ON UPDATE CASCADE,
     orderedAt TIMESTAMP WITH TIME ZONE NOT NULL,
-    orderArrivedAt TIMESTAMP WITH TIME ZONE CONSTRAINT order_ck CHECK (orderArrivedAt > orderedAt) 
+    orderArrivedAt TIMESTAMP WITH TIME ZONE NOT NULL CONSTRAINT order_ck CHECK (orderArrivedAt > orderedAt) 
 );
 
 
-CREATE TABLE purchase_history (
+CREATE TABLE purchase_product(
     purchase_id INTEGER REFERENCES purchase (id) ON UPDATE CASCADE,
     product_id INTEGER REFERENCES product (id) ON UPDATE CASCADE,
     quantity INTEGER NOT NULL CONSTRAINT quantity_ck CHECK (quantity > 0),
@@ -147,32 +134,72 @@ CREATE TABLE purchase_history (
 );
 
 
-CREATE TABLE product_statistic (
+CREATE TABLE product_statistic(
     product_id INTEGER REFERENCES product (id) ON UPDATE CASCADE,
-    TYPE statistic_type REFERENCES statistic (statistic_type) ON UPDATE CASCADE
+    statistic_type TEXT REFERENCES statistic (statistic_type) ON UPDATE CASCADE,
+    result INTEGER NOT NULL,
     PRIMARY KEY (product_id, statistic_type)
 );
 
 
-CREATE TABLE product_category (
-    product_id INTEGER REFERENCES product (id),
-    TYPE category_type REFERENCES category (category_type),
+CREATE TABLE product_category(
+    product_id INTEGER REFERENCES product (id) ON UPDATE CASCADE,
+    category_type TEXT REFERENCES category (category_type) ON UPDATE CASCADE,
     PRIMARY KEY (product_id, category_type)
 );
 
-CREATE TABLE review (
+CREATE TABLE review(
     id SERIAL PRIMARY KEY,
-    user_id INTEGER NOT NULL REFERENCES authenticated (user_id),
+    user_id INTEGER NOT NULL REFERENCES authenticated (user_id) ON UPDATE CASCADE,
+    product_id INTEGER NOT NULL REFERENCES product (id) ON UPDATE CASCADE,
     title TEXT NOT NULL,
     description TEXT,
-    rating INTEGER CONSTRAINT rating_ck (((0 <=rating) OR (rating >= 5))),
+    rating INTEGER CONSTRAINT rating_ck CHECK (((0 <= rating) AND (rating <= 5))),
     date TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL
 );
 
-CREATE TABLE review_report (
+CREATE TABLE review_report(
     id SERIAL PRIMARY KEY,
-    review_id INTEGER NOT NULL REFERENCES review (id),
+    review_id INTEGER NOT NULL REFERENCES review (id) ON UPDATE CASCADE,
     motive TEXT NOT NULL,
     date TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL
 );
 
+CREATE INDEX orderedAt_purchase ON purchase USING btree (orderedAt);
+
+CREATE INDEX product_review ON review USING hash (product_id);
+
+CREATE INDEX purchase_user_id ON purchase USING hash (user_id);
+
+ALTER TABLE product
+ADD COLUMN tsvectors TSVECTOR;       
+
+CREATE FUNCTION product_FTS_update() RETURNS TRIGGER AS $$
+BEGIN
+ IF TG_OP = 'INSERT' THEN
+        NEW.tsvectors = (
+         setweight(to_tsvector('english', NEW.title), 'A') ||
+         setweight(to_tsvector('english', NEW.author), 'B')||
+         setweight(to_tsvector('english', NEW.editor), 'C')||
+         setweight(to_tsvector('english', NEW.synopsis), 'D')
+        );
+ END IF;
+ IF TG_OP = 'UPDATE' THEN
+         IF (NEW.title <> OLD.title OR NEW.obs <> OLD.obs) THEN
+           NEW.tsvectors = (
+             setweight(to_tsvector('english', NEW.title), 'A') ||
+             setweight(to_tsvector('english', NEW.obs), 'B')
+           );
+         END IF;
+ END IF;
+ RETURN NEW;
+END $$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER product_FTS_update_trigger
+ BEFORE INSERT OR UPDATE ON product
+ FOR EACH ROW
+ EXECUTE PROCEDURE product_FTS_update();
+
+
+CREATE INDEX fts_index ON product USING GIN (tsvectors);
