@@ -12,13 +12,13 @@ file = open('proj/populate.sql',"w")
 
 # Notification 
 notification_types = ['payment_notification', 'instock_notification','purchaseinfo_notification','pricechange_notification']
-notification_descriptions = [['Your payment has been successful','Your payment has failed, please try again'], 'An item on your wishlist is currently in stock', "Thank you for purchasing at our store, this is your purchase's information:", "An item on your wishlist has had its price changed"]
+notification_descriptions = [['Your payment has been successful','Your payment has failed, please try again'], 'An item on your wishlist is currently in stock', "Thank you for purchasing at our store, this is your purchase information:", "An item on your wishlist has had its price changed"]
 
-file.write(f'INSERT INTO notification VALUES("{notification_types[0]}","{notification_descriptions[0][0]}");\n')
-file.write(f'INSERT INTO notification VALUES("{notification_types[0]}","{notification_descriptions[0][1]}");\n')
-file.write(f'INSERT INTO notification VALUES("{notification_types[1]}","{notification_descriptions[1]}");\n')
-file.write(f'INSERT INTO notification VALUES("{notification_types[2]}","{notification_descriptions[2]}");\n')
-file.write(f'INSERT INTO notification VALUES("{notification_types[3]}","{notification_descriptions[3]}");\n')
+file.write(f"INSERT INTO notification VALUES('{notification_types[1]}','{notification_descriptions[0][0]}');\n")
+file.write(f"INSERT INTO notification VALUES('{notification_types[1]}','{notification_descriptions[0][1]}');\n")
+file.write(f"INSERT INTO notification VALUES('{notification_types[1]}','{notification_descriptions[1]}');\n")
+file.write(f"INSERT INTO notification VALUES('{notification_types[2]}','{notification_descriptions[2]}');\n")
+file.write(f"INSERT INTO notification VALUES('{notification_types[3]}','{notification_descriptions[3]}');\n")
 
 file.write("\n")
 
@@ -26,7 +26,7 @@ file.write("\n")
 currency_types = ['euro', 'pound','dollar','rupee','yen']
 
 for currency in currency_types:
-    file.write(f'INSERT INTO currency VALUES("{currency}");\n')    
+    file.write(f"INSERT INTO currency VALUES('{currency}');\n")    
 
 file.write("\n")
 
@@ -34,7 +34,7 @@ file.write("\n")
 payment_types = ['paypal','credit/debit card','store money']
 
 for payment in payment_types:
-    file.write(f'INSERT INTO payment VALUES("{payment}");\n')    
+    file.write(f"INSERT INTO payment VALUES('{payment}');\n")    
 
 file.write("\n")
 
@@ -42,7 +42,7 @@ file.write("\n")
 stages = ['payment','order','transportation','delivered']
 
 for stage in stages:
-    file.write(f'INSERT INTO stage VALUES("{stage}");\n') 
+    file.write(f"INSERT INTO stage VALUES('{stage}');\n") 
 
 file.write("\n")
 
@@ -50,7 +50,7 @@ file.write("\n")
 statistic_types = ['sales','revenue','AOV','returnrate']
 
 for statistic in statistic_types:
-    file.write(f'INSERT INTO statistic VALUES("{statistic}");\n') 
+    file.write(f"INSERT INTO statistic VALUES('{statistic}');\n") 
 
 file.write("\n")
 
@@ -58,7 +58,7 @@ file.write("\n")
 categories = ['fiction','non-fiction','mystery','romance','comics','horror']
 
 for category in categories:
-    file.write(f'INSERT INTO category VALUES("{category}");\n') 
+    file.write(f"INSERT INTO category VALUES('{category}');\n") 
 
 file.write("\n")
 
@@ -141,7 +141,7 @@ def generate_random_email():
     return email
 
 for i in range(100):
-    file.write(f'INSERT INTO users(name,password,email) VALUES("{generate_random_username()}","{generate_random_password()}","{generate_random_email()}");\n') 
+    file.write(f"INSERT INTO users(name,password,email) VALUES('{generate_random_username()}','{generate_random_password()}','{generate_random_email()}');\n") 
 
 file.write("\n")
 
@@ -413,14 +413,14 @@ def generate_random_address():
     return address
 
 for i in range(5,100):
-    file.write(f'INSERT INTO authenticated(user_id,address,isBlocked) VALUES({i},"{generate_random_address()}","{random.choice(["TRUE","FALSE"])}");\n')
+    file.write(f"INSERT INTO authenticated(user_id,address,isBlocked) VALUES({i},'{generate_random_address()}','{random.choice(['TRUE','FALSE'])}');\n")
 
 file.write("\n")
 
 # wallet
 
 for i in range(5,100):
-    file.write(f'INSERT INTO wallet(user_id,money,currency_type) VALUES({i},{random.randrange(0,10000)},"{random.choice(currency_types)}");\n')
+    file.write(f"INSERT INTO wallet(user_id,money,currency_type) VALUES({i},{random.randrange(0,10000)},'{random.choice(currency_types)}');\n")
 
 file.write("\n")
 
@@ -498,14 +498,14 @@ def generate_random__unblock_description():
 
 
 for i in range(5,100):
-    file.write(f'INSERT INTO unblock_appeal(user_id,title,description) VALUES({i},"{generate_random_unblock_title()}","{generate_random__unblock_description()}");\n')
+    file.write(f"INSERT INTO unblock_appeal(user_id,title,description) VALUES({i},'{generate_random_unblock_title()}','{generate_random__unblock_description()}');\n")
 
 file.write("\n")
 
 # authenticated_notification
 
 for i in range(100):
-    file.write(f'INSERT INTO authenticated_notification(user_id,notification_type) VALUES({random.randint(5,100)},"{random.choice(notification_types)}");\n')
+    file.write(f"INSERT INTO authenticated_notification(user_id,notification_type) VALUES({random.randint(5,100)},'{random.choice(notification_types)}');\n")
 
 file.write("\n")
 
@@ -542,7 +542,7 @@ for i in range(500):
     author = generate_random_username()
     editor = generate_random_username()
     language = random.choice(languages)
-    file.write(f'INSERT INTO product(name,synopsis,price,discount,stock,author,editor,language) VALUES("{name}","{synopsis}",{price},{discount},{stock},"{author}","{editor}","{language}");\n')
+    file.write(f"INSERT INTO product(name,synopsis,price,discount,stock,author,editor,language) VALUES('{name}','{synopsis}',{price},{discount},{stock},'{author}','{editor}','{language}');\n")
 
 file.write("\n")
 
@@ -557,6 +557,8 @@ file.write("\n")
 
 for i in range(5,101):
     file.write(f'INSERT INTO wishlist(user_id, product_id) VALUES({i},{random.randint(1,499)});\n')
+
+file.write("\n")
 
 # purchase
 
@@ -579,7 +581,9 @@ for i in range(200):
     orderArrivedAt = generate_random_timestamp()
     while(orderArrivedAt < orderedAt):
         orderArrivedAt = generate_random_timestamp()
-    file.write(f'INSERT INTO purchase(user_id, price,quantity,payment_type,destination,stage_state,orderedAt,orderArrivedAt) VALUES({user_id},{price},{quantity},"{payment}","{destination}","{state}",{orderedAt},{orderArrivedAt});\n')
+    file.write(f"INSERT INTO purchase(user_id, price,quantity,payment_type,destination,stage_state,orderedAt,orderArrivedAt) VALUES({user_id},{price},{quantity},'{payment}','{destination}','{state}',{orderedAt},{orderArrivedAt});\n")
+
+file.write("\n")
 
 # purchase product
 
@@ -588,18 +592,24 @@ for i in range(300):
     product_id = random.randint(1,499)
     quantity = random.randint(1,50)
     price = random.randint(1,200)
-    file.write(f'INSERT INTO purchase_product(purchase_id,product_id,quantity,price) VALUES({purchase_id},{product_id},{quantity},{price});\n')
+    file.write(f"INSERT INTO purchase_product(purchase_id,product_id,quantity,price) VALUES({purchase_id},{product_id},{quantity},{price});\n")
+
+file.write("\n")
 
 #product statistic
 
 for i in range(500):
     for statistic_type in statistic_types:
-        file.write(f'INSERT INTO product_statistic(product_id,statistic_type,result) VALUES({i},"{statistic_type}",{random.randint(0,4567)});\n')
+        file.write(f"INSERT INTO product_statistic(product_id,statistic_type,result) VALUES({i},'{statistic_type}',{random.randint(0,4567)});\n")
+
+file.write("\n")
 
 #product category
 
 for i in range(500):
-    file.write(f'INSERT INTO product_category(product_id,category_type) VALUES({i},"{random.choice(categories)}");\n')
+    file.write(f"INSERT INTO product_category(product_id,category_type) VALUES({i},'{random.choice(categories)}');\n")
+
+file.write("\n")
 
 # review
 
@@ -610,12 +620,14 @@ for i in range(200):
     description = generate_random__unblock_description()
     rating = random.randint(1,5)
     date = generate_random_timestamp()
-    file.write(f'INSERT INTO review(user_id,product_id,title,description,rating,date) VALUES({user_id},{product_id},"{title}","{description}",{rating},{date});\n')
+    file.write(f"INSERT INTO review(user_id,product_id,title,description,rating,date) VALUES({user_id},{product_id},'{title}','{description}',{rating},{date});\n")
+
+file.write("\n")
 
 # review report
 
 for i in range(20):
-    file.write(f'INSERT INTO review_report(review_id,motive,date) VALUES({random.randint(1,199)},"{generate_random__unblock_description()},{generate_random_timestamp()}");\n')
+    file.write(f"INSERT INTO review_report(review_id,motive,date) VALUES({random.randint(1,199)},'{generate_random__unblock_description()}',{generate_random_timestamp()});\n")
 
 
 file.close()
