@@ -1,3 +1,7 @@
+create schema if not exists lbaw2315;
+
+-- DROP TABLES
+
 DROP TABLE IF EXISTS review_report;
 DROP TABLE IF EXISTS review;
 DROP TABLE IF EXISTS product_category;
@@ -19,6 +23,8 @@ DROP TABLE IF EXISTS stage;
 DROP TABLE IF EXISTS payment;
 DROP TABLE IF EXISTS currency;
 DROP TABLE IF EXISTS notification;
+
+-- TABLES
 
 CREATE TABLE notification(
     notification_type TEXT PRIMARY KEY,
@@ -165,11 +171,15 @@ CREATE TABLE review_report(
     date TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL
 );
 
+--INDEXES
+
 CREATE INDEX orderedAt_purchase ON purchase USING btree (orderedAt);
 
 CREATE INDEX product_review ON review USING hash (product_id);
 
 CREATE INDEX purchase_user_id ON purchase USING hash (user_id);
+
+-- FTS INDEXES
 
 ALTER TABLE product
 ADD COLUMN tsvectors TSVECTOR;       
