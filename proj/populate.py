@@ -573,7 +573,7 @@ def generate_random_timestamp():
     timezone_offset = random.randint(0, 12)
     
     # Format the timestamp with the timezone offset
-    formatted_timestamp = random_timestamp.strftime(f"%Y-%m-%d %H:%M:%S+0{timezone_offset}")
+    formatted_timestamp = random_timestamp.strftime(f"'%Y-%m-%d %H:%M:%S+0{timezone_offset}'")
     
     return formatted_timestamp
 
