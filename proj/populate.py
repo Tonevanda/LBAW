@@ -568,7 +568,14 @@ def generate_random_timestamp():
     time_difference = end_date - start_date
     random_seconds = random.randint(0, time_difference.total_seconds())
     random_timestamp = start_date + timedelta(seconds=random_seconds)
-    return random_timestamp.strftime("%Y-%m-%d %H:%M:%S")
+    
+    # Generate a random timezone offset between -12 and +12
+    timezone_offset = random.randint(0, 12)
+    
+    # Format the timestamp with the timezone offset
+    formatted_timestamp = random_timestamp.strftime(f"%Y-%m-%d %H:%M:%S+0{timezone_offset}")
+    
+    return formatted_timestamp
 
 for i in range(200):
     user_id = random.randint(5,100)
