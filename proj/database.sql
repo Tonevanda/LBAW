@@ -50,7 +50,7 @@ CREATE TABLE users(
     name TEXT NOT NULL,
     password TEXT NOT NULL,
     email TEXT NOT NULL CONSTRAINT email_ck UNIQUE,
-    profile_picture TEXT
+    profile_picture TEXT DEFAULT '../images/default_images/default_user_image'
 );
 
 CREATE TABLE admin(
@@ -150,7 +150,7 @@ CREATE TABLE product_category(
 
 CREATE TABLE review(
     id SERIAL PRIMARY KEY,
-    user_id INTEGER NOT NULL REFERENCES authenticated (user_id) ON UPDATE CASCADE,
+    user_id INTEGER NOT NULL REFERENCES users (id) ON UPDATE CASCADE,
     product_id INTEGER NOT NULL REFERENCES product (id) ON UPDATE CASCADE,
     title TEXT NOT NULL,
     description TEXT,
@@ -174,7 +174,7 @@ CREATE INDEX purchase_user_id ON purchase USING hash (user_id);
 ALTER TABLE product
 ADD COLUMN tsvectors TSVECTOR;       
 
-CREATE FUNCTION product_FTS_update() RETURNS TRIGGER AS $$
+CREATE OR REPLACE FUNCTION product_FTS_update() RETURNS TRIGGER AS $$
 BEGIN
  IF TG_OP = 'INSERT' THEN
         NEW.tsvectors = (
@@ -203,3 +203,39 @@ CREATE TRIGGER product_FTS_update_trigger
 
 
 CREATE INDEX fts_index ON product USING GIN (tsvectors);
+
+CREATE OR REPLACE FUNCTION manage_deleted_account() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+        UPDATE users
+        SET name = 'Deleted Account', profile_picture = '../images/default_images/default_user_image'
+    
+        WHERE users.id = OLD.user_id;
+        RETURN OLD;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER manage_deleted_account_trigger
+        BEFORE DELETE ON authenticated
+        FOR EACH ROW
+        EXECUTE PROCEDURE manage_deleted_account();
+
+CREATE OR REPLACE FUNCTION check_admin_purchase() RETURNS TRIGGER AS
+$BODY$
+BEGIN
+        IF EXISTS (SELECT * FROM purchase WHERE NEW.user_id = user_id) THEN
+            RAISE EXCEPTION 'An administrator can not make a purchase';
+        END IF;
+        RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER check_admin_purchase_trigger
+        BEFORE INSERT OR UPDATE ON purchase
+        FOR EACH ROW
+        EXECUTE PROCEDURE check_admin_purchase();
+
+
+

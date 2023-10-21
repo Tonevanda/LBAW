@@ -1,0 +1,21 @@
+BEGIN TRANSACTION;
+
+SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+
+INSERT INTO users (id, name, password, email, profile_picture) VALUES ($user_id, $name, $password, $email, $profile_picture);
+
+INSERT INTO authenticated (user_id, adress, isBlocked) VALUES ($user_id, $adress, false);
+
+INSERT INTO wallet (user_id, money, currency_type, transaction_date) VALUES ($user_id, DEFAULT, $currency_type, NULL);
+
+
+COMMIT;
+
+BEGIN TRANSACTION;
+
+SET TRANSACTION ISOLATION LEVEL READ COMMITED READ ONLY;
+
+SELECT * FROM product LIMIT $1
+
+
+COMMIT;
