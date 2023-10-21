@@ -56,7 +56,7 @@ CREATE TABLE users(
     name TEXT NOT NULL,
     password TEXT NOT NULL,
     email TEXT NOT NULL CONSTRAINT email_ck UNIQUE,
-    profile_picture TEXT DEFAULT '../images/default_images/default_user_image'
+    profile_picture TEXT DEFAULT 'df_user_image' NOT NULL --depois quando se faz o pedido à db concatenamos .png no final
 );
 
 CREATE TABLE admin(
@@ -65,7 +65,7 @@ CREATE TABLE admin(
 
 CREATE TABLE authenticated(
     user_id INTEGER PRIMARY KEY REFERENCES users (id) ON UPDATE CASCADE,
-    adress TEXT,
+    address TEXT,
     isBlocked BOOLEAN DEFAULT FALSE
 );
 
@@ -88,9 +88,11 @@ CREATE TABLE unblock_appeal(
 
 
 CREATE TABLE authenticated_notification(
+    id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES authenticated (user_id) ON UPDATE CASCADE,
     notification_type TEXT REFERENCES notification (notification_type) ON UPDATE CASCADE,
-    PRIMARY KEY (user_id, notification_type)
+    date TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL,
+    isNew BOOLEAN DEFAULT FALSE NOT NULL
 );
 
 CREATE TABLE product(
@@ -98,12 +100,12 @@ CREATE TABLE product(
     name TEXT NOT NULL,
     synopsis TEXT NOT NULL,
     price INTEGER NOT NULL CONSTRAINT price_ck CHECK (price >= 0),
-    discount INTEGER CONSTRAINT discount_ck CHECK (discount < price),
+    discount INTEGER DEFAULT 0 CONSTRAINT discount_ck CHECK (discount < price),
     stock INTEGER NOT NULL CONSTRAINT stock_ck CHECK (stock >= 0),
     author TEXT DEFAULT 'anonymous' NOT NULL,
     editor TEXT DEFAULT 'self published' NOT NULL,
     language TEXT NOT NULL,
-    image TEXT
+    image TEXT DEFAULT 'df_product_image' NOT NULL
 );
 
 CREATE TABLE shopping_cart(
