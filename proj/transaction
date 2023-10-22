@@ -1,21 +1,217 @@
+---- BEGIN INSERTING AUTHENTICATED USER TRANSACTION ------
+
 BEGIN TRANSACTION;
 
 SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
 
-INSERT INTO users (id, name, password, email, profile_picture) VALUES ($user_id, $name, $password, $email, $profile_picture);
+DO $BODY$
+DECLARE
+    user_name text := 'test_dummy_name';
+    user_password text := 'test_dummy_password';
+    user_email text := 'test_dummy_email';
+    user_adress text := 'test_dummy_adress';
 
-INSERT INTO authenticated (user_id, adress, isBlocked) VALUES ($user_id, $adress, false);
+BEGIN
 
-INSERT INTO wallet (user_id, money, currency_type, transaction_date) VALUES ($user_id, DEFAULT, $currency_type, NULL);
+    EXECUTE 'INSERT INTO users (name, password, email, profile_picture) 
+    VALUES ($1, $2, $3, DEFAULT)' USING user_name, user_password, user_email;
+
+    EXECUTE 'INSERT INTO authenticated (user_id, address, isBlocked) 
+    VALUES ((SELECT id FROM users WHERE email = $1), $2, DEFAULT)' USING user_email, user_adress;
+
+    INSERT INTO wallet (user_id, money, currency_type, transaction_date) 
+    VALUES ((SELECT id FROM users WHERE email = user_email), DEFAULT, 'Euro', NULL);
+
+EXCEPTION
+    WHEN others THEN
+        ROLLBACK;
+
+END;
+$BODY$
+LANGUAGE plpgsql;
 
 
-COMMIT;
+END TRANSACTION;
+
+---- END INSERTING AUTHENTICATED USER TRANSACTION   ------
+
+---- BEGIN INSERTING ADMIN TRANSACTION ------
+BEGIN TRANSACTION;
+
+SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+
+DO $BODY$
+DECLARE
+    admin_name text := 'test_admin_dummy_name';
+    admin_password text := 'test_admin_dummy_password';
+    admin_email text := 'test_admin_dummy_email';
+    admin_adress text := 'test_admin_dummy_adress';
+
+BEGIN
+
+    EXECUTE 'INSERT INTO users (name, password, email, profile_picture) 
+    VALUES ($1, $2, $3, DEFAULT)' USING admin_name, admin_password, admin_email;
+
+    EXECUTE 'INSERT INTO admin (admin_id) 
+    VALUES ((SELECT id FROM users WHERE email = $1))' USING admin_email;
+
+EXCEPTION
+    WHEN others THEN
+        ROLLBACK;
+
+END;
+$BODY$
+LANGUAGE plpgsql;
+
+
+END TRANSACTION;
+
+---- END INSERTING ADMIN TRANSACTION   ------
+
+---- BEGIN PRODUCT SEARCH AND DISPLAY TRANSACTION ------
 
 BEGIN TRANSACTION;
 
-SET TRANSACTION ISOLATION LEVEL READ COMMITED READ ONLY;
+SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
 
-SELECT * FROM product LIMIT $1
+DO $BODY$
+DECLARE
+        filter_query TEXT := '';
+        price_filter INTEGER := 10;
+        category_filter TEXT := 'Drama';
+        name_filter TEXT := ' game of dauh aduohdusah oasi asoi sdaida iasdasid ippdasda ipasds ipdasd pia apsisa paspa ';
+        name_filter_array TEXT[];
+        i INTEGER := 1;
+        query_record record;
+BEGIN
+        IF price_filter IS NOT NULL THEN
+            filter_query := filter_query || ' AND price <= ' || price_filter;
+        END IF;
+        IF category_filter IS NOT NULL THEN
+            filter_query := filter_query || ' AND category_type = ' 
+            || quote_literal(category_filter);
+        END IF;
+        IF name_filter IS NOT NULL THEN 
+            name_filter_array := regexp_split_to_array(name_filter, '\s+');
+            name_filter_array := array_remove(name_filter_array, '');
+            name_filter := '';
+            WHILE i <= array_length(name_filter_array, 1) LOOP
+                IF name_filter = '' THEN
+                    name_filter := name_filter_array[i];
+                ELSE 
+                    name_filter := name_filter || ' & ' || name_filter_array[i];
+                END IF;
+                IF i = array_length(name_filter_array, 1) THEN
+                        name_filter := name_filter || ':*';
+                        name_filter := filter_query || ' AND tsvectors @@ to_tsquery(' 
+                        || quote_literal('english') || ', ' || quote_literal(name_filter) || 
+                        ') ORDER BY ts_rank(tsvectors, to_tsquery(' || quote_literal('english') || ', ' || quote_literal(name_filter) || ')) DESC';
+
+                        EXECUTE 'SELECT name, id, price, discount, stock, author, editor, image, category_type
+                            FROM product 
+                            INNER JOIN product_category ON product_category.product_id = product.id 
+                            WHERE 1=1' || name_filter
+                            INTO query_record;
+
+          
+                            
+                        IF query_record IS NOT NULL THEN
+                            EXIT;
+                        ELSE
+                            name_filter_array := array_remove(name_filter_array, name_filter_array[i]);
+                            i := 0;
+                            name_filter := '';
+                        END IF;
+                END IF;
+                i := i+1;
+            END LOOP; 
+        ELSE
+            EXECUTE 'SELECT name, id, price, discount, stock, author, editor, image, category_type
+                            FROM product 
+                            INNER JOIN product_category ON product_category.product_id = product.id 
+                            WHERE 1=1' || filter_query
+                            INTO query_record;
+        END IF;
+END;
+$BODY$
+LANGUAGE plpgsql;
+END TRANSACTION;
+
+---- END PRODUCT SEARCH AND DISPLAY TRANSACTION   ------
+
+---- BEGIN DELETE AUTHENTICATED USER  ------
+
+BEGIN TRANSACTION;
+
+SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+DO $BODY$
+DECLARE
+    deleted_user_email TEXT := 'test_dummy_email';
+    deleted_user_id INTEGER;
+BEGIN
+    EXECUTE 'SELECT user_id FROM authenticated INNER JOIN users ON users.id = authenticated.user_id WHERE email = $1' INTO deleted_user_id USING deleted_user_email;
+
+    IF deleted_user_id IS NOT NULL THEN
+        EXECUTE 'DELETE FROM authenticated
+         WHERE user_id = $1' USING deleted_user_id;
+
+    ELSE
+        
+        ROLLBACK;
+    END IF;
+END;
+$BODY$
+LANGUAGE plpgsql;
+
+END TRANSACTION;
+
+---- END INSERTING ADMIN TRANSACTION   ------
+
+---- BEGIN PURCHASE TRANSACTION  ------
+
+BEGIN TRANSACTION;
+
+SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+DO $BODY$
+DECLARE
+    deleted_user_email TEXT := 'test_dummy_email';
+    deleted_user_id INTEGER;
+BEGIN
+
+    -- INSERT PURCHASE
+
+    EXECUTE 'INSERT INTO purchase (user_id, price, quantity, payment_type, destination, stage_state, orderedAt, orderArrivedAt) VALUES ($1, $2, $3, )' 
+
+    -- DELETE * SHOPPING CART
+
+    -- ADICIONAR AO PURCAHSE_PRODUCT * SHOPPING CART
+    EXECUTE 'SELECT user_id FROM authenticated INNER JOIN users ON users.id = authenticated.user_id WHERE email = $1' INTO deleted_user_id USING deleted_user_email;
+
+    IF deleted_user_id IS NOT NULL THEN
+        EXECUTE 'DELETE FROM authenticated
+         WHERE user_id = $1' USING deleted_user_id;
+
+    ELSE
+        
+        ROLLBACK;
+    END IF;
+END;
+$BODY$
+LANGUAGE plpgsql;
+
+END TRANSACTION;
+user_id INTEGER REFERENCES authenticated (user_id) ON UPDATE CASCADE ON DELETE CASCADE,
+    price INTEGER NOT NULL,
+    quantity INTEGER NOT NULL CONSTRAINT quantity_ck CHECK (quantity > 0),
+    payment_type TEXT NOT NULL REFERENCES payment (payment_type) ON UPDATE CASCADE,
+    destination TEXT NOT NULL,
+    stage_state TEXT NOT NULL REFERENCES stage (stage_state) ON UPDATE CASCADE,
+    orderedAt TIMESTAMP WITH TIME ZONE NOT NULL,
+    orderArrivedAt TIMESTAMP WITH TIME ZONE NOT NULL CONSTRAINT order_ck CHECK (orderArrivedAt > orderedAt)
+
+---- END PURCHASE TRANSACTION  ------
 
 
-COMMIT;
+-- TRIGGER QUE VERIFICA SE SHOPPING CART ESTA VAZIO DEPOIS DE PURCAHSE
+
+-- TRIGGER QUE ATUALIZA ESTATISTICAS
