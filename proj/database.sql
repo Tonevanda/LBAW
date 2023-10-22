@@ -1,28 +1,10 @@
-create schema if not exists lbaw2315;
+DROP SCHEMA lbaw2315 CASCADE;
 
--- DROP TABLES
+CREATE SCHEMA lbaw2315;
 
-DROP TABLE IF EXISTS review_report;
-DROP TABLE IF EXISTS review;
-DROP TABLE IF EXISTS product_category;
-DROP TABLE IF EXISTS product_statistic;
-DROP TABLE IF EXISTS purchase_product;
-DROP TABLE IF EXISTS purchase;
-DROP TABLE IF EXISTS wishlist;
-DROP TABLE IF EXISTS shopping_cart;
-DROP TABLE IF EXISTS product;
-DROP TABLE IF EXISTS authenticated_notification;
-DROP TABLE IF EXISTS unblock_appeal;
-DROP TABLE IF EXISTS wallet;
-DROP TABLE IF EXISTS authenticated;
-DROP TABLE IF EXISTS admin;
-DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS category;
-DROP TABLE IF EXISTS statistic;
-DROP TABLE IF EXISTS stage;
-DROP TABLE IF EXISTS payment;
-DROP TABLE IF EXISTS currency;
-DROP TABLE IF EXISTS notification;
+SET search_path TO lbaw2315;
+
+
 
 -- TABLES
 
@@ -64,14 +46,14 @@ CREATE TABLE admin(
 );
 
 CREATE TABLE authenticated(
-    user_id INTEGER PRIMARY KEY REFERENCES users (id) ON UPDATE CASCADE,
+    user_id INTEGER PRIMARY KEY REFERENCES users (id) ON UPDATE CASCADE ON DELETE CASCADE,
     address TEXT,
     isBlocked BOOLEAN DEFAULT FALSE
 );
 
 
 CREATE TABLE wallet(
-    user_id INTEGER PRIMARY KEY REFERENCES authenticated (user_id) ON UPDATE CASCADE,
+    user_id INTEGER PRIMARY KEY REFERENCES authenticated (user_id) ON UPDATE CASCADE ON DELETE CASCADE,
     money INTEGER DEFAULT 0,
     currency_type TEXT NOT NULL REFERENCES currency (currency_type) ON UPDATE CASCADE,
     transaction_date TIMESTAMP WITH TIME ZONE
@@ -80,7 +62,7 @@ CREATE TABLE wallet(
 
 CREATE TABLE unblock_appeal(
     id SERIAL PRIMARY KEY,
-    user_id INTEGER NOT NULL REFERENCES authenticated (user_id) ON UPDATE CASCADE,
+    user_id INTEGER NOT NULL REFERENCES authenticated (user_id) ON UPDATE CASCADE ON DELETE CASCADE,
     title TEXT NOT NULL,
     description TEXT,
     date TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL
@@ -89,7 +71,7 @@ CREATE TABLE unblock_appeal(
 
 CREATE TABLE authenticated_notification(
     id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES authenticated (user_id) ON UPDATE CASCADE,
+    user_id INTEGER REFERENCES authenticated (user_id) ON UPDATE CASCADE ON DELETE CASCADE,
     notification_type TEXT REFERENCES notification (notification_type) ON UPDATE CASCADE,
     date TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL,
     isNew BOOLEAN DEFAULT FALSE NOT NULL
@@ -100,7 +82,7 @@ CREATE TABLE product(
     name TEXT NOT NULL,
     synopsis TEXT NOT NULL,
     price INTEGER NOT NULL CONSTRAINT price_ck CHECK (price >= 0),
-    discount INTEGER DEFAULT 0 CONSTRAINT discount_ck CHECK (discount < price),
+    discount INTEGER DEFAULT 0 NOT NULL CONSTRAINT discount_ck CHECK (discount <= price),
     stock INTEGER NOT NULL CONSTRAINT stock_ck CHECK (stock >= 0),
     author TEXT DEFAULT 'anonymous' NOT NULL,
     editor TEXT DEFAULT 'self published' NOT NULL,
@@ -109,20 +91,20 @@ CREATE TABLE product(
 );
 
 CREATE TABLE shopping_cart(
-    user_id INTEGER REFERENCES authenticated (user_id) ON UPDATE CASCADE,
+    user_id INTEGER REFERENCES authenticated (user_id) ON UPDATE CASCADE ON DELETE CASCADE,
     product_id INTEGER REFERENCES product (id) ON UPDATE CASCADE,
     PRIMARY KEY (user_id, product_id)
 );
 
 CREATE TABLE wishlist(
-    user_id INTEGER REFERENCES authenticated (user_id) ON UPDATE CASCADE,
+    user_id INTEGER REFERENCES authenticated (user_id) ON UPDATE CASCADE ON DELETE CASCADE,
     product_id INTEGER REFERENCES product (id) ON UPDATE CASCADE,
     PRIMARY KEY (user_id, product_id)
 );
 
 CREATE TABLE purchase(
     id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES authenticated (user_id) ON UPDATE CASCADE,
+    user_id INTEGER REFERENCES authenticated (user_id) ON UPDATE CASCADE ON DELETE CASCADE,
     price INTEGER NOT NULL,
     quantity INTEGER NOT NULL CONSTRAINT quantity_ck CHECK (quantity > 0),
     payment_type TEXT NOT NULL REFERENCES payment (payment_type) ON UPDATE CASCADE,
@@ -168,7 +150,7 @@ CREATE TABLE review(
 
 CREATE TABLE review_report(
     id SERIAL PRIMARY KEY,
-    review_id INTEGER NOT NULL REFERENCES review (id) ON UPDATE CASCADE,
+    review_id INTEGER NOT NULL REFERENCES review (id) ON UPDATE CASCADE ON DELETE CASCADE,
     motive TEXT NOT NULL,
     date TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL
 );
@@ -181,6 +163,8 @@ CREATE INDEX product_review ON review USING hash (product_id);
 
 CREATE INDEX purchase_user_id ON purchase USING hash (user_id);
 
+CREATE INDEX price_product ON product USING btree (price);
+
 -- FTS INDEXES
 
 ALTER TABLE product
@@ -190,7 +174,7 @@ CREATE OR REPLACE FUNCTION product_FTS_update() RETURNS TRIGGER AS $$
 BEGIN
  IF TG_OP = 'INSERT' THEN
         NEW.tsvectors = (
-         setweight(to_tsvector('english', NEW.title), 'A') ||
+         setweight(to_tsvector('english', NEW.name), 'A') ||
          setweight(to_tsvector('english', NEW.author), 'B')||
          setweight(to_tsvector('english', NEW.editor), 'C')||
          setweight(to_tsvector('english', NEW.synopsis), 'D')
@@ -199,8 +183,10 @@ BEGIN
  IF TG_OP = 'UPDATE' THEN
          IF (NEW.title <> OLD.title OR NEW.obs <> OLD.obs) THEN
            NEW.tsvectors = (
-             setweight(to_tsvector('english', NEW.title), 'A') ||
-             setweight(to_tsvector('english', NEW.obs), 'B')
+             setweight(to_tsvector('english', NEW.name), 'A') ||
+             setweight(to_tsvector('english', NEW.author), 'B') ||
+             setweight(to_tsvector('english', NEW.editor), 'C')||
+             setweight(to_tsvector('english', NEW.synopsis), 'D')
            );
          END IF;
  END IF;
@@ -220,7 +206,7 @@ CREATE OR REPLACE FUNCTION manage_deleted_account() RETURNS TRIGGER AS
 $BODY$
 BEGIN
         UPDATE users
-        SET name = 'Deleted Account', profile_picture = '../images/default_images/default_user_image'
+        SET name = 'Deleted Account', profile_picture = 'df_user_image'
     
         WHERE users.id = OLD.user_id;
         RETURN OLD;
@@ -236,7 +222,7 @@ CREATE TRIGGER manage_deleted_account_trigger
 CREATE OR REPLACE FUNCTION check_admin_purchase() RETURNS TRIGGER AS
 $BODY$
 BEGIN
-        IF EXISTS (SELECT * FROM purchase WHERE NEW.user_id = user_id) THEN
+        IF EXISTS (SELECT * FROM purchase INNER JOIN admin ON admin.admin_id = purchase.user_id WHERE NEW.user_id = admin_id) THEN
             RAISE EXCEPTION 'An administrator can not make a purchase';
         END IF;
         RETURN NEW;
