@@ -504,7 +504,7 @@ file.write("\n")
 # authenticated_notification
 
 for i in range(100):
-    file.write(f"INSERT INTO authenticated_notification(user_id,notification_type) VALUES({random.randint(5,100)},'{random.choice(notification_types)}');\n")
+    file.write(f"INSERT INTO authenticated_notification(user_id,notification_type) VALUES({random.randint(5,99)},'{random.choice(notification_types)}');\n")
 
 file.write("\n")
 
@@ -547,14 +547,14 @@ file.write("\n")
 
 # shopping cart
 
-for i in range(5,101):
+for i in range(5,100):
     file.write(f'INSERT INTO shopping_cart(user_id, product_id) VALUES({i},{random.randint(1,500)});\n')
 
 file.write("\n")
 
 # wishlist
 
-for i in range(5,101):
+for i in range(5,100):
     file.write(f'INSERT INTO wishlist(user_id, product_id) VALUES({i},{random.randint(1,500)});\n')
 
 file.write("\n")
@@ -620,7 +620,7 @@ file.write("\n")
 # review
 
 for i in range(200):
-    user_id = random.randint(5,100)
+    user_id = random.randint(5,99)
     product_id = random.randint(1,500)
     title = generate_random_unblock_title()
     description = generate_random__unblock_description()
