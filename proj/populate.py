@@ -549,14 +549,14 @@ file.write("\n")
 # shopping cart
 
 for i in range(5,101):
-    file.write(f'INSERT INTO shopping_cart(user_id, product_id) VALUES({i},{random.randint(1,499)});\n')
+    file.write(f'INSERT INTO shopping_cart(user_id, product_id) VALUES({i},{random.randint(1,500)});\n')
 
 file.write("\n")
 
 # wishlist
 
 for i in range(5,101):
-    file.write(f'INSERT INTO wishlist(user_id, product_id) VALUES({i},{random.randint(1,499)});\n')
+    file.write(f'INSERT INTO wishlist(user_id, product_id) VALUES({i},{random.randint(1,500)});\n')
 
 file.write("\n")
 
@@ -596,7 +596,7 @@ file.write("\n")
 
 for i in range(300):
     purchase_id = random.randint(1,199)
-    product_id = random.randint(1,499)
+    product_id = random.randint(1,501)
     quantity = random.randint(1,50)
     price = random.randint(1,200)
     file.write(f"INSERT INTO purchase_product(purchase_id,product_id,quantity,price) VALUES({purchase_id},{product_id},{quantity},{price});\n")
@@ -605,7 +605,7 @@ file.write("\n")
 
 #product statistic
 
-for i in range(500):
+for i in range(1,501):
     for statistic_type in statistic_types:
         file.write(f"INSERT INTO product_statistic(product_id,statistic_type,result) VALUES({i},'{statistic_type}',{random.randint(0,4567)});\n")
 
@@ -613,7 +613,7 @@ file.write("\n")
 
 #product category
 
-for i in range(500):
+for i in range(1,501):
     file.write(f"INSERT INTO product_category(product_id,category_type) VALUES({i},'{random.choice(categories)}');\n")
 
 file.write("\n")
@@ -622,7 +622,7 @@ file.write("\n")
 
 for i in range(200):
     user_id = random.randint(5,100)
-    product_id = random.randint(1,499)
+    product_id = random.randint(1,501)
     title = generate_random_unblock_title()
     description = generate_random__unblock_description()
     rating = random.randint(1,5)
