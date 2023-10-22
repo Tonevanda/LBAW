@@ -12,10 +12,9 @@ file = open('proj/populate.sql',"w")
 
 # Notification 
 notification_types = ['payment_notification', 'instock_notification','purchaseinfo_notification','pricechange_notification']
-notification_descriptions = [['Your payment has been successful','Your payment has failed, please try again'], 'An item on your wishlist is currently in stock', "Thank you for purchasing at our store, this is your purchase information:", "An item on your wishlist has had its price changed"]
+notification_descriptions = ['Your payment has been successful', 'An item on your wishlist is currently in stock', "Thank you for purchasing at our store, this is your purchase information:", "An item on your wishlist has had its price changed"]
 
-file.write(f"INSERT INTO notification VALUES('{notification_types[1]}','{notification_descriptions[0][0]}');\n")
-file.write(f"INSERT INTO notification VALUES('{notification_types[1]}','{notification_descriptions[0][1]}');\n")
+file.write(f"INSERT INTO notification VALUES('{notification_types[0]}','{notification_descriptions[0]}');\n")
 file.write(f"INSERT INTO notification VALUES('{notification_types[1]}','{notification_descriptions[1]}');\n")
 file.write(f"INSERT INTO notification VALUES('{notification_types[2]}','{notification_descriptions[2]}');\n")
 file.write(f"INSERT INTO notification VALUES('{notification_types[3]}','{notification_descriptions[3]}');\n")
@@ -578,7 +577,7 @@ def generate_random_timestamp():
     return formatted_timestamp
 
 for i in range(200):
-    user_id = random.randint(5,100)
+    user_id = random.randint(5,99)
     price = random.randint(1,100)
     quantity = random.randint(1,50)
     payment = random.choice(payment_types)
@@ -594,7 +593,7 @@ file.write("\n")
 
 # purchase product
 
-for i in range(300):
+for i in range(100):
     purchase_id = random.randint(1,199)
     product_id = random.randint(1,501)
     quantity = random.randint(1,50)
@@ -622,7 +621,7 @@ file.write("\n")
 
 for i in range(200):
     user_id = random.randint(5,100)
-    product_id = random.randint(1,501)
+    product_id = random.randint(1,500)
     title = generate_random_unblock_title()
     description = generate_random__unblock_description()
     rating = random.randint(1,5)
