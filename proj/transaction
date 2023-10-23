@@ -1,4 +1,4 @@
----- BEGIN INSERTING AUTHENTICATED USER TRANSACTION ------
+---- BEGIN INSERTING AUTHENTICATED USER TRANSACTION (TRAN01) REQUIRES AN INSERT ON TABLE currency ------
 
 BEGIN TRANSACTION;
 
@@ -36,85 +36,7 @@ END TRANSACTION;
 
 ---- END INSERTING AUTHENTICATED USER TRANSACTION   ------
 
----- BEGIN EDITING AUTHENTICATED USER PROFILE TRANSACTION ------
-
-BEGIN TRANSACTION;
-
-SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
-
-DO $BODY$
-DECLARE
-    user_name text := 'test_dummy_name';
-    user_password text := 'test_dummy_new_password';
-    user_email text := 'test_dummy_new_email';
-    user_address text := 'test_dummy_new_address';
-    user_profile_picture text := 'df_user_img.png';
-    real_email text := 'test_dummy_email';
-    userID INTEGER := NULL;
-
-BEGIN
-    EXECUTE 'SELECT user_id FROM authenticated INNER JOIN users ON user_id = id WHERE email = $1' INTO userID USING real_email;
-
-    IF userID IS NOT NULL THEN
-
-        IF NOT EXISTS (SELECT 1 FROM users WHERE email = user_email AND id != userID) THEN
-            UPDATE users
-            SET name = user_name, password = user_password, email = user_email, profile_picture = user_profile_picture
-            WHERE id = userID;
-            UPDATE authenticated
-            SET address = user_address
-            WHERE user_id = userID;
-        END IF;
-    END IF;
-    
-
-EXCEPTION
-    WHEN others THEN
-        ROLLBACK;
-
-END;
-$BODY$
-LANGUAGE plpgsql;
-
-
-END TRANSACTION;
-
----- END EDITING AUTHENTICATED USER PROFILE TRANSACTION   ------
-
----- BEGIN INSERTING ADMIN TRANSACTION ------
-BEGIN TRANSACTION;
-
-SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
-
-DO $BODY$
-DECLARE
-    admin_name text := 'test_admin_dummy_name';
-    admin_password text := 'test_admin_dummy_password';
-    admin_email text := 'test_admin_dummy_email';
-    admin_adress text := 'test_admin_dummy_adress';
-
-BEGIN
-
-    EXECUTE 'INSERT INTO users (name, password, email, profile_picture) 
-    VALUES ($1, $2, $3, DEFAULT)' USING admin_name, admin_password, admin_email;
-
-    EXECUTE 'INSERT INTO admin (admin_id) 
-    VALUES ((SELECT id FROM users WHERE email = $1))' USING admin_email;
-
-EXCEPTION
-    WHEN others THEN
-        ROLLBACK;
-
-END;
-$BODY$
-LANGUAGE plpgsql;
-
-
-END TRANSACTION;
-
----- END INSERTING ADMIN TRANSACTION   ------
-
----- BEGIN PRODUCT SEARCH AND DISPLAY TRANSACTION ------
+---- BEGIN PRODUCT SEARCH AND DISPLAY TRANSACTION (TRAN02) REQURES AN INSERT ON TABLE category AND AN INSERT ON TABLE product AND AN INSERT ON TABLE product_category (TRAN16)------
 
 BEGIN TRANSACTION;
 
@@ -187,14 +109,14 @@ END TRANSACTION;
 
 ---- END PRODUCT SEARCH AND DISPLAY TRANSACTION   ------
 
----- BEGIN DELETE AUTHENTICATED USER  ------
+---- BEGIN DELETE AUTHENTICATED USER (TRAN03) REQUIRES A CURRENCY AND AN AUTHENTICATED USER (TRAN01)------
 
 BEGIN TRANSACTION;
 
 SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
 DO $BODY$
 DECLARE
-    deleted_user_email TEXT := 'test_dummy_email1';
+    deleted_user_email TEXT := 'test_dummy_email';
     deleted_user_id INTEGER;
 BEGIN
     EXECUTE 'SELECT user_id FROM authenticated INNER JOIN users ON users.id = authenticated.user_id WHERE email = $1' INTO deleted_user_id USING deleted_user_email;
@@ -215,7 +137,88 @@ END TRANSACTION;
 
 ---- END INSERTING ADMIN TRANSACTION   ------
 
----- BEGIN ADD TO SHOPPING CART TRANSACTION  ------
+---- BEGIN EDITING AUTHENTICATED USER PROFILE TRANSACTION (TRAN04) REQUIRES A CURRENCY AND AN AUTHENTICATED USER (TRAN01)------
+
+BEGIN TRANSACTION;
+
+SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+
+DO $BODY$
+DECLARE
+    user_name text := 'test_dummy_new_name';
+    user_password text := 'test_dummy_new_password';
+    user_email text := 'test_dummy_email';
+    user_address text := 'test_dummy_new_address';
+    user_profile_picture text := 'df_user_img.png';
+    real_email text := 'test_dummy_email';
+    userID INTEGER := NULL;
+
+BEGIN
+    EXECUTE 'SELECT user_id FROM authenticated INNER JOIN users ON user_id = id WHERE email = $1' INTO userID USING real_email;
+
+    IF userID IS NOT NULL THEN
+
+        IF NOT EXISTS (SELECT 1 FROM users WHERE email = user_email AND id != userID) THEN
+            UPDATE users
+            SET name = user_name, password = user_password, email = user_email, profile_picture = user_profile_picture
+            WHERE id = userID;
+            UPDATE authenticated
+            SET address = user_address
+            WHERE user_id = userID;
+        END IF;
+    END IF;
+    
+
+EXCEPTION
+    WHEN others THEN
+        ROLLBACK;
+
+END;
+$BODY$
+LANGUAGE plpgsql;
+
+
+END TRANSACTION;
+
+---- END EDITING AUTHENTICATED USER PROFILE TRANSACTION   ------
+
+---- BEGIN INSERTING ADMIN TRANSACTION (TRAN05) ------
+BEGIN TRANSACTION;
+
+SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+
+DO $BODY$
+DECLARE
+    admin_name text := 'test_admin_dummy_name';
+    admin_password text := 'test_admin_dummy_password';
+    admin_email text := 'test_admin_dummy_email';
+    admin_adress text := 'test_admin_dummy_adress';
+
+BEGIN
+
+    EXECUTE 'INSERT INTO users (name, password, email, profile_picture) 
+    VALUES ($1, $2, $3, DEFAULT)' USING admin_name, admin_password, admin_email;
+
+    EXECUTE 'INSERT INTO admin (admin_id) 
+    VALUES ((SELECT id FROM users WHERE email = $1))' USING admin_email;
+
+EXCEPTION
+    WHEN others THEN
+        ROLLBACK;
+
+END;
+$BODY$
+LANGUAGE plpgsql;
+
+
+END TRANSACTION;
+
+---- END INSERTING ADMIN TRANSACTION   ------
+
+
+
+
+---- BEGIN ADD TO SHOPPING CART TRANSACTION (TRAN06) REQUIRES A CURRENCY AND AN AUTHENTICATED USER (TRAN01) AND A PRODUCT ------
 
 BEGIN TRANSACTION;
 
@@ -245,7 +248,7 @@ END TRANSACTION;
 ---- END ADD TO SHOPPING CART TRANSACTION   ------
 
 
----- BEGIN ADD TO WISHLIST TRANSACTION  ------
+---- BEGIN ADD TO WISHLIST TRANSACTION (TRAN07) REQUIRES A CURRENCY AND AN AUTHENTICATED USER (TRAN01) AND A PRODUCT ------
 
 BEGIN TRANSACTION;
 
@@ -274,7 +277,8 @@ END TRANSACTION;
 
 ---- END ADD TO WISHLIST TRANSACTION   ------
 
----- BEGIN PURCHASE TRANSACTION  ------
+---- BEGIN PURCHASE TRANSACTION (TRAN08) REQUIRES A CURRENCY AND AN AUTHENTICATED USER (TRAN01) AND A PRODUCT A PAYMENT ------
+---- AND A STAGE AND PRODUCTS ADDED TO THE SHOOPING CART (TRAN06)  ------
 
 
 
@@ -337,7 +341,7 @@ END TRANSACTION;
 
 ---- END PURCHASE TRANSACTION  ------
 
----- BEGIN CANCEL ORDER TRANSACTION  ------
+---- BEGIN CANCEL ORDER TRANSACTION (TRAN09) REQUIRES A PRODUCT AND A PURCHASE (TRAN08) AND AN AUTHENTICATED USER (TRAN01) ------
 BEGIN TRANSACTION;
 
 SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
@@ -364,7 +368,7 @@ LANGUAGE plpgsql;
 END TRANSACTION;
 ---- END CANCEL ORDER TRANSACTION  ------
 
----- BEGIN VIEW PRODUCT DETAILS TRANSACTION  ------
+---- BEGIN VIEW PRODUCT DETAILS TRANSACTION (TRAN10) REQUIRES A PRODUCT ------
 BEGIN TRANSACTION;
 
 SET TRANSACTION ISOLATION LEVEL READ COMMITTED READ ONLY;
@@ -386,7 +390,7 @@ LANGUAGE plpgsql;
 END TRANSACTION;
 ---- END VIEW PRODUCT DETAILS TRANSACTION  ------
 
----- BEGIN INSERT REVIEW TRANSACTION  ------
+---- BEGIN INSERT REVIEW TRANSACTION (TRAN11) REQUIRES A PRODUCT AND AN AUTHENTICATED USER (TRAN01) ------
 
 BEGIN TRANSACTION;
 
@@ -421,7 +425,7 @@ END TRANSACTION;
 
 ---- END INSERT REVIEW TRANSACTION  ------
 
----- BEGIN DELETE REVIEW TRANSACTION  ------
+---- BEGIN DELETE REVIEW TRANSACTION (TRAN12) REQUIRES A REVIEW (TRAN11) ------
 
 BEGIN TRANSACTION;
 
@@ -445,7 +449,7 @@ END TRANSACTION;
 
 ---- END DELETE REVIEW TRANSACTION  ------
 
----- BEGIN BLOCK/UNBLOCK USER TRANSACTION  ------
+---- BEGIN BLOCK/UNBLOCK USER TRANSACTION (TRAN13) REQUIRES AN AUTHENTICATED USER (TRAN01) ------
 
 BEGIN TRANSACTION;
 
@@ -474,7 +478,7 @@ END TRANSACTION;
 
 ---- END BLOCK/UNBLOCK USER TRANSACTION  ------
 
----- BEGIN EDIT PRODUCT INFORMATION TRANSACTION  ------
+---- BEGIN EDIT PRODUCT INFORMATION TRANSACTION (TRAN14) REQUIRES A PRODUCT  ------
 
 BEGIN TRANSACTION;
 
@@ -511,7 +515,7 @@ END TRANSACTION;
 
 ---- END EDIT PRODUCT INFORMATION TRANSACTION  ------
 
----- BEGIN ADD PRODUCT CATEGORY TRANSACTION  ------
+---- BEGIN ADD PRODUCT CATEGORY TRANSACTION (TRAN15) REQUIRES A CATEGORY AND A PRODUCT ------
 BEGIN TRANSACTION;
 
 SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
@@ -538,7 +542,7 @@ END TRANSACTION;
 
 ---- END ADD PRODUCT CATEGORY TRANSACTION  ------
 
----- BEGIN REMOVE PRODUCT CATEGORY TRANSACTION  ------
+---- BEGIN REMOVE PRODUCT CATEGORY TRANSACTION (TRAN17) REQUIRES A product_category (TRAN15) ------
 BEGIN TRANSACTION;
 
 SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;

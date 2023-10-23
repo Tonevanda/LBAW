@@ -1,3 +1,6 @@
+q
+q
+
 DROP SCHEMA IF EXISTS lbaw2315 CASCADE;
 
 CREATE SCHEMA lbaw2315;
@@ -122,7 +125,7 @@ CREATE TABLE purchase_product(
     id SERIAL PRIMARY KEY,
     purchase_id INTEGER REFERENCES purchase (id) ON UPDATE CASCADE ON DELETE CASCADE,
     product_id INTEGER REFERENCES product (id) ON UPDATE CASCADE ON DELETE CASCADE,
-    price INTEGER NOT NULL CONSTRAINT price_ck CHECK (price >= 0)
+    price INTEGER NOT NULL CONSTRAINT price_ck CHECK (price > 0)
 );
 
 
@@ -159,7 +162,7 @@ CREATE TABLE review_report(
     date TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL
 );
 
-----BEGIN INDEXES----
+--INDEXES
 
 CREATE INDEX orderedAt_purchase ON purchase USING btree (orderedAt);
 
@@ -171,13 +174,10 @@ CREATE INDEX shopping_cart_user_id ON shopping_cart USING hash (user_id);
 
 CREATE INDEX wishlist_user_id ON wishlist USING hash (user_id);
 
+
 CREATE INDEX price_product ON product USING btree (price);
 
----- END INDEXES ----
-
----- BEGIN FTS INDEXES ----
-
-
+-- FTS INDEXES
 
 ALTER TABLE product
 ADD COLUMN tsvectors TSVECTOR;       
@@ -214,10 +214,6 @@ CREATE TRIGGER product_FTS_update_trigger
 
 CREATE INDEX fts_index ON product USING GIN (tsvectors);
 
----- END FTS INDEXES ----
-
----- BEGIN MANAGE DELETED ACCOUNT TRIGGER (TRIGGER01) ----
-
 CREATE OR REPLACE FUNCTION manage_deleted_account() RETURNS TRIGGER AS
 $BODY$
 BEGIN
@@ -235,9 +231,6 @@ CREATE TRIGGER manage_deleted_account_trigger
         FOR EACH ROW
         EXECUTE PROCEDURE manage_deleted_account();
 
----- END MANAGE DELETED ACCOUNT TRIGGER ----
-
----- BEGIN MANAGE PURCHASE INSERT TRIGGER (TRIGGER02) ----
 
 CREATE OR REPLACE FUNCTION manage_purchase_insert() RETURNS TRIGGER AS
 $BODY$
@@ -254,11 +247,16 @@ BEGIN
             EXECUTE 'SELECT price, discount FROM product WHERE id = $1' INTO price, discount USING productID;
             
             price := price-discount;
-    
             EXECUTE 'INSERT INTO purchase_product (purchase_id, product_id, price) VALUES ($1, $2, $3)' USING NEW.id, productID, price;
 
+            
         END LOOP;
-        EXECUTE 'DELETE FROM shopping_cart WHERE user_id = $1' USING NEW.user_id;
+        FOR shopping_cart_id IN EXECUTE 'SELECT id FROM shopping_cart WHERE user_id = $1' USING NEW.user_id
+        LOOP
+            
+            EXECUTE 'DELETE FROM shopping_cart WHERE id = $1' USING shopping_cart_id;
+        END LOOP;
+
     EXCEPTION
         WHEN others THEN
             RAISE EXCEPTION 'Something wrong when making a purchase';
@@ -273,9 +271,8 @@ CREATE TRIGGER manage_purchase_insert_trigger
         FOR EACH ROW
         EXECUTE PROCEDURE manage_purchase_insert();
 
----- END MANAGE PURCHASE INSERT TRIGGER  ----
 
----- BEGIN MANAGE INITIATE PRODUCT STATISTICS TRIGGER (TRIGGER03) ----
+
 
 CREATE OR REPLACE FUNCTION initiate_product_statistics() RETURNS TRIGGER AS
 $BODY$
@@ -303,10 +300,6 @@ CREATE TRIGGER initiate_product_statistics_trigger
         FOR EACH ROW
         EXECUTE PROCEDURE initiate_product_statistics();
 
----- END MANAGE INITIATE PRODUCT STATISTICS TRIGGER ----
-
----- BEGIN PAYMENT SUCCESSFULL NOTIFICATION TRIGGER (TRIGGER04) ----
-
 CREATE OR REPLACE FUNCTION payment_successfull_notification() RETURNS TRIGGER AS
 $BODY$
 BEGIN
@@ -326,9 +319,6 @@ CREATE TRIGGER payment_successfull_notification_trigger
         FOR EACH ROW
         EXECUTE PROCEDURE payment_successfull_notification();
 
----- END PAYMENT SUCCESSFULL NOTIFICATION TRIGGER----
-
----- BEGIN INSTOCK NOTIFICATION TRIGGER (TRIGGER05) ----
 
 CREATE OR REPLACE FUNCTION instock_notification() RETURNS TRIGGER AS
 $BODY$
@@ -340,6 +330,7 @@ BEGIN
         IF OLD.stock = 0 AND NEW.stock != OLD.stock THEN
             FOR user_id IN EXECUTE 'SELECT user_id FROM wishlist WHERE product_id = $1 GROUP BY user_id' USING NEW.id
             LOOP
+                RAISE NOTICE 'ENTERED LOOP, user_id: %', user_id;
                 EXECUTE 'INSERT INTO authenticated_notification (user_id, notification_type, date, isNew) VALUES ($1, $2, DEFAULT, DEFAULT)' USING user_id, 'instock_notification';
             END LOOP;
         END IF;
@@ -356,10 +347,6 @@ CREATE TRIGGER instock_notification_trigger
         AFTER UPDATE ON product
         FOR EACH ROW
         EXECUTE PROCEDURE instock_notification();
-
----- END INSTOCK NOTIFICATION TRIGGER ----
-
----- BEGIN PURCHASE INFO NOTIFICATION TRIGGER (TRIGGER06) ----
 
 CREATE OR REPLACE FUNCTION purchaseinfo_notification() RETURNS TRIGGER AS
 $BODY$
@@ -384,9 +371,6 @@ CREATE TRIGGER purchaseinfo_notification_trigger
         FOR EACH ROW
         EXECUTE PROCEDURE purchaseinfo_notification();
 
----- END PURCHASE INFO NOTIFICATION TRIGGER ----
-
----- BEGIN PRICE CHANGE NOTIFICATION TRIGGER (TRIGGER07) ----
 
 CREATE OR REPLACE FUNCTION pricechange_notification() RETURNS TRIGGER AS
 $BODY$
@@ -415,9 +399,6 @@ CREATE TRIGGER pricechange_notification_trigger
         FOR EACH ROW
         EXECUTE PROCEDURE pricechange_notification();
 
----- END PRICE CHANGE NOTIFICATION TRIGGER ----
-
----- BEGIN REFUND PURCHASE TRIGGER (TRIGGER08) ----
 
 CREATE OR REPLACE FUNCTION refund_purchase() RETURNS TRIGGER AS
 $BODY$
@@ -446,10 +427,6 @@ CREATE TRIGGER refund_purchase_trigger
         FOR EACH ROW
         EXECUTE PROCEDURE refund_purchase();
 
----- END REFUND PURCHASE TRIGGER ----
-
----- BEGIN INSERT WALLET TRIGGER (TRIGGER09) ----
-
 CREATE OR REPLACE FUNCTION insert_wallet() RETURNS TRIGGER AS
 $BODY$
 DECLARE
@@ -475,7 +452,7 @@ CREATE TRIGGER insert_wallet_trigger
         FOR EACH ROW
         EXECUTE PROCEDURE insert_wallet();
 
----- END INSERT WALLET TRIGGER ----
 
 
 
+mu

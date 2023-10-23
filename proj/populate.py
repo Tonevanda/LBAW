@@ -416,12 +416,6 @@ for i in range(5,100):
 
 file.write("\n")
 
-# wallet
-
-for i in range(5,100):
-    file.write(f"INSERT INTO wallet(user_id,money,currency_type) VALUES({i},{random.randrange(0,10000)},'{random.choice(currency_types)}');\n")
-
-file.write("\n")
 
 # unblock appeal
 
@@ -545,22 +539,6 @@ for i in range(500):
 
 file.write("\n")
 
-# shopping cart
-
-for i in range(5,100):
-    file.write(f'INSERT INTO shopping_cart(user_id, product_id) VALUES({i},{random.randint(1,500)});\n')
-
-file.write("\n")
-
-# wishlist
-
-for i in range(5,100):
-    file.write(f'INSERT INTO wishlist(user_id, product_id) VALUES({i},{random.randint(1,500)});\n')
-
-file.write("\n")
-
-# purchase
-
 def generate_random_timestamp():
     start_date = datetime(2000, 1, 1)
     end_date = datetime(2023, 12, 31)
@@ -576,39 +554,51 @@ def generate_random_timestamp():
     
     return formatted_timestamp
 
-for i in range(200):
-    user_id = random.randint(5,99)
-    price = random.randint(1,100)
-    quantity = random.randint(1,50)
-    payment = random.choice(payment_types)
-    destination = generate_random_address()
-    state = random.choice(stages)
-    orderedAt = generate_random_timestamp()
-    orderArrivedAt = generate_random_timestamp()
-    while(orderArrivedAt < orderedAt):
-        orderArrivedAt = generate_random_timestamp()
-    file.write(f"INSERT INTO purchase(user_id, price,quantity,payment_type,destination,stage_state,orderedAt,orderArrivedAt) VALUES({user_id},{price},{quantity},'{payment}','{destination}','{state}',{orderedAt},{orderArrivedAt});\n")
+# shopping cart
+
+for i in range(1,200):
+    userID = random.randint(5, 99)
+    price_purchase = random.randint(1,100)
+    quantity_purchase = 0
+    payment_purchase = random.choice(payment_types)
+    destination_purchase = generate_random_address()
+    state_purchase = random.choice(stages)
+    start_date = datetime(2000, 1, 1)
+    end_date = datetime(2023, 12, 31)
+    time_difference = end_date - start_date
+    random_seconds = random.randint(0, time_difference.total_seconds())
+    random_timestamp = start_date + timedelta(seconds=random_seconds)
+    
+    # Generate a random timezone offset between -12 and +12
+    timezone_offset = random.randint(0, 12)
+    
+    # Format the timestamp with the timezone offset
+    formatted_timestamp = random_timestamp.strftime(f"'%Y-%m-%d %H:%M:%S+0{timezone_offset}'")
+    orderedAt_purchase = formatted_timestamp
+
+    random_timestamp = start_date + timedelta(seconds=random_seconds+random.randint(3000, 3000000))
+    formatted_timestamp = random_timestamp.strftime(f"'%Y-%m-%d %H:%M:%S+0{timezone_offset}'")
+    orderArrivedAt_purchase = formatted_timestamp
+    for y in range(0, random.randint(2, 5)):
+        file.write(f'INSERT INTO shopping_cart(user_id, product_id) VALUES({userID},{random.randint(1,500)});\n')
+        quantity_purchase += 1
+        
+    price_purchase = price_purchase * quantity_purchase
+    file.write(f"INSERT INTO purchase(user_id, price,quantity,payment_type,destination,stage_state,isTracked,orderedAt,orderArrivedAt) VALUES({userID},{price_purchase},{quantity_purchase},'{payment_purchase}','{destination_purchase}','{state_purchase}','{random.choice(['TRUE','FALSE'])}',{orderedAt_purchase},{orderArrivedAt_purchase});\n")
+file.write("\n")
+
+#for i in range(1,200):
+ #   file.write(f'INSERT INTO shopping_cart(user_id, product_id) VALUES({random.randint(5, 99)},{random.randint(1,500)});\n')
+
+#file.write("\n")
+# wishlist
+
+for i in range(5,100):
+    file.write(f'INSERT INTO wishlist(user_id, product_id) VALUES({i},{random.randint(1,500)});\n')
 
 file.write("\n")
 
-# purchase product
 
-for i in range(100):
-    purchase_id = random.randint(1,199)
-    product_id = random.randint(1,501)
-    quantity = random.randint(1,50)
-    price = random.randint(1,200)
-    file.write(f"INSERT INTO purchase_product(purchase_id,product_id,quantity,price) VALUES({purchase_id},{product_id},{quantity},{price});\n")
-
-file.write("\n")
-
-#product statistic
-
-for i in range(1,501):
-    for statistic_type in statistic_types:
-        file.write(f"INSERT INTO product_statistic(product_id,statistic_type,result) VALUES({i},'{statistic_type}',{random.randint(0,4567)});\n")
-
-file.write("\n")
 
 #product category
 
