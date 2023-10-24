@@ -1,6 +1,0 @@
- id |      name       | synopsis  | price | discount | stock |  author   |     editor     | language |        image        |                                 tsvectors                                  
-----+-----------------+-----------+-------+----------+-------+-----------+----------------+----------+---------------------+----------------------------------------------------------------------------
-  1 | Game of Thrones | good book |    10 |        0 |     3 | anonymous | self published | english  | game of thrones.png | 'anonym':4B 'book':8 'game':1A 'good':7 'publish':6C 'self':5C 'throne':3A
-  2 | Star Wars       | bad book  |    25 |        5 |     2 | anonymous | self published | english  | star_wars.png       | 'anonym':3B 'bad':6 'book':7 'publish':5C 'self':4C 'star':1A 'war':2A
-(2 rows)
-

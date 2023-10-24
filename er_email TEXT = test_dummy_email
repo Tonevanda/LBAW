@@ -1,5 +1,0 @@
- id  | user_id | price | quantity | payment_type |      destination       | stage_state |           orderedat           |        orderarrivedat         
------+---------+-------+----------+--------------+------------------------+-------------+-------------------------------+-------------------------------
- 201 |     103 |    19 |        2 | paypal       | test_dummy_destination | payment     | 2023-10-22 18:21:43.426996+00 | 2023-11-04 00:21:43.426996+00
-(1 row)
-
