@@ -1,0 +1,478 @@
+openapi: 3.0.0
+
+info:
+  version: '1.0'
+  title: 'LBAW MediaLibrary Web API'
+  description: 'Web Resources Specification (A7) for MediaLibrary'
+
+servers:
+- url: http://lbaw.fe.up.pt
+  description: Production server
+
+externalDocs:
+  description: Find more info here.
+  url: https://web.fe.up.pt/~ssn/wiki/teach/lbaw/medialib/a07
+
+tags:
+  - name: 'M01: Authentication and Individual Profile'
+  - name: 'M02: Purchase'
+  - name: 'M03: Shpping Cart and Wish list'
+  - name: 'M05: User Administration and Static pages'
+
+paths:
+
+  /login:
+    get:
+      operationId: R101
+      summary: 'R101: Login Form'
+      description: 'Provide login form. Access: PUB'
+      tags:
+        - 'M01: Authentication and Individual Profile'
+      responses:
+        '200':
+          description: 'Ok. Show log-in UI'
+    post:
+      operationId: R102
+      summary: 'R102: Login Action'
+      description: 'Processes the login form submission. Access: PUB'
+      tags:
+        - 'M01: Authentication and Individual Profile'
+ 
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                email:          # <!--- form field name
+                  type: string
+                password:    # <!--- form field name
+                  type: string
+              required:
+                - email
+                - password
+ 
+      responses:
+        '302':
+          description: 'Redirect after processing the login credentials.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successful authentication. Redirect to user profile.'
+                  value: '/users/{id}'
+                302Error:
+                  description: 'Failed authentication. Redirect to login form.'
+                  value: '/login'
+ 
+  /logout:
+
+    post:
+      operationId: R103
+      summary: 'R103: Logout Action'
+      description: 'Logout the current authenticated used. Access: USR, ADM'
+      tags:
+        - 'M01: Authentication and Individual Profile'
+      responses:
+        '302':
+          description: 'Redirect after processing logout.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successful logout. Redirect to login form.'
+                  value: '/login'
+
+  /register:
+    get:
+      operationId: R104
+      summary: 'R104: Register Form'
+      description: 'Provide new user registration form. Access: PUB'
+      tags:
+        - 'M01: Authentication and Individual Profile'
+      responses:
+        '200':
+          description: 'Ok. Show sign-up UI'
+
+    post:
+      operationId: R105
+      summary: 'R105: Register Action'
+      description: 'Processes the new user registration form submission. Access: PUB'
+      tags:
+        - 'M01: Authentication and Individual Profile'
+
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+              required:
+                - email
+                - password
+
+      responses:
+        '302':
+          description: 'Redirect after processing the new user information.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successful authentication. Redirect to user profile.'
+                  value: '/users/{id}'
+                302Failure:
+                  description: 'Failed authentication. Redirect to login form.'
+                  value: '/login'
+
+  /users/{id}:
+    get:
+      operationId: R106
+      summary: 'R106: View user profile'
+      description: 'Show the individual user profile. Access: OWN'
+      tags:
+        - 'M01: Authentication and Individual Profile'
+
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+
+      responses:
+        '200':
+          description: 'Ok. Show view profile UI'
+ 
+
+  /api/products:
+    get:
+      operationId: R202
+      summary: 'R202: Search Products API'
+      description: 'Searches for works and returns the results as JSON. Access: PUB.'
+
+      tags: 
+        - 'M02: Products'
+
+      parameters:
+        - in: query
+          name: query
+          description: String to use for full-text search
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: category
+          description: Category of the product
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: classification
+          description: Integer corresponding to the product classification
+          schema:
+            type: integer
+          required: false
+
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    synopsis:
+                      type: string
+                    price:
+                      type: string
+                    author:
+                      type: string
+                    editor:
+                      type: string
+                    language:
+                      type: string
+                example:
+                  - name: "O Segredo de Espinosa"
+                    sinopse: "O Segredo de Espinosa" narra a vida de Bento de Espinosa, um judeu excomungado por questionar a Bíblia. Ele torna-se um prodígio, mas a sua busca por respostas sobre a fé e a natureza leva-o a ser acusado de heresia por rabinos judeus e pregadores cristãos. Este é um livro inspirado na vida do maior filósofo português, Bento de Espinosa, e sua busca proibida por um segredo."
+                    price: 20,25
+                    author: Jose Rodrigues dos Santos
+                    editor: Planeta
+                    language: portugues
+
+  /api/products:
+    get:
+      operationId: R203
+      summary: 'R203: Edit products' details
+      description: 'The product details become editable. Access: ADM.'
+
+      tags: 
+        - 'M02: Products'
+
+      responses:
+        '200':
+          description: 'Ok. Show editable details UI'
+
+    post:
+      operationId: R204
+      summary: 'R204: Edit Action'
+      description: 'Processes the changes made. Access: ADM'
+      tags:
+        - 'M02: Products'
+
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                synopsis:
+                  type: string
+                price:
+                  type: string
+                author:
+                  type: string
+                editor:
+                  type: string
+                language:
+                  type: string
+              required: false
+
+      responses:
+        '200':
+          description: 'Redirect after processing the new product information.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successfully edited. Redirect to product page.'
+                  value: '/product'
+                302Failure:
+                  description: 'Edit failed. Redirect to editable product page.'
+                  value: '/product'
+
+    /api/products:
+    get:
+      operationId: R205
+      summary: 'R205: Add discount'
+      description: 'Show the discount form. Access: ADM.'
+
+      tags: 
+        - 'M02: Products'
+
+      responses:
+        '200':
+          description: 'Ok. Show the discount form.'
+
+    post:
+      operationId: R206
+      summary: '206: Add discount Action'
+      description: 'Apply the discount on the product. Access: ADM'
+      tags:
+        - 'M02: Products'
+
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                discount:
+                      type: integer
+              required: true
+
+      responses:
+        '200':
+          description: 'Redirect after processing the discount.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Discount successfully apllied. Redirect to product page.'
+                  value: '/product'
+                302Failure:
+                  description: 'Discount application failed. Redirect to discount form.'
+                  value: '/product'
+
+  /api/products:
+    get:
+      operationId: R207
+      summary: 'R207: Add product'
+      description: 'The product details become editable. Access: ADM.'
+
+      tags: 
+        - 'M02: Products'
+
+      responses:
+        '200':
+          description: 'Ok. Show the new product form'
+
+    post:
+      operationId: R208
+      summary: 'R208: Add Product Action'
+      description: 'Processes the product. Access: ADM'
+      tags:
+        - 'M02: Products'
+
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                synopsis:
+                  type: string
+                price:
+                  type: string
+                author:
+                  type: string
+                editor:
+                  type: string                    
+                language:
+                  type: string
+              required: true
+
+      responses:
+        '200':
+          description: 'Redirect after processing the new product.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Product successfully added. Redirect to product page.'
+                  value: '/product'
+                302Failure:
+                  description: 'Failed to add the product. Redirect to editable product page.'
+                  value: '/product'
+
+  /api/products:
+    get:
+      operationId: R301
+      summary: 'R301: Write a review'
+      description: 'Show the review form. Access: USR.'
+
+      tags: 
+        - 'M03: Reviews'
+
+      responses:
+        '200':
+          description: 'Ok. Show the review form'
+
+    post:
+      operationId: R302
+      summary: 'R302: Add Review Action'
+      description: 'Processes the review. Access: USR'
+      tags:
+        - 'M03: Reviews'
+
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                rate: 
+                  type: integer
+              required: 
+                - title
+                - rate
+
+      responses:
+        '200':
+          description: 'Redirect after processing the review.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Review successfully sent. Redirect to product page.'
+                  value: '/product'
+                302Failure:
+                  description: 'Failed to send the review. Redirect to review form.'
+                  value: '/product'
+
+  /api/products:
+    get:
+      operationId: R303
+      summary: 'R303: Report a review'
+      description: 'Show the review report form. Access: USR.'
+
+      tags: 
+        - 'M03: Reviews'
+
+      responses:
+        '200':
+          description: 'Ok. Show the review report form'
+
+    post:
+      operationId: R304
+      summary: 'R304: Report a review Action'
+      description: 'Processes the review report. Access: USR'
+      tags:
+        - 'M03: Reviews'
+
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                motive:
+                  type: string
+                  enum:
+                    - Option 1
+                    - Option 2
+                    - Option 3
+              required: true
+
+      responses:
+        '200':
+          description: 'Redirect after processing the review report.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Review report successfully sent. Redirect to product page.'
+                  value: '/product'
+                302Failure:
+                  description: 'Failed to send the review report. Redirect to review report form.'
+                  value: '/product'
+
+ 
