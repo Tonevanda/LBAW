@@ -2,6 +2,8 @@
 
 @section('content')
 
+@include('partials._search')
+
 @foreach ($products as $product)
 <div class="product">
     <a href="{{ route('single-product', $product) }}">

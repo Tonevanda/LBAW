@@ -21,4 +21,14 @@ class Product extends Model
     {
         return $this->belongsToMany(Authenticated::class, 'shopping_cart');
     }
+
+    public function scopeFilter($query, array $filters)
+    {
+
+        if($filters['search'] ?? false){
+                $query->where('name', 'like', '%' . request('search') . '%')
+                    ->orWhere('synopsis', 'like', '%' . request('search') . '%');
+        };
+    }
+
 }
