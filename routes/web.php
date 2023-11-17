@@ -2,11 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\CardController;
-use App\Http\Controllers\ItemController;
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,9 +18,10 @@ use App\Http\Controllers\Auth\RegisterController;
 |
 */
 
-// Home
-Route::get('/', function(){
-    return view('home');
+// Pages
+Route::controller(ProductController::class)->group(function () {
+    Route::get('/', 'index')->name('all-products');
+    Route::get('/product/{product}', 'show')->name('single-product');
 });
 
 

@@ -26,6 +26,10 @@
                 <h1><a href="{{ url('/') }}">Bibliophile's Bliss</a></h1>
                 @if (Auth::check())
                     <a class="button" href="{{ url('/logout') }}"> Logout </a> <span>{{ Auth::user()->name }}</span>
+                    <a class="button" href="{{ url('/shopping_cart') }}"> Shopping Cart </a>
+                @else 
+                    <a class="button button-outline" href="{{ route('login') }}">Login</a>
+                    <a class="button button-outline" href="{{ route('register') }}">Register</a>
                 @endif
             </header>
             <section id="content">
