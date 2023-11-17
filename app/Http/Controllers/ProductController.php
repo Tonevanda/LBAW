@@ -10,7 +10,7 @@ class ProductController extends Controller
     //Show all products
     public function index(){
         return view('products.index', [
-            'products' => Product::Paginate(10)
+            'products' => Product::filter(request(['search']))->Paginate(10)
         ]);
     }
 

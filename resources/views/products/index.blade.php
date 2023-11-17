@@ -2,6 +2,8 @@
 
 @section('content')
 
+@include('partials._search')
+
 @foreach ($products as $product)
 
 <x-product-card :product="$product" />
