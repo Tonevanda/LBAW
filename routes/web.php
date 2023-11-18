@@ -58,5 +58,6 @@ Route::controller(RegisterController::class)->group(function () {
 
 Route::controller(AuthenticatedController::class)->group(function () {
     Route::get('/shopping-cart/users/{user}', 'index')->name('shopping-cart');
+    Route::get('/profile/users/{user}', 'show')->name('profile');
     Route::post('/shopping-cart/users/{user}', 'store')->name('shopping-cart.store');
 });

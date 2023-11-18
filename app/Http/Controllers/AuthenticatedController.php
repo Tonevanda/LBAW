@@ -15,6 +15,12 @@ class AuthenticatedController extends Controller
             #'Products' => Authenticated::findOrFail($user->user_id)->getAllProducts()
         ]);
     }
+    //Show Profile
+    public function show(Authenticated $user){
+        return view('profile', [
+            'user' => $user
+        ]);
+    }
     public function store(Authenticated $user){
         $data = request()->validate([
             'product_id' => 'required'
@@ -24,3 +30,7 @@ class AuthenticatedController extends Controller
 
     }
 }
+
+
+
+//FAZER O PROFILE QUANDO VOLTAR!!
