@@ -19,7 +19,7 @@ class Product extends Model
 
     public function showAllBuyers()
     {
-        return $this->belongsToMany(Authenticated::class, 'shopping_cart');
+        return $this->belongsToMany(Authenticated::class, 'shopping_cart', 'product_id', 'user_id')->get();
     }
 
     public function scopeFilter($query, array $filters)

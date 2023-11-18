@@ -6,6 +6,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\AuthenticatedController;
+use App\Models\User;
+use GuzzleHttp\Middleware;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,7 +24,7 @@ use App\Http\Controllers\ProductController;
 // Pages
 Route::controller(ProductController::class)->group(function () {
     Route::get('/', 'index')->name('all-products');
-    Route::get('/product/{product}', 'show')->name('single-product');
+    Route::get('/products/{product}', 'show')->name('single-product')->middleware('admin');
 });
 
 
@@ -46,6 +49,11 @@ Route::controller(LoginController::class)->group(function () {
 });
 
 Route::controller(RegisterController::class)->group(function () {
-    Route::get('/register', 'showRegistrationForm')->name('register');
+    Route::get('/register', 'showRegistrationForm')->name('register')->middleware('guest');
     Route::post('/register', 'register');
+});
+
+
+Route::controller(AuthenticatedController::class)->group(function () {
+    Route::get('/shopping-cart/users/{user}', 'index')->name('shopping-cart');
 });

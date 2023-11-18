@@ -511,7 +511,7 @@ INSERT INTO category VALUES('romance');
 INSERT INTO category VALUES('comics');
 INSERT INTO category VALUES('horror');
 
-INSERT INTO users(name,password,email) VALUES('Hazel Ezekiel','s-@**b:2BZ=n','YTwwRXNS@outlook.com');
+INSERT INTO users(name,password,email) VALUES('Hazel Ezekiel','$2y$10$s3v9UMMlt7or9VV.MRKyI.bk8wQrtBcwgs8SAx3lgQEDvKRK0WG96','YTwwRXNS@outlook.com');
 INSERT INTO users(name,password,email) VALUES('Emily Hudson','dJ*C^1r7<..l','RcctvSiO@gmail.com');
 INSERT INTO users(name,password,email) VALUES('Jackson Elena','/b/&_i-TgZ\c','gtHPMWuc@hotmail.com');
 INSERT INTO users(name,password,email) VALUES('Josiah Leo','b+@.+@$ynt_K','MNbeWlZd@yahoo.com');

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Authenticated;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth;
@@ -33,16 +34,22 @@ class RegisterController extends Controller
             'password' => 'required|min:8|confirmed'
         ]);
 
-        User::create([
+        $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password)
         ]);
 
+        Authenticated::create([
+            'user_id' => $user->id,
+            'address' => null,
+            'isblocked' => false
+        ]);
+
         $credentials = $request->only('email', 'password');
         Auth::attempt($credentials);
         $request->session()->regenerate();
-        return redirect()->route('/home')
+        return redirect()->route('all-products')
             ->withSuccess('You have successfully registered & logged in!');
     }
 }
