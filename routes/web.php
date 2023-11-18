@@ -24,10 +24,12 @@ use GuzzleHttp\Middleware;
 // Pages
 Route::controller(ProductController::class)->group(function () {
     Route::get('/', 'index')->name('all-products');
-    Route::get('/products/{product}', 'show')->name('single-product')->middleware('admin');
+    Route::get('/products/{product}', 'show')->name('single-product');
 });
 
-
+#->middleware('admin')
+#->middleware('guest')
+#->middleware('auth')
 // API
 Route::controller(CardController::class)->group(function () {
     Route::put('/api/cards', 'create');
@@ -56,4 +58,5 @@ Route::controller(RegisterController::class)->group(function () {
 
 Route::controller(AuthenticatedController::class)->group(function () {
     Route::get('/shopping-cart/users/{user}', 'index')->name('shopping-cart');
+    Route::post('/shopping-cart/users/{user}', 'store')->name('shopping-cart.store');
 });

@@ -28,7 +28,7 @@ class Authenticated extends Model
 
     public function getAllProducts()
     {
-        return $this->belongsToMany(Product::class, 'shopping_cart', 'user_id', 'product_id')->get();
+        return $this->belongsToMany(Product::class, 'shopping_cart', 'user_id', 'product_id');
     }
 
 }
