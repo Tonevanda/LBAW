@@ -23,12 +23,17 @@ function addEventListeners() {
     if (cardCreator != null)
       cardCreator.addEventListener('submit', sendCreateCardRequest);*/
 
-    let cartAdd = document.querySelectorAll('form.add_cart');
+    let cartDeleter = document.querySelectorAll('form.remove_cart');
+    //console.log(cartDeleter);
+    [].forEach.call(cartDeleter, function(deleter){
+      //console.log(deleter);
+      deleter.addEventListener('submit', deleteCartProductRequest);
+  });
 
-    console.log(cartAdd);
-    [].forEach.call(cartAdd, function(add){
-        //console.log(add);
-        add.addEventListener('submit', addShoppingCartRequest);
+    let cartCreator = document.querySelectorAll('form.add_cart');
+    //console.log(cartCreator);
+    [].forEach.call(cartCreator, function(creator){
+        creator.addEventListener('submit', createCartProductRequest);
     });
 
     /*let productSearch = document.querySelector('form.products_search');
@@ -63,11 +68,19 @@ function addEventListeners() {
     sendAjaxRequest('post', '/api/item/' + id, {done: checked}, itemUpdatedHandler);
   }
 
-  function addShoppingCartRequest(event){
+  function createCartProductRequest(event){
       let user_id = this.querySelector('input[name=user_id]').value;
       let product_id = this.querySelector('input[name=product_id]').value;
 
-      sendAjaxRequest('post', '/api/shopping-cart/users/'+user_id, {product_id: product_id}, addShoppingCartHandler);
+      sendAjaxRequest('post', '/api/shopping-cart/users/'+user_id, {product_id: product_id}, createCartProductHandler);
+      event.preventDefault();
+  }
+  
+  function deleteCartProductRequest(event){
+      let user_id = this.querySelector('input[name=user_id]').value;
+      let cart_id = this.querySelector('input[name=cart_id]').value;
+      //console.log(cart_id);
+      sendAjaxRequest('delete', '/api/shopping-cart/users/'+user_id, {cart_id: cart_id}, deleteCartProductHandler);
       event.preventDefault();
   }
   
@@ -102,10 +115,25 @@ function addEventListeners() {
     event.preventDefault();
   }
 
-  function addShoppingCartHandler(){
+  function createCartProductHandler(){
     if(this.status == 200){
+      console.log("added to shopping cart");
       //confirm added to shopping cart with popup in css
       
+    }
+  }
+
+  function deleteCartProductHandler(){
+    if(this.status == 200){
+      console.log("removed from shopping cart");
+      let response = JSON.parse(this.responseText);
+      let deletion_target = document.querySelector('div[data-id="' + response + '"]');
+      let deletion_price = deletion_target.querySelector('a p:last-child').textContent;
+      let new_total_price = document.querySelector('tr:last-child td:first-child');
+      let new_total_quantity = document.querySelector('tr:last-child td:last-child');
+      new_total_price.textContent= new_total_price.textContent-deletion_price;
+      new_total_quantity.textContent = new_total_quantity.textContent-1;
+      deletion_target.remove();
     }
   }
   

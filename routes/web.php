@@ -34,6 +34,7 @@ Route::controller(ProductController::class)->group(function () {
 
 Route::controller(AuthenticatedController::class)->group(function () {
     Route::post('/api/shopping-cart/users/{user_id}', 'store')->name('shopping-cart.store');
+    Route::delete('/api/shopping-cart/users/{user_id}', 'destroy')->name('shopping-cart.destroy');
 });
 /*
 Route::controller(ItemController::class)->group(function () {

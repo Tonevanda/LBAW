@@ -24,7 +24,19 @@ class AuthenticatedController extends Controller
     }
     public function store(Request $request, $user_id){
         $user = Authenticated::findOrFail($user_id);
-        $user->shoppingCart()->attach($request->input('product_id'));
+        $data = $request->validate([
+            'product_id' => 'required'
+        ]);
+        $user->shoppingCart()->attach($data['product_id']);
+    }
+
+    public function destroy(Request $request, $user_id){
+        $user = Authenticated::findOrFail($user_id);
+        $data = $request->validate([
+            'cart_id' => 'required'
+        ]);
+        $user->shoppingCart()->wherePivot('id', $data['cart_id'])->detach();
+        return response()->json($data['cart_id']);
     }
 }
 

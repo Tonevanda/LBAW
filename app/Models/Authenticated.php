@@ -28,7 +28,8 @@ class Authenticated extends Model
 
     public function shoppingCart()
     {
-        return $this->belongsToMany(Product::class, 'shopping_cart', 'user_id', 'product_id');
+        return $this->belongsToMany(Product::class, 'shopping_cart', 'user_id', 'product_id')
+                    ->withPivot('id');
     }
 
 }
