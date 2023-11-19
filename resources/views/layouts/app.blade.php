@@ -25,8 +25,9 @@
             <header>
                 <h1><a href="{{ url('/') }}">Bibliophile's Bliss</a></h1>
                 @if (Auth::check())
-                    <a class="button" href="{{ url('/logout') }}"> Logout </a> <span>{{ Auth::user()->name }}</span>
-                    <a class="button" href="{{ url('/shopping_cart') }}"> Shopping Cart </a>
+                    <a class="button" href="{{ url('/logout') }}"> Logout </a> 
+                    <a class="button" href="{{ route('profile',Auth::user())}}">{{ Auth::user()->name }}</a>
+                    <a class="button" href="{{ route('shopping-cart',Auth::user()) }}"> Shopping Cart </a> 
                 @else 
                     <a class="button button-outline" href="{{ route('login') }}">Login</a>
                     <a class="button button-outline" href="{{ route('register') }}">Register</a>

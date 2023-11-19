@@ -15,13 +15,20 @@ class Authenticated extends Model
 
     protected $primaryKey = 'user_id';
 
+    protected $fillable = [
+        'user_id',
+        'address',
+        'isBlocked',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function showAllProducts()
+    public function shoppingCart()
     {
-        return $this->belongsToMany(Product::class, 'shopping_cart');
+        return $this->belongsToMany(Product::class, 'shopping_cart', 'user_id', 'product_id');
     }
+
 }
