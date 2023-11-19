@@ -1,5 +1,5 @@
 function addEventListeners() {
-    let itemCheckers = document.querySelectorAll('article.card li.item input[type=checkbox]');
+    /*let itemCheckers = document.querySelectorAll('article.card li.item input[type=checkbox]');
     [].forEach.call(itemCheckers, function(checker) {
       checker.addEventListener('change', sendItemUpdateRequest);
     });
@@ -21,7 +21,13 @@ function addEventListeners() {
   
     let cardCreator = document.querySelector('article.card form.new_card');
     if (cardCreator != null)
-      cardCreator.addEventListener('submit', sendCreateCardRequest);
+      cardCreator.addEventListener('submit', sendCreateCardRequest);*/
+
+    let productSearch = document.querySelector('form.products_search');
+    if( productSearch != null)
+         console.log(productSearch);
+         productSearch.addEventListener('submit', searchProductsRequest);
+    
   }
   
   function encodeForAjax(data) {
@@ -78,6 +84,32 @@ function addEventListeners() {
       sendAjaxRequest('put', '/api/cards/', {name: name}, cardAddedHandler);
   
     event.preventDefault();
+  }
+
+  function searchProductsRequest(event){
+    let search = this.querySelector('input[name=search]').value;
+    let category = this.querySelector('select[name=category]').value;
+    let price = this.querySelector('input[name=price]').value;
+
+    sendAjaxRequest('get', '/', {search: search, category: category, price: price}, productSearchHandler);
+    event.preventDefault();
+  }
+
+  function productSearchHandler(){
+    if(this.status == 200){
+      console.log("hello");
+      let res = JSON.parse(this.responseText);
+      console.log(res.name);
+      /*let text = document.querySelector('');
+      console.log(text);
+      text.innerHTML = `
+  
+          <a href="#">
+          <h2> {{ ${res}}} </h2>
+          <p> blah </p>
+          <p> blah </p>
+      </a>`*/
+    }
   }
   
   function itemUpdatedHandler() {
@@ -178,4 +210,7 @@ function addEventListeners() {
   }
   
   addEventListeners();
+
+
+ 
   

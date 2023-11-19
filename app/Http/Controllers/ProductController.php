@@ -8,10 +8,15 @@ use Illuminate\Http\Request;
 class ProductController extends Controller
 {   
     //Show all products
-    public function index(){
-        return view('products.index', [
-            'products' => Product::filter(request(['search']))->Paginate(10)
-        ]);
+    public function index(Request $request){
+        //dd($request->input());
+        $products = Product::filter($request->input())->paginate(10);
+            //dd($products);
+        //dd($products[0]);
+
+        //dd($products[0]->name);
+        return response()->json($products[0]);
+        //return view('products.index', ['products' => $products]);
     }
 
     //Show a single product
