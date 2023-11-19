@@ -15,7 +15,7 @@ class PurchaseController extends Controller
         $data['user_id']=$user_id;
         $data['payment_type']="paypal";
         $data['destination']="Rua 1 2º andar 1234-567 Lisboa";
-        $data['orderarrivedat']='2025-09-08 14:35:03+02';
+        $data['orderarrivedat']='2025-09-08 14:35:03+02';                                   //these values are temporary
         $data['stage_state']="payment";
         Purchase::create($data);
         return redirect()->route('shopping-cart', $data['user_id']);

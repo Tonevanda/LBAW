@@ -33,7 +33,7 @@ class Purchase extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function Products()
+    public function products()
     {
         return $this->belongsToMany(Product::class, 'purchase_product', 'purchase_id', 'product_id');
     }

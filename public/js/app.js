@@ -24,22 +24,20 @@ function addEventListeners() {
       cardCreator.addEventListener('submit', sendCreateCardRequest);*/
 
     let cartDeleter = document.querySelectorAll('form.remove_cart');
-    //console.log(cartDeleter);
     [].forEach.call(cartDeleter, function(deleter){
-      //console.log(deleter);
       deleter.addEventListener('submit', deleteCartProductRequest);
   });
 
     let cartCreator = document.querySelectorAll('form.add_cart');
-    //console.log(cartCreator);
     [].forEach.call(cartCreator, function(creator){
         creator.addEventListener('submit', createCartProductRequest);
     });
 
-    /*let productSearch = document.querySelector('form.products_search');
-    if( productSearch != null)
-         console.log(productSearch);
-         productSearch.addEventListener('submit', searchProductsRequest);*/
+    let priceFilter = document.querySelector('form.products_search input[name=price]');
+    priceFilter.addEventListener('input', function () {
+      let priceShow = document.querySelector('form.products_search div');
+      priceShow.textContent = this.value;
+    });
     
   }
   
@@ -118,7 +116,6 @@ function addEventListeners() {
   function createCartProductHandler(){
     if(this.status == 200){
       console.log("added to shopping cart");
-      //confirm added to shopping cart with popup in css
       
     }
   }
