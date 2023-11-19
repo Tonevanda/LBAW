@@ -23,6 +23,13 @@
             <td>{{ $productCount }}</td>
         </tr>
     </table>
-    <a class="button" href="{{ url('/checkout') }}">Checkout</a>   
+    <form method="POST" action="{{ route('purchase.store', ['user_id' => Auth::user()->id]) }}">
+        {{ csrf_field() }}
+        <input type="hidden" name="quantity" value="{{ $productCount }}">
+        <input type="hidden" name="price" value="{{ $total }}">
+        <button type="submit" class="button button-outline">
+            Checkout
+        </button>
+    </form>
 
 @endsection

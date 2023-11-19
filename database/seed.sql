@@ -113,7 +113,7 @@ CREATE TABLE purchase(
     destination TEXT NOT NULL,
     stage_state TEXT NOT NULL REFERENCES stage (stage_state) ON UPDATE CASCADE ON DELETE CASCADE,
     isTracked BOOLEAN DEFAULT FALSE NOT NULL,
-    orderedAt TIMESTAMP WITH TIME ZONE NOT NULL,
+    orderedAt TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL,
     orderArrivedAt TIMESTAMP WITH TIME ZONE NOT NULL CONSTRAINT order_ck CHECK (orderArrivedAt > orderedAt) 
 );
 
