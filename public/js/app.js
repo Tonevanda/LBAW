@@ -23,10 +23,18 @@ function addEventListeners() {
     if (cardCreator != null)
       cardCreator.addEventListener('submit', sendCreateCardRequest);*/
 
-    let productSearch = document.querySelector('form.products_search');
+    let cartAdd = document.querySelectorAll('form.add_cart');
+
+    console.log(cartAdd);
+    [].forEach.call(cartAdd, function(add){
+        //console.log(add);
+        add.addEventListener('submit', addShoppingCartRequest);
+    });
+
+    /*let productSearch = document.querySelector('form.products_search');
     if( productSearch != null)
          console.log(productSearch);
-         productSearch.addEventListener('submit', searchProductsRequest);
+         productSearch.addEventListener('submit', searchProductsRequest);*/
     
   }
   
@@ -54,11 +62,19 @@ function addEventListeners() {
   
     sendAjaxRequest('post', '/api/item/' + id, {done: checked}, itemUpdatedHandler);
   }
+
+  function addShoppingCartRequest(event){
+      let user_id = this.querySelector('input[name=user_id]').value;
+      let product_id = this.querySelector('input[name=product_id]').value;
+
+      sendAjaxRequest('post', '/api/shopping-cart/users/'+user_id, {product_id: product_id}, addShoppingCartHandler);
+      event.preventDefault();
+  }
   
   function sendDeleteItemRequest() {
     let id = this.closest('li.item').getAttribute('data-id');
   
-    sendAjaxRequest('delete', '/api/item/' + id, null, itemDeletedHandler);
+    sendAjaxRequest('delete', '/api/item/', null, itemDeletedHandler);
   }
   
   function sendCreateItemRequest(event) {
@@ -86,29 +102,10 @@ function addEventListeners() {
     event.preventDefault();
   }
 
-  function searchProductsRequest(event){
-    let search = this.querySelector('input[name=search]').value;
-    let category = this.querySelector('select[name=category]').value;
-    let price = this.querySelector('input[name=price]').value;
-
-    sendAjaxRequest('get', '/', {search: search, category: category, price: price}, productSearchHandler);
-    event.preventDefault();
-  }
-
-  function productSearchHandler(){
+  function addShoppingCartHandler(){
     if(this.status == 200){
-      console.log("hello");
-      let res = JSON.parse(this.responseText);
-      console.log(res.name);
-      /*let text = document.querySelector('');
-      console.log(text);
-      text.innerHTML = `
-  
-          <a href="#">
-          <h2> {{ ${res}}} </h2>
-          <p> blah </p>
-          <p> blah </p>
-      </a>`*/
+      //confirm added to shopping cart with popup in css
+      
     }
   }
   

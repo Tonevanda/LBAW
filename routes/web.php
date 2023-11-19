@@ -31,12 +31,11 @@ Route::controller(ProductController::class)->group(function () {
 #->middleware('guest')
 #->middleware('auth')
 // API
-/*
-Route::controller(CardController::class)->group(function () {
-    Route::put('/api/cards', 'create');
-    Route::delete('/api/cards/{card_id}', 'delete');
-});
 
+Route::controller(AuthenticatedController::class)->group(function () {
+    Route::post('/api/shopping-cart/users/{user_id}', 'store')->name('shopping-cart.store');
+});
+/*
 Route::controller(ItemController::class)->group(function () {
     Route::put('/api/cards/{card_id}', 'create');
     Route::post('/api/item/{id}', 'update');
@@ -58,7 +57,6 @@ Route::controller(RegisterController::class)->group(function () {
 
 
 Route::controller(AuthenticatedController::class)->group(function () {
-    Route::get('/shopping-cart/users/{user}', 'index')->name('shopping-cart');
-    Route::get('/profile/users/{user}', 'show')->name('profile');
-    Route::post('/shopping-cart/users/{user}', 'store')->name('shopping-cart.store');
+    Route::get('/shopping-cart/users/{user_id}', 'index')->name('shopping-cart');
+    Route::get('/profile/users/{user_id}', 'show')->name('profile');
 });

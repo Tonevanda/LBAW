@@ -9,25 +9,22 @@ use Illuminate\View\View;
 class AuthenticatedController extends Controller
 {
     //Show all products in the shopping cart
-    public function index(Authenticated $user){
+    public function index($user_id){
+        $user = Authenticated::findOrFail($user_id);
         return view('shopping_cart', [
             'products' => $user->shoppingCart()->get()
-            #'Products' => Authenticated::findOrFail($user->user_id)->shoppingCart()
         ]);
     }
     //Show Profile
-    public function show(Authenticated $user){
+    public function show($user_id){
+        $user = Authenticated::findOrFail($user_id);
         return view('profile', [
             'user' => $user
         ]);
     }
-    public function store(Authenticated $user){
-        $data = request()->validate([
-            'product_id' => 'required'
-        ]);
-        $user->shoppingCart()->attach($data['product_id']);
-        return redirect()->route('shopping-cart', $user->user_id);
-
+    public function store(Request $request, $user_id){
+        $user = Authenticated::findOrFail($user_id);
+        $user->shoppingCart()->attach($request->input('product_id'));
     }
 }
 
