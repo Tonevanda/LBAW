@@ -11,7 +11,13 @@ use Illuminate\Support\Facades\Auth;
 class AuthenticatedController extends Controller
 {
     //Show all products in the shopping cart
-    public function index($user_id){
+
+    public function index(Request $request){
+        $users = Authenticated::filter($request->input())->paginate(10);
+        return view('user_search', ['users' => $users]);
+    }
+
+    public function showShoppingCart($user_id){
         $user = Authenticated::findOrFail($user_id);
         return view('shopping_cart', [
             'products' => $user->shoppingCart()->get()
@@ -37,14 +43,16 @@ class AuthenticatedController extends Controller
         $auth = Authenticated::findOrFail($user_id);
         $user = $auth->user()->get()[0];
         #dd('ok');
-        dd(request()->all( ));
+        //dd(request()->all( ));
         $data = request()->validate([
+            'profile_picture' => ['required'],
             'name' => 'string|max:250',
-            'email' => ['email', 'max:250', Rule::unique('users')->ignore($user->id)],
-            'old_password' => 'required|min:8',
+            'email' => ['email', 'max:250'],
+            'old-password' => 'required|min:8',
             'password' => 'min:8|confirmed',
             'address' => 'string|max:250',
         ]);
+        //dd(request('profile_picture'));
         $credentials = [
             'email' => $user->email,
             'password' => $data['old_password']
@@ -52,6 +60,7 @@ class AuthenticatedController extends Controller
         if (Auth::attempt($credentials)) {
             dd('ok');
         }
+        //dd(request('profile_picture')->store('uploads', 'public'));
         $auth->update($data);
         $user->update($data);
         return view('profile', [

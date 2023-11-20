@@ -39,4 +39,15 @@ class Authenticated extends Model
                     ->withPivot('id');
     }
 
+    public function scopeFilter($query, array $filters)
+    {
+        if($filters['search'] ?? false){
+            $search_filter = $filters['search'];
+            $query->leftJoin('users', 'user_id', '=', 'id')
+              ->where('email', '=', "$search_filter");
+        }
+        else
+            $query->leftJoin('users', 'user_id', '=', 'id');
+    }
+
 }

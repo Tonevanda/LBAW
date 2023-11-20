@@ -2,7 +2,7 @@
 
 @section('content')
 
-@include('partials._search')
+@include('partials._search-products')
 
 @foreach ($products as $product)
 

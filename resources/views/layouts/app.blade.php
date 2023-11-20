@@ -25,10 +25,14 @@
             <header>
                 <h1><a href="{{ url('/') }}">Bibliophile's Bliss</a></h1>
                 @if (Auth::check())
-                    <a class="button" href="{{ url('/logout') }}"> Logout </a> 
-                    <a class="button" href="{{ route('profile',Auth::user()->id)}}">{{ Auth::user()->name }}</a>
-                    <a class="button" href="{{ route('shopping-cart',Auth::user()->id) }}"> Shopping Cart </a>
-                    <a class="button" href="{{ route('purchase_history',Auth::user()->id) }}"> Purchase History </a>
+                    @if (Auth::user()->isAdmin())
+                        <a class="button" href="{{ route('users')}}">Users</a>
+                    @else
+                        <a class="button" href="{{ route('profile',Auth::user()->id)}}">{{ Auth::user()->name }}</a>
+                        <a class="button" href="{{ route('shopping-cart',Auth::user()->id) }}"> Shopping Cart </a>
+                        <a class="button" href="{{ route('purchase_history',Auth::user()->id) }}"> Purchase History </a>
+                    @endif
+                    <a class="button" href="{{ route('logout') }}"> Logout </a> 
                 @else 
                     <a class="button button-outline" href="{{ route('login') }}">Login</a>
                     <a class="button button-outline" href="{{ route('register') }}">Register</a>
