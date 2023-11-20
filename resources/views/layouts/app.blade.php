@@ -28,6 +28,7 @@
                     <a class="button" href="{{ url('/logout') }}"> Logout </a> 
                     <a class="button" href="{{ route('profile',Auth::user()->id)}}">{{ Auth::user()->name }}</a>
                     <a class="button" href="{{ route('shopping-cart',Auth::user()->id) }}"> Shopping Cart </a>
+                    <a class="button" href="{{ route('purchase_history',Auth::user()->id) }}"> Purchase History </a>
                 @else 
                     <a class="button button-outline" href="{{ route('login') }}">Login</a>
                     <a class="button button-outline" href="{{ route('register') }}">Register</a>

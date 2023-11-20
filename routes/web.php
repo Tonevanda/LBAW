@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AuthenticatedController;
 use App\Http\Controllers\PurchaseController;
+use Carbon\Carbon;
 use App\Models\User;
 use GuzzleHttp\Middleware;
 
@@ -61,9 +62,11 @@ Route::controller(RegisterController::class)->group(function () {
 Route::controller(AuthenticatedController::class)->group(function () {
     Route::get('/shopping-cart/users/{user_id}', 'index')->name('shopping-cart');
     Route::get('/profile/users/{user_id}', 'show')->name('profile');
-    Route::delete('/shopping-cart/users/{user}', 'destroy')->name('shopping-cart.destroy');
+    Route::delete('/shopping-cart/users/{user_id}', 'destroy')->name('shopping-cart.destroy');
+    Route::get('/purchase-history/{user_id}', 'showPurchases')->name('purchase_history');
 });
 
 Route::controller(PurchaseController::class)->group(function () {
     Route::post('/shopping-cart/users/{user_id}', 'store')->name('purchase.store');
+    //Route::get('/purchase-history/{user_id}', 'show_purchase')->name('purchase_history');
 });

@@ -7,6 +7,16 @@ use Illuminate\Http\Request;
 
 class PurchaseController extends Controller
 {
+
+    /*public function index($user_id){
+        $purchase = Purchase::findOrFail($user_id);
+        dd($purchase);
+        return view('purchase_history', [
+            'products' => $purchase->products()->get()
+        ]);
+
+    }*/
+    
    public function store($user_id){
         $data = request()->validate([
             'price' => 'required',
