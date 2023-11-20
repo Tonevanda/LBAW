@@ -24,6 +24,7 @@ main > header a.button.button-outline {
 
 .header-buttons {
     display: flex;
+    justify-content: flex-end;
     gap: 0.2em; /* Adjust the gap between buttons */
 }
 
@@ -179,25 +180,7 @@ main > header a.button.button-outline {
     border-color: #003740;
   }
 
-  .products_search {
-    position: relative;
-    width: 300px; /* Increase the width as needed */ /* Set sidebar height to 100% of viewport height */
-    background-color: #f2f2f2;
-    padding: 20px;
-  }
-  
-  #content {
-    flex-grow: 1;
-    padding: 20px;
-  }
-  
-  /* Add media query for responsiveness */
-  @media (max-width: 800px) {
-    .products_search {
-      width: 100%;
-      height: auto;
-    }
-  }
+
 
 #content {
   display: grid;
@@ -208,6 +191,99 @@ main > header a.button.button-outline {
 
 .product {
   background-color: #f2f2f28a;
+  padding: 20px;
+  border: 1px solid #00374052;
+  border-radius: 8px;
+}
+
+.shopping-cart {
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 20px auto;
+  max-width: 800px;
+}
+
+h1, p {
+  color: #003740;
+  margin-bottom: 10px;
+}
+
+.cart-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.purchases-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px; /* Adjust the gap between purchases */
+}
+
+.purchase {
+  flex: 1;
+  box-sizing: border-box;
+  border: 1px solid #f2f2f253;
+  background-color: #f2f2f2dc;
+  margin: 0;
+  padding: 20px;
+}
+
+.purchase a {
+  text-decoration: none;
+  color: #003740;
+}
+
+.purchase p {
+  color: #003740;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.x-history-product-card {
+  box-sizing: border-box;
+  background-color: #f2f2f28a;
+  padding: 20px;
+  border: 1px solid #00374052;
+  border-radius: 8px;
+  width: 100%; /* Set to a specific value or percentage */
+  max-width: 100%; /* Add this line to ensure the card doesn't exceed the width of its container */
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(800px, 1fr));
+  gap: 20px;
+  padding: 20px;
+  width: 100%; /* Set to a specific value or percentage */
+}
+
+@media (min-width: 1200px) {
+  .product-grid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+.purchases-container a p {
+  font-size: small;
+}
+
+.user-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Three columns */
+  gap: 20px; /* Adjust the gap between user cards */
+}
+
+.user-box {
+  background-color: #f2f2f2;
   padding: 20px;
   border: 1px solid #00374052;
   border-radius: 8px;
