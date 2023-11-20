@@ -2,8 +2,14 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Validator;
+
+
+
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -15,6 +21,7 @@ class AppServiceProvider extends ServiceProvider
         //
     }
 
+    
     /**
      * Bootstrap any application services.
      */
@@ -28,5 +35,10 @@ class AppServiceProvider extends ServiceProvider
             $schema = explode(':', $app_url)[0];
             URL::forceScheme($schema);
         }
+        
+        Validator::extend('old_password', function ($attribute, $value, $parameters, $validator) {
+            return Hash::check($value, Auth::user()->password);
+        });
     }
 }
+

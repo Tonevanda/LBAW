@@ -4,7 +4,7 @@
 <form method="POST" action="{{ route('profile.update', ['user_id' => Auth::user()->id]) }}">
     {{ csrf_field() }}
     @method('PUT')
-
+    
     <label for="image">Profile Picture</label>
     
     <input type="file" name="profile_picture" value="{{ old('profile_picture', Auth::user()->name) }}">
@@ -39,15 +39,15 @@
     @endif
 
     <label for="password">Old Password</label>
-    <input id="old-password" type="password" name="old-password" required>
-    @if ($errors->has('password'))
+    <input id="old_password" type="password" name="old_password" required>
+    @if ($errors->has('old_password'))
       <span class="error">
-          {{ $errors->first('password') }}
+        This password does not match our records.
       </span>
     @endif
 
     <label for="password">New Password</label>
-    <input id="password" type="password" name="password" required>
+    <input id="password" type="password" name="password">
     @if ($errors->has('password'))
       <span class="error">
           {{ $errors->first('password') }}
@@ -55,7 +55,7 @@
     @endif
 
     <label for="password-confirm">Confirm Password</label>
-    <input id="password-confirm" type="password" name="password_confirmation" required>
+    <input id="password-confirm" type="password" name="password_confirmation">
     <button type="submit">
       update
     </button>
