@@ -1,3 +1,4 @@
+
 <form class = "products_search" action="" method="GET">
     {{ csrf_field() }}
     <input type="text" name="search" value = "{{ request('search') }}">

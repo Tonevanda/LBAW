@@ -2,6 +2,9 @@
 
 @section('content')
 
-hello
+    <div class="product">
+    <!-- Your specific content for this section goes here -->
+    </div>
 
 @endsection
+

@@ -1,16 +1,34 @@
 body {
     background-color: #ffffff;
-    color: #9b4dca;
+    color: #003740;
   }
   main > header {
-    display: grid;
-    grid-template-columns: 1fr auto auto;
+    display: flex;
+    justify-content: space-between;
     align-items: center;
-    background-color: #d2afe7;
+    background-color: #003740;
     padding: 1em;
     margin: 1em;
-  }
-  main > header h1 {
+}
+
+main > header h1,
+main > header a.button {
+    color: #003740;
+    text-decoration: none;
+}
+
+main > header a.button.button-outline {
+    color: #003740;
+    border-color: white;
+}
+
+.header-buttons {
+    display: flex;
+    gap: 0.2em; /* Adjust the gap between buttons */
+}
+
+  main > header h1 a {
+    color: white;
     margin: 0;
   }
   main > header a.button {
@@ -86,7 +104,7 @@ body {
     margin: 0 auto;
     padding: 1em;
     max-width: 20em;
-    border: 1px solid #d2afe7;
+    border: 1px solid #ccc;
   }
   #content > form .error {
     font-weight: bold;
@@ -141,22 +159,56 @@ body {
    * Some styles might be missing
    **/
   button {
-    background-color: #9b4dca;
-    border-color: #9b4dca;
+    background-color: #003740;
+    border-color: #003740;
   }
   a.button {
-    background-color: #9b4dca;
-    border-color: #9b4dca;
+    background-color: white;
+    border-color: white;
+    color: #003740
   }
   a.button.button-outline {
-    color: #9b4dca;
+    color: white;
   }
   a {
-    color: #9b4dca;
+    color: #003740;
   }
   input[type=text]:focus,
   input[type=email]:focus,
   input[type=password]:focus {
-    border-color: #9b4dca;
+    border-color: #003740;
+  }
+
+  .products_search {
+    position: relative;
+    width: 300px; /* Increase the width as needed */ /* Set sidebar height to 100% of viewport height */
+    background-color: #f2f2f2;
+    padding: 20px;
   }
   
+  #content {
+    flex-grow: 1;
+    padding: 20px;
+  }
+  
+  /* Add media query for responsiveness */
+  @media (max-width: 800px) {
+    .products_search {
+      width: 100%;
+      height: auto;
+    }
+  }
+
+#content {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-gap: 20px;
+  padding: 20px;
+}
+
+.product {
+  background-color: #f2f2f28a;
+  padding: 20px;
+  border: 1px solid #00374052;
+  border-radius: 8px;
+}
