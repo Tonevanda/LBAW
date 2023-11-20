@@ -36,7 +36,7 @@
           {{ $errors->first('address') }}
       </span>
     @endif
-    @if ($user->user()->get()[0]->isAdmin()) 
+    @if (!Auth::user()->isAdmin()) 
     <label for="password">Old Password</label>
     <input id="old_password" type="password" name="old_password" required>
       @if ($errors->has('old_password'))
