@@ -2,6 +2,8 @@
 
 @section('content')
 
-hello
+    <div class="content-box">
+    <!-- Your specific content for this section goes here -->
+</div>
 
 @endsection

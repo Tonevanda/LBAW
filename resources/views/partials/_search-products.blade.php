@@ -1,6 +1,8 @@
+
 @php
     use App\Models\Category;
 @endphp
+
 
 <form class = "products_search" action="" method="GET">
     {{ csrf_field() }}
