@@ -70,7 +70,7 @@ function addEventListeners() {
       let user_id = this.querySelector('input[name=user_id]').value;
       let product_id = this.querySelector('input[name=product_id]').value;
 
-      sendAjaxRequest('post', '/api/shopping-cart/users/'+user_id, {product_id: product_id}, createCartProductHandler);
+      sendAjaxRequest('post', '/api/shopping-cart/'+user_id, {product_id: product_id}, createCartProductHandler);
       event.preventDefault();
   }
   
@@ -78,7 +78,7 @@ function addEventListeners() {
       let user_id = this.querySelector('input[name=user_id]').value;
       let cart_id = this.querySelector('input[name=cart_id]').value;
       //console.log(cart_id);
-      sendAjaxRequest('delete', '/api/shopping-cart/users/'+user_id, {cart_id: cart_id}, deleteCartProductHandler);
+      sendAjaxRequest('delete', '/api/shopping-cart/'+user_id, {cart_id: cart_id}, deleteCartProductHandler);
       event.preventDefault();
   }
   

@@ -32,9 +32,10 @@ class Product extends Model
     {
         $search_filter = '1 = ?';
         $name_filter = '1';
-        if($filters['price'] ?? true){
+        if(!($filters['price'] ?? false)){
             $filters['price'] = '250';
         }
+
         if($filters['category'] ?? false){
             $category_filter = 'category_type = ?';
         }
