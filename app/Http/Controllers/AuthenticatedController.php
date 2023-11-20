@@ -42,8 +42,6 @@ class AuthenticatedController extends Controller
     public function update($user_id){
         $auth = Authenticated::findOrFail($user_id);
         $user = $auth->user()->get()[0];
-        #dd('ok');
-        //dd(request()->all( ));
         $data = request()->validate([
             'profile_picture' => ['required'],
             'name' => 'string|max:250',
@@ -52,7 +50,6 @@ class AuthenticatedController extends Controller
             'password' => 'min:8|confirmed',
             'address' => 'string|max:250',
         ]);
-        //dd(request('profile_picture'));
         $credentials = [
             'email' => $user->email,
             'password' => $data['old_password']
@@ -60,12 +57,9 @@ class AuthenticatedController extends Controller
         if (Auth::attempt($credentials)) {
             dd('ok');
         }
-        //dd(request('profile_picture')->store('uploads', 'public'));
         $auth->update($data);
         $user->update($data);
-        return view('profile', [
-            'user' => $auth
-        ]);
+        return view('profile');
     }
     public function store(Request $request, $user_id){
         $user = Authenticated::findOrFail($user_id);

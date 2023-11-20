@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
-<form method="POST" action="{{ route('profile.update', ['user_id' => Auth::user()->id]) }}">
-    {{ csrf_field() }}
-    @method('PUT')
+<form method="POST" action="{{ route('profile.update', ['user_id' => Auth::user()->id]) }}" enctype="multipart/form-data">
+  {{ csrf_field() }}
+  @method('PUT')
 
-    <label for="image">Profile Picture</label>
-    
-    <input type="file" name="profile_picture" value="{{ old('profile_picture', Auth::user()->name) }}">
+  <label for="image">Profile Picture</label>
+  
+  <input type="file" name="profile_picture" value="{{ old('profile_picture', Auth::user()->profile_picture) }}">
     @if ($errors->has('profile_picture'))
       <span class="error">
           {{ $errors->first('profile_picture') }}

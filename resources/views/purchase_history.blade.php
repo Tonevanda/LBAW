@@ -11,6 +11,7 @@ use Carbon\Carbon;
 
     <a href="#">
         <p> {{ Carbon::parse($purchase->orderedat)->format('d/m/Y H:i:s') }} </p>
+        <p> {{ $purchase->price }} </p>
         @foreach($purchase->products()->get() as $product)
             <x-history-product-card :product="$product" />
         @endforeach
