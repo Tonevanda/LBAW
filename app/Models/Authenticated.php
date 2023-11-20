@@ -26,9 +26,17 @@ class Authenticated extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    public function purchases()
+    {
+        return $this->hasMany(Purchase::class, 'user_id');
+    }
+
+    
+
     public function shoppingCart()
     {
-        return $this->belongsToMany(Product::class, 'shopping_cart', 'user_id', 'product_id');
+        return $this->belongsToMany(Product::class, 'shopping_cart', 'user_id', 'product_id')
+                    ->withPivot('id');
     }
 
 }

@@ -2,9 +2,8 @@
 
 @section('content')
 
-    <div class="product">
+    <div class="content-box">
     <!-- Your specific content for this section goes here -->
-    </div>
+</div>
 
 @endsection
-

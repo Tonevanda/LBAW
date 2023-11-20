@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Purchase;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Product extends Model
 {
@@ -17,18 +18,24 @@ class Product extends Model
 
     protected $primaryKey = 'id';
 
-    public function showAllBuyers()
+    public function buyers()
     {
-        return $this->belongsToMany(Authenticated::class, 'shopping_cart', 'product_id', 'user_id')->get();
+        return $this->belongsToMany(Authenticated::class, 'shopping_cart', 'product_id', 'user_id');
+    }
+
+    public function purchases()
+    {
+        return $this->belongsToMany(Purchase::class, 'purchase_product', 'product_id', 'purchase_id');
     }
 
     public function scopeFilter($query, array $filters)
     {
         $search_filter = '1 = ?';
         $name_filter = '1';
-        if($filters['price'] ?? true){
+        if(!($filters['price'] ?? false)){
             $filters['price'] = '250';
         }
+
         if($filters['category'] ?? false){
             $category_filter = 'category_type = ?';
         }

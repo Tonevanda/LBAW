@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AuthenticatedController;
 use App\Http\Controllers\PurchaseController;
+use Carbon\Carbon;
 use App\Models\User;
 use GuzzleHttp\Middleware;
 
@@ -25,7 +26,7 @@ use GuzzleHttp\Middleware;
 // Pages
 Route::controller(ProductController::class)->group(function () {
     Route::get('/', 'index')->name('all-products');
-    Route::get('/products/{product}', 'show')->name('single-product');
+    Route::get('/products/{product_id}', 'show')->name('single-product');
 });
 
 #->middleware('admin')
@@ -34,7 +35,8 @@ Route::controller(ProductController::class)->group(function () {
 // API
 
 Route::controller(AuthenticatedController::class)->group(function () {
-    Route::post('/api/shopping-cart/users/{user_id}', 'store')->name('shopping-cart.store');
+    Route::post('/api/shopping-cart/{user_id}', 'store')->name('shopping-cart.store');
+    Route::delete('/api/shopping-cart/{user_id}', 'destroy')->name('shopping-cart.destroy');
 });
 /*
 Route::controller(ItemController::class)->group(function () {
@@ -58,11 +60,12 @@ Route::controller(RegisterController::class)->group(function () {
 
 
 Route::controller(AuthenticatedController::class)->group(function () {
-    Route::get('/shopping-cart/users/{user_id}', 'index')->name('shopping-cart');
+    Route::get('/shopping-cart/{user_id}', 'index')->name('shopping-cart');
     Route::get('/profile/users/{user_id}', 'show')->name('profile');
-    Route::delete('/shopping-cart/users/{user}', 'destroy')->name('shopping-cart.destroy');
+    Route::put('/profile/users/{user_id}', 'update')->name('profile.update');
+    Route::get('/purchase-history/{user_id}', 'showPurchases')->name('purchase_history');
 });
 
 Route::controller(PurchaseController::class)->group(function () {
-    Route::post('/shopping-cart/users/{user_id}', 'store')->name('purchase.store');
+    Route::post('/checkout/{user_id}', 'store')->name('purchase.store');
 });
