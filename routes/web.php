@@ -61,7 +61,7 @@ Route::controller(RegisterController::class)->group(function () {
 
 Route::controller(AuthenticatedController::class)->group(function () {
     Route::get('/shopping-cart/{user_id}', 'showShoppingCart')->name('shopping-cart');
-    Route::get('/users/{user_id}', 'show')->name('profile');
+    Route::get('/users/{user_id}', 'show')->name('profile')->middleware('adminOrAuth');
     Route::get('/user/create', 'showCreateUserForm')->name('create_user');
     Route::post('/user/create', 'create')->name('user.create');
     Route::get('/users', 'index')->name('users');
