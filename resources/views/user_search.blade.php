@@ -11,4 +11,7 @@
 
 @endforeach
 
+<div class="pagination">
+    {{ $users->links() }}
+
 @endsection

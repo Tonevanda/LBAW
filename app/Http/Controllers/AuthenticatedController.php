@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use App\Models\Admin;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 use App\Models\Authenticated;
@@ -43,7 +45,6 @@ class AuthenticatedController extends Controller
     public function update($user_id){
         $auth = Authenticated::findOrFail($user_id);
         $user = $auth->user()->get()[0];
-        #dd('ok');
         $data = request()->validate([
             'profile_picture' => ['required'],
             'name' => 'string|max:250',
@@ -62,6 +63,41 @@ class AuthenticatedController extends Controller
         Auth::setUser($user->fresh());
         return view('profile');
     }
+
+    public function showCreateUserForm(): View
+    {
+        return view('create_user');
+    }
+
+    public function create(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:250',
+            'email' => 'required|email|max:250|unique:users',
+            'password' => 'required|min:8|confirmed',
+            'type' => 'required'
+        ]);
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password)
+        ]);
+        if($request->type == 'Admin'){
+            Admin::create([
+                'admin_id' => $user->id
+            ]);
+        }
+        else{
+            Authenticated::create([
+                'user_id' => $user->id,
+                'address' => null,
+                'isblocked' => false
+            ]);
+        }
+
+        return redirect()->route('create_user');
+    }
+
     public function store(Request $request, $user_id){
         $user = Authenticated::findOrFail($user_id);
         $data = $request->validate([

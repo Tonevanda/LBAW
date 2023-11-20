@@ -62,6 +62,8 @@ Route::controller(RegisterController::class)->group(function () {
 Route::controller(AuthenticatedController::class)->group(function () {
     Route::get('/shopping-cart/{user_id}', 'showShoppingCart')->name('shopping-cart');
     Route::get('/users/{user_id}', 'show')->name('profile');
+    Route::get('/user/create', 'showCreateUserForm')->name('create_user');
+    Route::post('/user/create', 'create')->name('user.create');
     Route::get('/users', 'index')->name('users');
     Route::put('/users/{user_id}', 'update')->name('profile.update');
     Route::get('/purchase-history/{user_id}', 'showPurchases')->name('purchase_history');
@@ -70,3 +72,4 @@ Route::controller(AuthenticatedController::class)->group(function () {
 Route::controller(PurchaseController::class)->group(function () {
     Route::post('/checkout/{user_id}', 'store')->name('purchase.store');
 });
+

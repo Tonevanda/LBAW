@@ -2,8 +2,8 @@ openapi: 3.0.0
 
 info:
   version: '1.0'
-  title: 'Bibliophile's Bliss'
-  description: 'Web Resources Specification (A7) for Bibiophile's Bliss'
+  title: 'Bibliophiles Bliss'
+  description: 'Web Resources Specification (A7) for Bibiophiles Bliss'
 
 servers:
 - url: http://lbaw.fe.up.pt
@@ -11,16 +11,70 @@ servers:
 
 tags:
   - name: 'M01: Authentication and Individual Profile'
-  - name: 'M02: Purchase'
-  - name: 'M03: Shpping Cart and Wish list'
+  - name: 'M02: Products'
+  - name: 'M03: Reviews'
+  - name: 'M04: Wishlist, Shopping Cart and Purchases'
   - name: 'M05: User Administration and Static pages'
 
 paths:
+  /register:
+    get:
+      operationId: R101
+      summary: 'R101: Register Form'
+      description: 'Provide new user registration form. Access: PUB,ADM'
+      tags:
+        - 'M01: Authentication and Individual Profile'
+      responses:
+        '200':
+          description: 'Ok. Show sign-up UI'
+
+    post:
+      operationId: R102
+      summary: 'R102: Register Action'
+      description: 'Processes the new user registration form submission. Access: PUB'
+      tags:
+        - 'M01: Authentication and Individual Profile'
+
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+                confirmPassword:
+                  type: string
+              required:
+                - name
+                - email
+                - password
+                - confirmPassword
+
+      responses:
+        '302':
+          description: 'Redirect after processing the new user information.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successful authentication. Redirect to home page.'
+                  value: '/'
+                302Failure:
+                  description: 'Failed authentication. Redirect to registation form.'
+                  value: '/register'
 
   /login:
     get:
-      operationId: R101
-      summary: 'R101: Login Form'
+      operationId: R103
+      summary: 'R103: Login Form'
       description: 'Provide login form. Access: PUB'
       tags:
         - 'M01: Authentication and Individual Profile'
@@ -28,8 +82,8 @@ paths:
         '200':
           description: 'Ok. Show log-in UI'
     post:
-      operationId: R102
-      summary: 'R102: Login Action'
+      operationId: R104
+      summary: 'R104: Login Action'
       description: 'Processes the login form submission. Access: PUB'
       tags:
         - 'M01: Authentication and Individual Profile'
@@ -58,18 +112,104 @@ paths:
                 type: string
               examples:
                 302Success:
-                  description: 'Successful authentication. Redirect to user profile.'
-                  value: '/users/{id}'
+                  description: 'Successful authentication. Redirect to home page.'
+                  value: '/'
                 302Error:
                   description: 'Failed authentication. Redirect to login form.'
                   value: '/login'
- 
+
+  /users/{user_id}:
+    get:
+      operationId: R105
+      summary: 'R105: View user profile'
+      description: 'Show the individual user profile. Access: USR,ADM'
+      tags:
+        - 'M01: Authentication and Individual Profile'
+
+      parameters:
+        - in: path
+          name: user_id
+          description: The user id
+          schema:
+            type: integer
+          required: true
+
+      responses:
+        '200':
+          description: 'Ok. Show view profile UI'
+          
+  /users:
+    get:
+      operationId: R501
+      summary: 'R501: Search User'
+      description: 'Perform exact search to show user. Access: ADM'
+      tags:
+        - 'M06: User Administration and Static pages'
+      parameters:
+        - in: query
+          name: email
+          description: The user email
+          schema:
+            type: string
+          required: false
+      responses:
+        '200':
+          description: Success  
+    put:
+      operationId: R106
+      summary: 'R106: Edit Profile Action'
+      description: 'Processes the new user profile information. Access: USR,ADM'
+      tags:
+        - 'M01: Authentication and Individual Profile'
+
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                user_id:
+                    type: integer
+                name:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+                confirmPassword:
+                  type: string
+                profilePicture:
+                  type: string
+              required:
+                - name
+                - email
+                - password
+                - confirmPassword
+                - profilePicture
+
+      responses:
+        '302':
+          description: 'Redirect after processing the new profile information.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Profile successfully edited. Redirect to user profile.'
+                  value: '/users/{user_id}'
+                302Failure:
+                  description: 'Profile failed edit . Redirect to user profile.'
+                  value: '/users/{user_id}'
+
+
   /logout:
 
     post:
-      operationId: R103
-      summary: 'R103: Logout Action'
-      description: 'Logout the current authenticated used. Access: USR, ADM'
+      operationId: R107
+      summary: 'R107: Logout Action'
+      description: 'Logout the current authenticated user. Access: USR,ADM'
       tags:
         - 'M01: Authentication and Individual Profile'
       responses:
@@ -84,24 +224,210 @@ paths:
                   description: 'Successful logout. Redirect to login form.'
                   value: '/login'
 
-  /register:
+
+  /:
     get:
-      operationId: R104
-      summary: 'R104: Register Form'
-      description: 'Provide new user registration form. Access: PUB'
+      operationId: R201
+      summary: 'R201: view or search home page'
+      description: 'Show home page. Access: PUB,USR,ADM'
       tags:
-        - 'M01: Authentication and Individual Profile'
+        - 'M02: Products'
+      parameters:
+        - in: query
+          name: search
+          description: String to use for full-text search
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: category
+          description: Category of the products
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: price
+          description: Price of the products
+          schema:
+            type: integer
+          required: true
       responses:
         '200':
-          description: 'Ok. Show sign-up UI'
+         description: Success
 
-    post:
-      operationId: R105
-      summary: 'R105: Register Action'
-      description: 'Processes the new user registration form submission. Access: PUB'
+  /products/{product_id}:
+    get:
+      operationId: R202
+      summary: 'R202: view product details page'
+      description: 'Show product details page. Access: PUB,USR,ADM'
       tags:
-        - 'M01: Authentication and Individual Profile'
+        - 'M02: Products'
+      parameters:
+        - in: path
+          name: product_id
+          description: The id of the product
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: 'Ok. Show product details page'
 
+  /shopping-cart/{user_id}:
+      get:
+          operationId: R401
+          summary: 'R401: view product details page'
+          description: 'Show product details page. Access: PUB,USR,ADM'
+          tags:
+            - 'M02: Products'
+          parameters:
+            - in: path
+              name: user_id
+              description: The id of the user
+              schema:
+                type: integer
+              required: true
+          responses:
+            '200':
+              description: 'Ok. Show product details page'     
+                    
+  /api/shopping-cart:
+       post:
+         operationId: R402
+         summary: 'R402: Add to Shopping Cart'
+         description: 'Add a product to shopping cart. Access: USR,ADM'
+         tags:
+           - 'M04: Wishlist, Shopping Cart and Purchases'
+         requestBody:
+           required: true
+           content:
+             application/x-www-form-urlencoded:
+               schema:
+                 type: object
+                 properties:
+                   user_id:                                
+                     type: integer
+                   product_id:                       
+                     type: integer
+                 required:
+                   - user_id
+                   - product_id
+         responses:
+           '302':
+              description: 'Redirect after processing adding to shopping cart.'
+              headers:
+                Location:
+                  schema:
+                    type: string
+                  examples:
+                    302Success:
+                      description: 'Successful addition. Redirect to home page.'
+                      value: '/'
+                      
+                      
+       delete:
+         operationId: R403
+         summary: 'R403: Remove from Shopping Cart'
+         description: 'Remove a product from a shopping cart. Access: OWN,ADM'
+         tags:
+           - 'M04: Wishlist, Shopping Cart and Purchases'
+         parameters:
+            - in: header
+              name: user_id
+              description: The id of the user
+              schema:
+                type: integer
+              required: true
+            - in: header
+              name: cart_id
+              description: The cart id of the shopping cart
+              schema:
+                type: integer
+              required: true
+         responses:
+           '302':
+              description: 'Redirect after processing removing from shopping cart.'
+              headers:
+                Location:
+                  schema:
+                    type: string
+                  examples:
+                    302Success:
+                      description: 'Successful deletion. Redirect to shoppingg cart page.'
+                      value: '/shopping-cart/{user_id}'             
+
+
+  /checkout:
+       post:
+         operationId: R404
+         summary: 'R404: Checkout'
+         description: 'Finalise the purchase of the products in the shopping cart. Access: OWN'
+         tags:
+           - 'M04: Wishlist, Shopping Cart and Purchases'
+         requestBody:
+           required: true
+           content:
+             application/x-www-form-urlencoded:
+               schema:
+                 type: object
+                 properties:
+                   user_id:                        
+                     type: integer
+                   paymentMethod:                      
+                     type: string
+                 required:
+                   - user_id
+                   - paymentMethod
+         responses:
+           '302':
+              description: 'Redirect after processing checkout.'
+              headers:
+                Location:
+                  schema:
+                    type: string
+                  examples:
+                    302Success:
+                      description: 'Successful checkout. Redirect to home page.'
+                      value: '/'
+                    302Failure:
+                      description: 'Failed during checkout. Redirect to shopping cart page.'
+                      value: '/shoping-cart/{user_id}'
+
+  /purchase-history/{user_id}:
+    get:
+      operationId: R405
+      summary: 'R405: Purchase History'
+      description: 'View Purchase History. Access: USR,ADM'
+      tags:
+        - 'M04: Wishlist, Shopping Cart and Purchases'
+      parameters:
+        - in: path
+          name: user_id
+          description: The id of the user
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: Success
+
+
+  /user/create:
+    get:
+      operationId: R502
+      summary: 'R502: Create User Form'
+      description: 'Provide new create user form. Access: ADM'
+      tags:
+        - 'M05: User Administration and Static pages'
+      responses:
+        '200':
+          description: Success
+    post:
+      operationId: R503
+      summary: 'R503: Create User Action'
+      description: 'Create a new User Action. Access: ADM'
+      tags:
+        - 'M05: User Administration and Static pages'
       requestBody:
         required: true
         content:
@@ -113,15 +439,18 @@ paths:
                   type: string
                 email:
                   type: string
+                type:
+                  type: string
                 password:
                   type: string
-                picture:
+                confirmPassword:
                   type: string
-                  formate: binary
               required:
                 - name
                 - email
+                - type
                 - password
+                - confirmPassword
 
       responses:
         '302':
@@ -132,1083 +461,8 @@ paths:
                 type: string
               examples:
                 302Success:
-                  description: 'Successful authentication. Redirect to user profile.'
-                  value: '/users/{id}'
+                  description: 'Successful authentication. Redirect to create user page.'
+                  value: '/user/create'
                 302Failure:
-                  description: 'Failed authentication. Redirect to login form.'
-                  value: '/login'
-
-  /users/{id}:
-    get:
-      operationId: R106
-      summary: 'R106: View user profile'
-      description: 'Show the individual user profile. Access: OWN, ADM'
-      tags:
-        - 'M01: Authentication and Individual Profile'
-
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true
-
-      responses:
-        '200':
-          description: 'Ok. Show view profile UI'
-
-  /users/edit:
-    get:
-      operationId: R107
-      summary: 'R107: Edit user profile'
-      description: 'Provide edit profile form. Access: OWN,ADM'
-      tags:
-        - 'M01: Authentication and Individual Profile'
-      responses:
-        '200':
-          description: 'Ok. Show edit profile form'
-
-    post:
-      operationId: R108
-      summary: 'R108: Edit Profile Action'
-      description: 'Processes the new user profile information. Access: OWN, ADM'
-      tags:
-        - 'M01: Authentication and Individual Profile'
-
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                email:
-                  type: string
-                password:
-                  type: string
-                picture:
-                  type: string
-                  formate: binary
-              required:
-                - name
-                - email
-                - password
-
-      responses:
-        '302':
-          description: 'Redirect after processing the new profile information.'
-          headers:
-            Location:
-              schema:
-                type: string
-              examples:
-                302Success:
-                  description: 'Profile successfully edit. Redirect to user profile.'
-                  value: '/users/{id}'
-                302Failure:
-                  description: 'Failed authentication. Redirect to edit profile form.'
-                  value: '/' 
-  
-  /user/delete:
-
-    post:
-      operationId: R109
-      summary: 'R109: Delete Account Action'
-      description: 'Delete the Account. Access: OWN, ADM'
-      tags:
-        - 'M01: Authentication and Individual Profile'
-      responses:
-        '302':
-          description: 'Redirect after deleting the account.'
-          headers:
-            Location:
-              schema:
-                type: string
-              examples:
-                302Success:
-                  description: 'Account sucessfully deleted. Redirect to login form.'
-                  value: '/login'
-
-  /user/block:
-
-    post:
-      operationId: R110
-      summary: 'R109: Block user Action'
-      description: 'The user loses access to their account. Access: ADM'
-      tags:
-        - 'M01: Authentication and Individual Profile'
-      responses:
-        '302':
-          description: 'Redirect after blocking the account.'
-          headers:
-            Location:
-              schema:
-                type: string
-              examples:
-                302Success:
-                  description: 'Account sucessfully blocked. Redirect to user page.'
-                  value: '/login'
-
-  /user/unblock:
-
-    post:
-      operationId: R111
-      summary: 'R109: Unblock user Action'
-      description: 'The user regains access to their account. Access: ADM'
-      tags:
-        - 'M01: Authentication and Individual Profile'
-      responses:
-        '302':
-          description: 'Redirect after unblocking the account.'
-          headers:
-            Location:
-              schema:
-                type: string
-              examples:
-                302Success:
-                  description: 'Account sucessfully unblocked. Redirect to users page.'
-                  value: '/login'
-
-  /user/unblockappeal:
-
-    get:
-      operationId: R112
-      summary: 'R107: Send unblock appeal'
-      description: 'Provide unblock appeal form. Access: OWN'
-      tags:
-        - 'M01: Authentication and Individual Profile'
-      responses:
-        '200':
-          description: 'Ok. Show unblock appeal form'
-
-    post:
-      operationId: R113
-      summary: 'R113: Send unblocked appeal Action'
-      description: 'Processes unblock appeal. Access: ADM'
-      tags:
-        - 'M01: Authentication and Individual Profile'
-
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                title:
-                  type: string
-                description:
-                  type: string
-                date:
-                  type: Date
-              required:
-                - title
-                - date
-
-      responses:
-        '302':
-          description: 'Redirect after processing the new profile information.'
-          headers:
-            Location:
-              schema:
-                type: string
-              examples:
-                302Success:
-                  description: 'Profile successfully edit. Redirect to user profile.'
-                  value: '/users/{id}'
-                302Failure:
-                  description: 'Failed authentication. Redirect to edit profile form.'
-                  value: '/' 
-
-  /users:
-    get:
-      operationId: R115
-      summary: 'R115: View users'
-      description: 'Show the users page. Access: ADM'
-      tags:
-        - 'M01: Authentication and Individual Profile'
-
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true
-
-      responses:
-        '200':
-          description: 'Ok. Show users page'
-
-  user/notifications/{id}:
-    get:
-      operationId: R116
-      summary: 'R116: View personal notifications'
-      description: 'Show the notifications. Access: OWN'
-      tags:
-        - 'M01: Authentication and Individual Profile'
-
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true
-
-      responses:
-        '200':
-          description: 'Ok. Show the notifications'
-
-  /recoverPassword:
-
-    post:
-      operationId: R117
-      summary: 'R117 : Recover Password Action'
-      description: 'Changes the current password after receiving the validation token. Access: VST'
-      tags:
-        - 'M01: Authentication'
-
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                token:
-                  type: string
-                password:
-                  type: string
-                  format: password
-                verify_password:
-                  type: string
-                  format: password
-              required:
-                - token
-                - password
-                - verify_password;
-
-      responses:
-        '200':
-          description: 'Success. Your password has been changed successfully.'
-        '404':
-          description: 'Error. Invalid token.'
-
-  /products:
-    get:
-      operationId: R200
-      summary: 'R200: View products page'
-      description: 'Show products page. Access: USR,ADM'
-      tags:
-        - 'M02: Products'
-
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true
-
-      responses:
-        '200':
-          description: 'Ok. Show products'
-
-  /products/{id}:
-    get:
-      operationId: R201
-      summary: 'R201: View product page'
-      description: 'Show product page. Access: USR, ADM'
-      tags:
-        - 'M02: Products'
-
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true
-
-      responses:
-        '200':
-          description: 'Ok. Show product'
-
-  /api/products:
-    get:
-      operationId: R202
-      summary: 'R202: Search Products API'
-      description: 'Searches for works and returns the results as JSON. Access: PUB.'
-
-      tags: 
-        - 'M02: Products'
-
-      parameters:
-        - in: query
-          name: query
-          description: String to use for full-text search
-          schema:
-            type: string
-          required: false
-        - in: query
-          name: category
-          description: Category of the product
-          schema:
-            type: string
-          required: false
-        - in: query
-          name: classification
-          description: Integer corresponding to the product classification
-          schema:
-            type: integer
-          required: false
-
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    name:
-                      type: string
-                    synopsis:
-                      type: string
-                    price:
-                      type: string
-                    author:
-                      type: string
-                    editor:
-                      type: string
-                    language:
-                      type: string
-                example:
-                  - name: "O Segredo de Espinosa"
-                    sinopse: "O Segredo de Espinosa" narra a vida de Bento de Espinosa, um judeu excomungado por questionar a Bíblia. Ele torna-se um prodígio, mas a sua busca por respostas sobre a fé e a natureza leva-o a ser acusado de heresia por rabinos judeus e pregadores cristãos. Este é um livro inspirado na vida do maior filósofo português, Bento de Espinosa, e sua busca proibida por um segredo."
-                    price: 20,25
-                    author: Jose Rodrigues dos Santos
-                    editor: Planeta
-                    language: portugues
-
-  /products/edit:
-    get:
-      operationId: R203
-      summary: 'R203: Edit products' details
-      description: 'The product details become editable. Access: ADM.'
-
-      tags: 
-        - 'M02: Products'
-
-      responses:
-        '200':
-          description: 'Ok. Show editable details UI'
-
-    post:
-      operationId: R204
-      summary: 'R204: Edit Action'
-      description: 'Processes the changes made. Access: ADM'
-      tags:
-        - 'M02: Products'
-
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                synopsis:
-                  type: string
-                price:
-                  type: string
-                author:
-                  type: string
-                editor:
-                  type: string
-                language:
-                  type: string
-              required: false
-
-      responses:
-        '200':
-          description: 'Redirect after processing the new product information.'
-          headers:
-            Location:
-              schema:
-                type: string
-              examples:
-                302Success:
-                  description: 'Successfully edited. Redirect to product page.'
-                  value: '/product'
-                302Failure:
-                  description: 'Edit failed. Redirect to editable product page.'
-                  value: '/product'
-
-    /products/discount:
-    get:
-      operationId: R205
-      summary: 'R205: Add discount'
-      description: 'Show the discount form. Access: ADM.'
-
-      tags: 
-        - 'M02: Products'
-
-      responses:
-        '200':
-          description: 'Ok. Show the discount form.'
-
-    post:
-      operationId: R206
-      summary: '206: Add discount Action'
-      description: 'Apply the discount on the product. Access: ADM'
-      tags:
-        - 'M02: Products'
-
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                discount:
-                      type: integer
-              required: true
-
-      responses:
-        '200':
-          description: 'Redirect after processing the discount.'
-          headers:
-            Location:
-              schema:
-                type: string
-              examples:
-                302Success:
-                  description: 'Discount successfully apllied. Redirect to product page.'
-                  value: '/product'
-                302Failure:
-                  description: 'Discount application failed. Redirect to discount form.'
-                  value: '/product'
-
-  /products/add:
-    get:
-      operationId: R207
-      summary: 'R207: Add product'
-      description: 'Show the new product form. Access: ADM.'
-
-      tags: 
-        - 'M02: Products'
-
-      responses:
-        '200':
-          description: 'Ok. Show the new product form'
-
-    post:
-      operationId: R208
-      summary: 'R208: Add Product Action'
-      description: 'Processes the product. Access: ADM'
-      tags:
-        - 'M02: Products'
-
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                synopsis:
-                  type: string
-                price:
-                  type: string
-                author:
-                  type: string
-                editor:
-                  type: string                    
-                language:
-                  type: string
-              required: true
-
-      responses:
-        '200':
-          description: 'Redirect after processing the new product.'
-          headers:
-            Location:
-              schema:
-                type: string
-              examples:
-                302Success:
-                  description: 'Product successfully added. Redirect to product page.'
-                  value: '/product'
-                302Failure:
-                  description: 'Failed to add the product. Redirect to editable product page.'
-                  value: '/product'
-
-  /products/stock:
-    get:
-      operationId: R209
-      summary: 'R209: Manage product stock'
-      description: 'Show the product stock form. Access: ADM.'
-
-      tags: 
-        - 'M02: Products'
-
-      responses:
-        '200':
-          description: 'Ok. Show the product stock form'
-
-    post:
-      operationId: R208
-      summary: 'R208: Manage product stock Action'
-      description: 'Processes the updated product stock. Access: ADM'
-      tags:
-        - 'M02: Products'
-
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                stock:
-                  type: integer        
-              required: true
-
-      responses:
-        '200':
-          description: 'Redirect after processing the updated product stock.'
-          headers:
-            Location:
-              schema:
-                type: string
-              examples:
-                302Success:
-                  description: 'Product stock successfully updated. Redirect to product page.'
-                  value: '/product'
-                302Failure:
-                  description: 'Failed to update the product stock. Redirect to editable product page.'
-                  value: '/product'
-
-
-  /review/write:
-    get:
-      operationId: R301
-      summary: 'R301: Write a review'
-      description: 'Show the review form. Access: USR.'
-
-      tags: 
-        - 'M03: Reviews'
-
-      responses:
-        '200':
-          description: 'Ok. Show the review form'
-
-    post:
-      operationId: R302
-      summary: 'R302: Add Review Action'
-      description: 'Processes the review. Access: USR'
-      tags:
-        - 'M03: Reviews'
-
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                title:
-                  type: string
-                description:
-                  type: string
-                rate: 
-                  type: integer
-              required: 
-                - title
-                - rate
-
-      responses:
-        '200':
-          description: 'Redirect after processing the review.'
-          headers:
-            Location:
-              schema:
-                type: string
-              examples:
-                302Success:
-                  description: 'Review successfully sent. Redirect to product page.'
-                  value: '/product'
-                302Failure:
-                  description: 'Failed to send the review. Redirect to review form.'
-                  value: '/product'
-
-  /review/report:
-    get:
-      operationId: R303
-      summary: 'R303: Report a review'
-      description: 'Show the review report form. Access: USR.'
-
-      tags: 
-        - 'M03: Reviews'
-
-      responses:
-        '200':
-          description: 'Ok. Show the review report form'
-
-    post:
-      operationId: R304
-      summary: 'R304: Report a review Action'
-      description: 'Processes the review report. Access: USR'
-      tags:
-        - 'M03: Reviews'
-
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                motive:
-                  type: string
-                  enum:
-                    - Option 1
-                    - Option 2
-                    - Option 3
-              required: true
-
-      responses:
-        '200':
-          description: 'Redirect after processing the review report.'
-          headers:
-            Location:
-              schema:
-                type: string
-              examples:
-                302Success:
-                  description: 'Review report successfully sent. Redirect to product page.'
-                  value: '/product'
-                302Failure:
-                  description: 'Failed to send the review report. Redirect to review report form.'
-                  value: '/product'
-
-  /review/delete:
-
-    post:
-      operationId: R305
-      summary: 'R305: Delete a review Action'
-      description: 'Delete a review. Access: OWN, ADM'
-      tags:
-        - 'M03: Reviews'
-
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                id:
-                  type: integer
-              required: 
-                - id
-
-      responses:
-        '200':
-          description: 'Redirect after delete the review.'
-          headers:
-            Location:
-              schema:
-                type: string
-              examples:
-                302Success:
-                  description: 'Review successfully deleted. Redirect to product page.'
-                  value: '/product'
-                302Failure:
-                  description: 'Failed to delete the review. Redirect to product page.'
-                  value: '/product'
-
-  /review/edit:
-    get:
-      operationId: R306
-      summary: 'R306: Edit a review'
-      description: 'Show the edit review form. Access: OWN.'
-
-      tags: 
-        - 'M03: Reviews'
-
-      responses:
-        '200':
-          description: 'Ok. Show the review edit form'
-
-    post:
-      operationId: R307
-      summary: 'R307: Edit Review Action'
-      description: 'Processes the updated review. Access: OWN'
-      tags:
-        - 'M03: Reviews'
-
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                title:
-                  type: string
-                description:
-                  type: string
-                rate: 
-                  type: integer
-              required: 
-                - title
-                - rate
-
-      responses:
-        '200':
-          description: 'Redirect after processing the updated review.'
-          headers:
-            Location:
-              schema:
-                type: string
-              examples:
-                302Success:
-                  description: 'Review successfully updated. Redirect to product page.'
-                  value: '/product'
-                302Failure:
-                  description: 'Failed to update review. Redirect to review edit form.'
-                  value: '/product'
-
-  /whishlist/add:
-
-    post:
-      operationId: R401
-      summary: 'R401: Like product Action'
-      description: 'Like product. Access: USR'
-      tags:
-        - 'M04: Wishlist'
-
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                id:
-                  type: integer 
-              required: 
-                - id
-
-      responses:
-        '200':
-          description: 'Product added to the wish list.'
-
-    /whishlist/remove:
-
-    post:
-      operationId: R402
-      summary: 'R402: Remove like from a product Action'
-      description: 'Remove like from a product. Access: USR'
-      tags:
-        - 'M04: Wishlist'
-
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                id:
-                  type: integer 
-              required: 
-                - id
-
-      responses:
-        '200':
-          description: 'Product remove from the wish list.'
-
-  /wishlist/{id}:
-
-    get:
-      operationId: R403
-      summary: 'R403: View wishlist page'
-      description: 'Show the wishlist page for an individual user. Access: OWN'
-      tags:
-        - 'M04: Wishlist'
-
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: True
-
-      responses:
-        '200':
-          description: 'OK. Show the wishlist page'
-          headers:
-            Location:
-              schema:
-                type: string
-              example:
-                302Failure:
-                  description: 'Failure in show the wishlist page'
-
-  /shoppingcar/add:
-
-    post:
-      operationId: R501
-      summary: 'R501: Add product to the shopping car Action'
-      description: 'Add product to the shopping car. Access: USR'
-      tags:
-        - 'M05: Shopping Car'
-
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                id:
-                  type: integer 
-              required: 
-                - id
-
-      responses:
-        '200':
-          description: 'Product added to the shopping car.'
-
-  /shoppingcar/remove:
-
-    post:
-      operationId: R502
-      summary: 'R502: Remove product from the shopping car Action'
-      description: 'Remove product from the shopping car. Access: USR'
-      tags:
-        - 'M05: Shopping Car'
-
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                id:
-                  type: integer 
-              required: 
-                - id
-
-      responses:
-        '200':
-          description: 'Product removed from the shopping car.'
-
-  /shoppingcar/{id}:
-
-    get:
-      operationId: R503
-      summary: 'R503: View shopping car page'
-      description: 'Show the shopping car page for an individual user. Access: OWN'
-      tags:
-        - 'M05: Shopping Car'
-
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: True
-
-      responses:
-        '200':
-          description: 'OK. Show the shopping car page'
-
-  /checkout:
-
-    post:
-      operationId: R504
-      summary: 'R504: Checkout Action'
-      description: 'Finalize purchase of the products in the shopping car. Access: OWN'
-      tags:
-        - 'M05: Shopping Car'
-      responses:
-        '302':
-          description: 'Redirect after checkout.'
-          headers:
-            Location:
-              schema:
-                type: string
-              examples:
-                302Success:
-                  description: 'Purchase completed. Redirect to products page.'
-                  value: '/products'
-
-  /paymentmethod:
-    get:
-      operationId: R505
-      summary: 'R505: Choose a payment method'
-      description: 'Show the payment method form. Access: USR.'
-
-      tags: 
-        - 'M05: Shopping Car'
-
-      responses:
-        '200':
-          description: 'Ok. Show the payment method form'
-
-    post:
-      operationId: R506
-      summary: 'R506: Choose a payment methose Action'
-      description: 'Processes the choice of the payment method. Access: USR'
-      tags:
-        - 'M05: Shopping Car'
-
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                motive:
-                  type: string
-                  enum:
-                    - Option 1
-                    - Option 2
-                    - Option 3
-              required: true
-
-      responses:
-        '200':
-          description: 'Redirect after processing the choice of the payment method.'
-          headers:
-            Location:
-              schema:
-                type: string
-              examples:
-                302Success:
-                  description: 'Payment method successfully choosed. Redirect to checkout page.'
-                  value: '/product'
-                302Failure:
-                  description: 'Failed to choose the payment method. Redirect to payment method form.'
-                  value: '/product'
-                  value: '/products'
-
-  /purchases/{id}:
-    get:
-      operationId: R601
-      summary: 'R601: View personal purchases'
-      description: 'Show the purchases. Access: OWN, ADM'
-      tags:
-        - 'M01: Purchases'
-
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true
-
-      responses:
-        '200':
-          description: 'Ok. Show the purchases'
-
-  /purchases/cancel:
-
-    post:
-      operationId: R602
-      summary: 'R602: Cancel Order Action'
-      description: 'Cancel Order. Access: OWN, ADM'
-      tags:
-        - 'M06: Shopping Car'
-      responses:
-        '200':
-        description: 'Order canceled'
-
-  /purchases/orderstatus:
-    get:
-      operationId: R603
-      summary: 'R603: Manage Order Status'
-      description: 'Show the manage order status form. Access: USR.'
-
-      tags: 
-        - 'M06: Purchases'
-
-      responses:
-        '200':
-          description: 'Ok. Show the order status form.'
-
-    post:
-      operationId: R604
-      summary: 'R604: Manage Order Status Action'
-      description: 'Processes the updated order status. Access: ADM'
-      tags:
-        - 'M06: Purchases'
-
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                status:
-                  type: string
-              required: 
-                - status
-
-      responses:
-        '200':
-          description: 'Redirect after processing the order status.'
-          headers:
-            Location:
-              schema:
-                type: string
-              examples:
-                302Success:
-                  description: 'Order status successfully updated. Redirect to purchases page.'
-                  value: '/product'
-                302Failure:
-                  description: 'Failed to update order status. Redirect to purchases form.'
-                  value: '/product'
-
-  /purchases/statistics:
-
-    get:
-      operationId: R605
-      summary: 'R605: View sales statistics.'
-      description: 'Show the sales statistics page. Access: OWN'
-      tags:
-        - 'M06: Wishlist'
-
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: True
-
-      responses:
-        '200':
-          description: 'OK. Show the sales statistics page'
-          headers:
-            Location:
-              schema:
-                type: string
-              example:
-                302Failure:
-                  description: 'Failure in show the sales statistics page'
-
-
-  
+                  description: 'Failed authentication. Redirect to create user page.'
+                  value: '/user/create'
