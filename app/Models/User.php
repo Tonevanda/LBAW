@@ -60,7 +60,11 @@ class User extends Authenticatable
 
     public function admin()
     {
-        // Assuming 'admin' is the relationship method in the User model
         return $this->hasOne(Admin::class, 'admin_id');
+    }
+
+    public function authenticated()
+    {
+        return $this->hasOne(Authenticated::class, 'user_id');
     }
 }
