@@ -17,6 +17,14 @@ class AuthenticatedController extends Controller
             'products' => $user->shoppingCart()->get()
         ]);
     }
+
+    public function showPurchases($user_id){
+        $user = Authenticated::findOrFail($user_id);
+        return view('purchase_history', [
+            'purchases' => $user->purchases()->get()
+        ]);
+    }
+    
     //Show Profile
     public function show($user_id){
         $user = Authenticated::findOrFail($user_id);

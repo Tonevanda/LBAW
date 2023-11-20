@@ -4,6 +4,15 @@
 <form method="POST" action="{{ route('profile.update', ['user_id' => Auth::user()->id]) }}">
     {{ csrf_field() }}
     @method('PUT')
+
+    <label for="image">Profile Picture</label>
+    
+    <input type="file" name="profile_picture" value="{{ old('profile_picture', Auth::user()->name) }}">
+    @if ($errors->has('profile_picture'))
+      <span class="error">
+          {{ $errors->first('profile_picture') }}
+      </span>
+    @endif
     <label for="name">Name</label>
     
     <input id="name" type="text" name="name" autofocus value="{{ old('name', Auth::user()->name) }}">

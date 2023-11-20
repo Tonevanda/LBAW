@@ -1,7 +1,7 @@
 @props(['product'])
 
 <div class="product">
-    <a href="{{ route('single-product', $product) }}">
+    <a href="{{ route('single-product', $product->id) }}">
         <h2> {{ $product->name }} </h2>
         <p> {{ $product->synopsis }} </p>
         <p> {{ $product->price }} </p>
