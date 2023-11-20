@@ -34,9 +34,13 @@ function addEventListeners() {
     });
 
     let priceFilter = document.querySelector('form.products_search input[name=price]');
+    let priceShow = document.querySelector('form.products_search div');
+    if(priceShow.textContent == 0)priceShow.textContent = `no restrictions`;
     priceFilter.addEventListener('input', function () {
-      let priceShow = document.querySelector('form.products_search div');
       priceShow.textContent = this.value;
+      if(priceShow.textContent == 0){
+        priceShow.textContent = `no restrictions`;
+      }
     });
     
   }
