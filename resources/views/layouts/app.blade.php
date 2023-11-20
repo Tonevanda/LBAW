@@ -24,6 +24,7 @@
         <main>
             <header>
                 <h1><a href="{{ url('/') }}">Bibliophile's Bliss</a></h1>
+                <div class="header-buttons">
                 @if (Auth::check())
                     @if (Auth::user()->isAdmin())
                         <a class="button" href="{{ route('users')}}">Users</a>
@@ -38,6 +39,7 @@
                     <a class="button button-outline" href="{{ route('login') }}">Login</a>
                     <a class="button button-outline" href="{{ route('register') }}">Register</a>
                 @endif
+                </div>
             </header>
             <section id="content">
                 @yield('content')
