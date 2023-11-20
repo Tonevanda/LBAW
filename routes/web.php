@@ -63,6 +63,7 @@ Route::controller(AuthenticatedController::class)->group(function () {
     Route::get('/shopping-cart/users/{user_id}', 'index')->name('shopping-cart');
     Route::get('/profile/users/{user_id}', 'show')->name('profile');
     Route::delete('/shopping-cart/users/{user_id}', 'destroy')->name('shopping-cart.destroy');
+    Route::put('/profile/users/{user_id}', 'update')->name('profile.update');
     Route::get('/purchase-history/{user_id}', 'showPurchases')->name('purchase_history');
 });
 
