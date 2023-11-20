@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Hash;
 class AuthenticatedController extends Controller
 {
     //Show all products in the shopping cart
-    
+
     public function index(Request $request){
         $users = Authenticated::filter($request->input())->paginate(10);
         return view('user_search', ['users' => $users]);
@@ -24,7 +24,7 @@ class AuthenticatedController extends Controller
             'products' => $user->shoppingCart()->get()
         ]);
     }
-    
+
     public function showPurchases($user_id){
         $user = Authenticated::findOrFail($user_id);
         return view('purchase_history', [
@@ -43,10 +43,7 @@ class AuthenticatedController extends Controller
     public function update($user_id){
         $auth = Authenticated::findOrFail($user_id);
         $user = $auth->user()->get()[0];
-<<<<<<< HEAD
-=======
         #dd('ok');
->>>>>>> 594188e63cf8fa9db91778ee538cb3522b5adf74
         $data = request()->validate([
             'profile_picture' => ['required'],
             'name' => 'string|max:250',
@@ -55,17 +52,6 @@ class AuthenticatedController extends Controller
             'password' => ['nullable', 'min:8', 'confirmed'],
             'address' => 'string|max:250',
         ]);
-<<<<<<< HEAD
-        $credentials = [
-            'email' => $user->email,
-            'password' => $data['old_password']
-        ];
-        if (Auth::attempt($credentials)) {
-            dd('ok');
-        }
-        $auth->update($data);
-        $user->update($data);
-=======
         if (!is_null($data['password'])) {
             $data['password'] = Hash::make($data['password']);
         } else {
@@ -74,7 +60,6 @@ class AuthenticatedController extends Controller
         $auth->update($data);
         $user->update($data);
         Auth::setUser($user->fresh());
->>>>>>> 594188e63cf8fa9db91778ee538cb3522b5adf74
         return view('profile');
     }
     public function store(Request $request, $user_id){
