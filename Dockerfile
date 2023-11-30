@@ -13,5 +13,8 @@ COPY ./etc/nginx/default.conf /etc/nginx/sites-enabled/default
 COPY .env_production /var/www/.env
 COPY docker_run.sh /docker_run.sh
 
+# Change shebang of docker_run.sh
+RUN sed -i '1s/^.*$/#!\/bin\/bash/' /docker_run.sh
+
 # Start command
-CMD sh /docker_run.sh
+CMD ["bash", "/docker_run.sh"]

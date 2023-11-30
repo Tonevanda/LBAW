@@ -56,8 +56,13 @@
 
     <label for="password-confirm">Confirm Password</label>
     <input id="password-confirm" type="password" name="password_confirmation">
-    <button type="submit">
+    <button type="submit" name="update" value="{{ true }}">
       update
     </button>
+
+    <button type="submit" name="update" value="{{ false }}">
+      delete
+    </button>
 </form>
+
 @endsection
