@@ -36,121 +36,121 @@ function addEventListeners() {
 }
   
 
-  function editReview(){
-    document.querySelector('li textarea[name=description]').readOnly = false; 
-    let button= document.querySelector('li button[name=update-review]');
-    button.classList.toggle('visible');
-    if(this.classList.contains("fa-edit")){
-      this.classList.remove("fa-edit");
-      this.classList.add("fa-times");
-      document.querySelector('li form').addEventListener('submit', updateReviewRequest);
-    }
-    else{
-      this.classList.remove("fa-times");
-      this.classList.add("fa-edit");
-    }
-  }
-  function encodeForAjax(data) {
-    if (data == null) return null;
-    return Object.keys(data).map(function(k){
-      return encodeURIComponent(k) + '=' + encodeURIComponent(data[k])
-    }).join('&');
-  }
+function encodeForAjax(data) {
+  if (data == null) return null;
+  return Object.keys(data).map(function(k){
+    return encodeURIComponent(k) + '=' + encodeURIComponent(data[k])
+  }).join('&');
+}
 
-  function updateReviewRequest(event){
-    console.log(this);
-    let review_id = this.querySelector('input[name=review_id]').value;
-    let description = this.querySelector('textarea[name=description]').value;
-    sendAjaxRequest('put', '/review/'+review_id, {review_id: review_id, description: description}, reviewHandler);
-    event.preventDefault();
-  }
 
-  function sendAjaxRequest(method, url, data, handler) {
-    let request = new XMLHttpRequest();
+function sendAjaxRequest(method, url, data, handler) {
+  let request = new XMLHttpRequest();
   
-    request.open(method, url, true);
-    request.setRequestHeader('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').content);
-    request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    request.addEventListener('load', handler);
-    request.send(encodeForAjax(data));
-  }
+  request.open(method, url, true);
+  request.setRequestHeader('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').content);
+  request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+  request.addEventListener('load', handler);
+  request.send(encodeForAjax(data));
+}
 
-  function createReportRequest(event){
-    let review_id = this.querySelector('input[name=review_id]').value;
-    let product_id = this.querySelector('input[name=product_id]').value;
-    console.log(review_id, product_id);
-    sendAjaxRequest('post', '/review/'+review_id, {review_id: review_id, product_id: product_id}, createReportHandler);
-    event.preventDefault();
+function editReview(){
+  document.querySelector('li textarea[name=description]').readOnly = false; 
+  let button= document.querySelector('li button[name=update-review]');
+  button.classList.toggle('visible');
+  if(this.classList.contains("fa-edit")){
+    this.classList.remove("fa-edit");
+    this.classList.add("fa-times");
+    document.querySelector('li form').addEventListener('submit', updateReviewRequest);
   }
+  else{
+    this.classList.remove("fa-times");
+    this.classList.add("fa-edit");
+  }
+}
+function updateReviewRequest(event){
+  console.log(this);
+  let review_id = this.querySelector('input[name=review_id]').value;
+  let description = this.querySelector('textarea[name=description]').value;
+  sendAjaxRequest('put', '/review/'+review_id, {review_id: review_id, description: description}, reviewHandler);
+  event.preventDefault();
+}
 
-  function deleteReviewRequest(event){
-    let review_id = this.querySelector('input[name=review_id]').value;
-    let product_id = this.querySelector('input[name=product_id]').value;
-    sendAjaxRequest('delete', '/review/'+review_id, {review_id: review_id, product_id: product_id}, reviewHandler);
-    event.preventDefault();
-  }
+function createReportRequest(event){
+  let review_id = this.querySelector('input[name=review_id]').value;
+  let product_id = this.querySelector('input[name=product_id]').value;
+  console.log(review_id, product_id);
+  sendAjaxRequest('post', '/review/'+review_id, {review_id: review_id, product_id: product_id}, createReportHandler);
+  event.preventDefault();
+}
 
-  function createCartProductRequest(event){
-    let user_id = this.querySelector('input[name=user_id]').value;
-    let product_id = this.querySelector('input[name=product_id]').value;
+function deleteReviewRequest(event){
+  let review_id = this.querySelector('input[name=review_id]').value;
+  let product_id = this.querySelector('input[name=product_id]').value;
+  sendAjaxRequest('delete', '/review/'+review_id, {review_id: review_id, product_id: product_id}, reviewHandler);
+  event.preventDefault();
+}
 
-    sendAjaxRequest('post', '/api/shopping-cart/'+user_id, {product_id: product_id}, createCartProductHandler);
-    event.preventDefault();
-  }
-  
-  function deleteCartProductRequest(event){
-    let user_id = this.querySelector('input[name=user_id]').value;
-    let cart_id = this.querySelector('input[name=cart_id]').value;
-    sendAjaxRequest('delete', '/api/shopping-cart/'+user_id, {cart_id: cart_id}, deleteCartProductHandler);
-    event.preventDefault();
-  }
+function createCartProductRequest(event){
+  let user_id = this.querySelector('input[name=user_id]').value;
+  let product_id = this.querySelector('input[name=product_id]').value;
 
-  function reviewHandler(){
-    console.log(this.status);
-    if(this.status == 204){
-      console.log("deleted review");
-      let response = JSON.parse(this.responseText);
-      let deletion_target = document.querySelector('li[data-id="' + response + '"]');
-      deletion_target.remove();
-    }
-    else if(this.status == 201){
-      console.log("reported");
-    }
-    else if(this.status == 200){
-      console.log("updated review");
-      
-    }
-  }
-  
-  function createReportHandler(){
-    if(this.status == 201){
-      console.log("reported");
-    }
-  }
+  sendAjaxRequest('post', '/api/shopping-cart/'+user_id, {product_id: product_id}, createCartProductHandler);
+  event.preventDefault();
+}
 
-  function createCartProductHandler(){
-    if(this.status == 201){
-      console.log("added to shopping cart");
-      
-    }
-  }
+function deleteCartProductRequest(event){
+  let user_id = this.querySelector('input[name=user_id]').value;
+  let cart_id = this.querySelector('input[name=cart_id]').value;
+  sendAjaxRequest('delete', '/api/shopping-cart/'+user_id, {cart_id: cart_id}, deleteCartProductHandler);
+  event.preventDefault();
+}
 
-  function deleteCartProductHandler(){
-    if(this.status == 200){
-      console.log("removed from shopping cart");
-      let response = JSON.parse(this.responseText);
-      let deletion_target = document.querySelector('div[data-id="' + response + '"]');
-      let deletion_price = deletion_target.querySelector('a p:last-child').textContent;
-      let new_total_price = document.querySelector('tr:last-child td:first-child');
-      let new_total_quantity = document.querySelector('tr:last-child td:last-child');
-      new_total_price.textContent= new_total_price.textContent-deletion_price;
-      new_total_quantity.textContent = new_total_quantity.textContent-1;
-      deletion_target.remove();
-    }
+function reviewHandler(){
+  console.log(this.status);
+  if(this.status == 204){
+    console.log("deleted review");
+    let response = JSON.parse(this.responseText);
+    let deletion_target = document.querySelector('li[data-id="' + response + '"]');
+    deletion_target.remove();
   }
-  
+  else if(this.status == 201){
+    console.log("reported");
+  }
+  else if(this.status == 200){
+    console.log("updated review");
+    
+  }
+}
 
-  addEventListeners();
+function createReportHandler(){
+  if(this.status == 201){
+    console.log("reported");
+  }
+}
+
+function createCartProductHandler(){
+  if(this.status == 201){
+    console.log("added to shopping cart");
+    
+  }
+}
+
+function deleteCartProductHandler(){
+  if(this.status == 200){
+    console.log("removed from shopping cart");
+    let response = JSON.parse(this.responseText);
+    let deletion_target = document.querySelector('div[data-id="' + response + '"]');
+    let deletion_price = deletion_target.querySelector('a p:last-child').textContent;
+    let new_total_price = document.querySelector('tr:last-child td:first-child');
+    let new_total_quantity = document.querySelector('tr:last-child td:last-child');
+    new_total_price.textContent= new_total_price.textContent-deletion_price;
+    new_total_quantity.textContent = new_total_quantity.textContent-1;
+    deletion_target.remove();
+  }
+}
+
+addEventListeners();
 
 
  
