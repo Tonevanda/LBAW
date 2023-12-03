@@ -135,6 +135,7 @@ class AuthenticatedController extends Controller
             'product_id' => 'required'
         ]);
         $user->shoppingCart()->attach($data['product_id']);
+        return response()->json([], 201);
     }
 
     public function destroy(Request $request, $user_id){

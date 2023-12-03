@@ -288,3 +288,11 @@ table {
   border: 1px solid #00374052;
   border-radius: 8px;
 }
+
+li button[name="update-review"]{
+  display: none;
+}
+
+li button[name="update-review"].visible{
+  display: block;
+}
