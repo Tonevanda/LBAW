@@ -594,3 +594,11 @@ footer p a {
   background-color: white;
   padding: 1em 2em;
 }
+
+li button[name="update-review"]{
+  display: none;
+}
+
+li button[name="update-review"].visible{
+  display: block;
+}

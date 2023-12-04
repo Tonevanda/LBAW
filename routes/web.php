@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AuthenticatedController;
 use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\ReviewController;
 use Carbon\Carbon;
 use App\Models\User;
 use GuzzleHttp\Middleware;
@@ -58,6 +59,12 @@ Route::controller(RegisterController::class)->group(function () {
     Route::post('/register', 'register');
 });
 
+Route::controller(ReviewController::class)->group(function () {
+    Route::post('/review/create/{user_id}', 'store')->name('review.store');
+    Route::delete('/review/{review_id}', 'destroy')->name('review.destroy');
+    Route::post('/review/{review_id}', 'report')->name('review.report');
+    Route::put('/review/{review_id}', 'update')->name('review.update');
+});
 
 Route::controller(AuthenticatedController::class)->group(function () {
     Route::get('/shopping-cart/{user_id}', 'showShoppingCart')->name('shopping-cart');

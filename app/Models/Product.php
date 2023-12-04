@@ -23,6 +23,11 @@ class Product extends Model
         return $this->belongsToMany(Authenticated::class, 'shopping_cart', 'product_id', 'user_id');
     }
 
+    public function reviews()
+    {
+        return $this->hasMany(Review::class, 'product_id');
+    }
+    
     public function purchases()
     {
         return $this->belongsToMany(Purchase::class, 'purchase_product', 'product_id', 'purchase_id');

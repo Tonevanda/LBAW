@@ -31,8 +31,16 @@ class Authenticated extends Model
         return $this->hasMany(Purchase::class, 'user_id');
     }
 
-    
+    public function reviews()
+    {
+        return $this->hasMany(Review::class, 'user_id');
+    }
 
+    public function getReviewFromProduct($productId)
+    {
+        return $this->reviews()->where('product_id', $productId)->first();
+    }
+    
     public function shoppingCart()
     {
         return $this->belongsToMany(Product::class, 'shopping_cart', 'user_id', 'product_id')
