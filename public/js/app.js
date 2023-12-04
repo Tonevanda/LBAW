@@ -77,6 +77,49 @@ function addEventListeners() {
     }
   }
 
+    // Function to show the popup
+    function showPopup() {
+      var popup = document.getElementById('popup');
+      var overlay = document.getElementById('overlay');
+
+      popup.style.display = 'block';
+      overlay.style.display = 'block';
+
+      // Hide the popup after 3 seconds (adjust as needed)
+      setTimeout(function () {
+          hidePopup();
+      }, 1500);
+  }
+
+  // Function to hide the popup
+  function hidePopup() {
+      var popup = document.getElementById('popup');
+      var overlay = document.getElementById('overlay');
+
+      // Hiding the popup and overlay
+      popup.style.display = 'none';
+      overlay.style.display = 'none';
+  }
+
+
+  function toggleMenu() {
+    var miniMenu = document.getElementById('miniMenu');
+    var userButton = document.querySelector('.user-button');
+  
+    // Toggle the 'active' class to control visibility
+    miniMenu.classList.toggle('active');
+  
+    if (miniMenu.classList.contains('active')) {
+      // Calculate position when showing the menu
+      var rect = userButton.getBoundingClientRect();
+      var offsetLeft = (window.innerWidth - rect.left - rect.width) / 2; // Adjust this offset as needed
+      miniMenu.style.top = rect.bottom + window.scrollY + 12 + 'px';
+      miniMenu.style.left = rect.left - miniMenu.offsetWidth + offsetLeft + 12 + 'px';
+    }
+  }
+  
+    
+  
   addEventListeners();
 
 

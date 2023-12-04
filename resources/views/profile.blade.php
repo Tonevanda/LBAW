@@ -28,7 +28,7 @@
           {{ $errors->first('email') }}
       </span>
     @endif
-
+      
     <label for="address">Address</label>
     <input id="address" type="text" name="address" value="{{ old('address',$user->address)}}">
     @if ($errors->has('address'))

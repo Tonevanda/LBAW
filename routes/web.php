@@ -73,3 +73,10 @@ Route::controller(PurchaseController::class)->group(function () {
     Route::post('/checkout/{user_id}', 'store')->name('purchase.store');
 });
 
+Route::get('/about_us', function () {
+    return view('about_us');
+})->name('about_us');
+
+Route::get('/contact_us', function () {
+    return view('contact_us');
+})->name('contact_us');
