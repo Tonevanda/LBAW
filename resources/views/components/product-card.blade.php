@@ -3,6 +3,7 @@
 <div class="product">
     <a href="{{ route('single-product', $product->id) }}">
         <h2> {{ $product->name }} </h2>
+        <img src="{{$product->image ? asset('storage/' . $product->image) : asset('/images/no-image.png')}}"
         <p> {{ $product->synopsis }} </p>
         <p> {{ $product->price }} </p>
     </a>

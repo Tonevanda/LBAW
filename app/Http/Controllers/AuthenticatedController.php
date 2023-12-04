@@ -47,7 +47,6 @@ class AuthenticatedController extends Controller
         $user = $auth->user()->get()[0];
         if (Auth::user()->isAdmin()) {
             $data = request()->validate([
-                'profile_picture' => ['required'],
                 'name' => 'string|max:250',
                 'email' => ['email', 'max:250', Rule::unique('users')->ignore($user->id)],
                 'password' => ['nullable', 'min:8', 'confirmed'],
@@ -56,13 +55,15 @@ class AuthenticatedController extends Controller
         }
         else {
             $data = request()->validate([
-                'profile_picture' => ['required'],
                 'name' => 'string|max:250',
                 'email' => ['email', 'max:250', Rule::unique('users')->ignore($user->id)],
                 'old_password' => ['required', 'min:8', 'old_password'],
                 'password' => ['nullable', 'min:8', 'confirmed'],
                 'address' => 'string|max:250',
             ]);
+        }
+        if(request()->hasFile('profile_picture')){
+            $data['profile_picture'] = request()->file('profile_picture')->store('user_pictures', 'public');
         }
         if (!is_null($data['password'])) {
             $data['password'] = Hash::make($data['password']);
