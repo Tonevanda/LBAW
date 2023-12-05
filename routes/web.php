@@ -27,7 +27,7 @@ use GuzzleHttp\Middleware;
 // Pages
 Route::controller(ProductController::class)->group(function () {
     Route::get('/', 'index')->name('all-products');
-    Route::get('/products/{product_id}', 'show')->name('single-product');
+    Route::get('/products/{product}', 'show')->name('single-product')->middleware('admin');
 });
 
 #->middleware('admin')
@@ -38,6 +38,8 @@ Route::controller(ProductController::class)->group(function () {
 Route::controller(AuthenticatedController::class)->group(function () {
     Route::post('/api/shopping-cart/{user_id}', 'store')->name('shopping-cart.store');
     Route::delete('/api/shopping-cart/{user_id}', 'destroy')->name('shopping-cart.destroy');
+    Route::post('/api/wishlist/{user_id}', 'wishlistStore')->name('wishlist.store');
+    Route::delete('/api/wishlist/{user_id}', 'wishlistDestroy')->name('wishlist.destroy');
 });
 /*
 Route::controller(ItemController::class)->group(function () {
@@ -68,6 +70,7 @@ Route::controller(ReviewController::class)->group(function () {
 
 Route::controller(AuthenticatedController::class)->group(function () {
     Route::get('/shopping-cart/{user_id}', 'showShoppingCart')->name('shopping-cart');
+    Route::get('/wishlist/{user_id}', 'showWishlist')->name('wishlist');
     Route::get('/users/{user_id}', 'show')->name('profile')->middleware('adminOrAuth');
     Route::get('/user/create', 'showCreateUserForm')->name('create_user');
     Route::post('/user/create', 'create')->name('user.create');

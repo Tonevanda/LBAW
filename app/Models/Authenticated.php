@@ -47,6 +47,12 @@ class Authenticated extends Model
                     ->withPivot('id');
     }
 
+    public function wishlist()
+    {
+        return $this->belongsToMany(Product::class, 'wishlist', 'user_id', 'product_id')
+                    ->withPivot('id');
+    }
+    
     public function scopeFilter($query, array $filters)
     {
         if($filters['search'] ?? false){

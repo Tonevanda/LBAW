@@ -16,6 +16,14 @@
                     Add to Cart
                 </button>
             </form>
+            <form class = "add_wishlist" method="" action="{{ route('wishlist.store', ['user_id' => Auth::user()->id]) }}">
+                {{ csrf_field() }}
+                <input type="hidden" name="product_id" value="{{ $product->id }}" required>
+                <input type="hidden" name="user_id" value="{{ Auth::user()->id }}" required>
+                <button type="submit" name="add-to-wishlist" class="button button-outline">
+                    Add to Wishlist
+                </button>
+            </form>
         @endif
     @endif
 </div>
