@@ -30,6 +30,7 @@
                     @if (Auth::user()->isAdmin())
                         <a class="button" href="{{ route('users')}}">Users</a>
                         <a class="button" href="{{ route('create_user')}}">Create User</a>
+                        <a class="button" href="{{ route('add_products')}}">Add Products</a>
                     @else
                         <a class="button" href="{{ route('profile',Auth::user()->id)}}">{{ Auth::user()->name }}</a>
                         <a class="button" href="{{ route('shopping-cart',Auth::user()->id) }}"> Shopping Cart </a>

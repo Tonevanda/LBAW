@@ -7,7 +7,7 @@
 @section('content')
     <h1>Wishlist</h1>
     @foreach ($products as $product)
-    <x-wishlist-product-card :product="$product"/>
+    <x-wishlist-product-card  :user="$user" :product="$product"/>
     @endforeach
 
 @endsection

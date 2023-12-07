@@ -1,12 +1,12 @@
-@props(['product'])
+@props(['product', 'user'])
 <div class="product" data-id="{{$product->pivot->id}}">
     <a href="{{ route('single-product', $product) }}">
         <h2> {{ $product->name }} </h2>
         <p> {{ $product->synopsis }} </p>
         <p> {{ $product->price }} </p>
     </a>
-    @if (auth()->check())
-    <form class = "remove_wishlist" method="" action="{{ route('wishlist.destroy', ['user_id' => Auth::user()->id]) }}">
+    @if (auth()->check() && !Auth::user()->isAdmin())
+    <form class = "remove_wishlist" method="" action="{{ route('wishlist.destroy', ['user_id' => $user->user_id]) }}">
         {{ csrf_field() }}
         {{ $product->pivot->id }}
         <input type="hidden" name="wishlist_id" value="{{ $product->pivot->id }}" required>
