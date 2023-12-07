@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Middleware;
-
+use Illuminate\Support\Facades\Route;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -23,6 +23,7 @@ class CheckAdmin
 
             // Check if the user is an admin
             if ($user->isAdmin()) {
+                //dd(Route::current()->getAction()['middleware']);
                 return $next($request);
             }
 

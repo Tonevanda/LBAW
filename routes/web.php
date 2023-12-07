@@ -28,6 +28,8 @@ use GuzzleHttp\Middleware;
 Route::controller(ProductController::class)->group(function () {
     Route::get('/', 'index')->name('all-products');
     Route::get('/products/{product}', 'show')->name('single-product')->middleware('admin');
+    Route::get('/product/create', 'showCreateProductForm')->name('add_products');
+    Route::post('/product/create', 'createProduct')->name('product.create');
 });
 
 #->middleware('admin')

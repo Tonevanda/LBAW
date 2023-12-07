@@ -100,10 +100,12 @@ class AuthenticatedController extends Controller
         return view('create_user');
     }
 
+
     public function showWishlist($user_id){
         $user = Authenticated::findOrFail($user_id);
         return view('wishlist', [
-            'products' => $user->wishlist()->get()
+            'products' => $user->wishlist()->get(),
+            'user' => $user
         ]);
     } 
 

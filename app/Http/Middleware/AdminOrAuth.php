@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class AdminOrAuth
 {
@@ -18,7 +19,6 @@ class AdminOrAuth
     {
         $userId = $request->route('user_id'); // replace 'user_id' with the actual name of the route parameter
         $user = Auth::user();
-        #dd($user);
         if ($user->isAdmin() ) {
             return $next($request);
         }
