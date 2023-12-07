@@ -36,7 +36,7 @@
                         <a class="buttonss" href="{{ route('shopping-cart',Auth::user()->id) }}">
                             <i class="fas fa-shopping-cart"></i> Shopping Cart
                         </a>  
-                        <a class="buttonss" href="{{ route('shopping-cart',Auth::user()->id) }}">
+                        <a class="buttonss" href="{{ route('wishlist',Auth::user()->id) }}">
                             <i class="fas fa-heart"></i> Wishlist
                         </a>  
                         <div class="user-button" onclick="toggleMenu()">
