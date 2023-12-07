@@ -63,7 +63,7 @@
                     </button>
                 </form>
             @else
-                <li class="list-group-item">
+                <li class="my-review" data-id="{{$userReview->id}}">
                     <form class = "edit_review" method="" action="">
                         {{ csrf_field() }}
                         <input type="hidden" name="review_id" value="{{ $userReview->id }}" required>
@@ -80,6 +80,14 @@
                         </button>
                         <i class="fas fa-edit"></i>
                     </form>
+                    <form class = "delete_review" method="" action="{{ route('review.destroy', ['review_id' => $userReview->id]) }}">
+                        {{ csrf_field() }}
+                        <input type="hidden" name="product_id" value="{{ $product->id }}" required>
+                        <input type="hidden" name="review_id" value="{{ $userReview->id }}" required>
+                        <button type="submit" name="delete-review" class="button button-outline">
+                            Delete Review
+                        </button>
+                    </form>
                 </li>
             @endif
         @endif
@@ -91,7 +99,7 @@
                     #dd($review);
                     $user = $review->getAuthor()->get()[0]->user()->get()[0];    
                 @endphp
-                @if(Auth::user()->id!==$user->id)
+                @if(!auth()->check() || Auth::user()->id!==$user->id)
                     <li class="list-group-item" data-id="{{$review->id}}">
                         <strong>
                             {{--add pfp later--}}

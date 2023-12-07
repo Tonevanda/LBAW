@@ -17,12 +17,12 @@ class ReviewController extends Controller
         $data['user_id']=$user_id;
         $data['date']=date('Y-m-d H:i:s');
         Review::create($data);
-        return redirect()->route('product', $data['product_id']);
+        return redirect()->route('single-product', $data['product_id']);
     }
     public function destroy(Request $request, $review_id){
         $review = Review::findOrFail($review_id);
         $review->delete();
-        return response()->json($review_id,204);
+        return response()->json($review_id,200);
     }
     public function report(Request $request, $review_id){
         //é preciso adicionar um popup para o user escrever o motivo do report

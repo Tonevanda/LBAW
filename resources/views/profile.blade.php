@@ -1,6 +1,6 @@
 @extends('layouts.app')
-
 @section('content')
+<a class="button" href="{{ route('wishlist',Auth::user()->id)}}">Wishlist</a>
 <form method="POST" action="{{ route('profile.update', ['user_id' => $user->user_id]) }}" enctype="multipart/form-data">
   {{ csrf_field() }}
   @method('PUT')

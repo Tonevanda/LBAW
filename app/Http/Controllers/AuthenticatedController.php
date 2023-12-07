@@ -100,6 +100,13 @@ class AuthenticatedController extends Controller
         return view('create_user');
     }
 
+    public function showWishlist($user_id){
+        $user = Authenticated::findOrFail($user_id);
+        return view('wishlist', [
+            'products' => $user->wishlist()->get()
+        ]);
+    } 
+
     public function create(Request $request)
     {
         $request->validate([
@@ -138,12 +145,30 @@ class AuthenticatedController extends Controller
         return response()->json([], 201);
     }
 
+    public function wishlistStore(Request $request, $user_id){
+        $user = Authenticated::findOrFail($user_id);
+        $data = $request->validate([
+            'product_id' => 'required'
+        ]);
+        $user->wishlist()->attach($data['product_id']);
+        return response()->json([], 201);
+    }
+
+    public function wishlistDestroy(Request $request, $user_id){
+        $user = Authenticated::findOrFail($user_id);
+        $data = $request->validate([
+            'wishlist_id' => 'required'
+        ]);
+        $user->wishlist()->wherePivot('id', $data['wishlist_id'])->detach();
+        return response()->json($data['wishlist_id'], 200);
+    }
+
     public function destroy(Request $request, $user_id){
         $user = Authenticated::findOrFail($user_id);
         $data = $request->validate([
             'cart_id' => 'required'
         ]);
         $user->shoppingCart()->wherePivot('id', $data['cart_id'])->detach();
-        return response()->json($data['cart_id']);
+        return response()->json($data['cart_id'],200);
     }
 }
