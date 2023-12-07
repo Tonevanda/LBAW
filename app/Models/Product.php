@@ -69,4 +69,14 @@ class Product extends Model
               ->orderByRaw('ts_rank(tsvectors, to_tsquery(\'english\', ?)) DESC', [$name_filter]);
     }
 
+    public function productStatistic()
+    {
+        return $this->hasMany(ProductStatistic::class, 'product_id');
+    }
+
+    public function purchaseProducts()
+    {
+        return $this->hasMany(PurchaseProduct::class, 'product_id');
+    }
+
 }

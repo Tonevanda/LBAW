@@ -15,6 +15,15 @@
                     Add to Cart
                 </button>
             </form>
+            @else
+            <ul>
+                @foreach ($statistics as $statistic)
+                    <li>
+                        {{ $statistic->statistic_type }}
+                    </li>
+                @endforeach
+            </ul>
+            <p>Product Revenue: ${{ $productRevenue }}</p>
         @endif
     @endif
     <!--review forms-->

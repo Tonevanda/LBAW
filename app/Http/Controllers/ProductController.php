@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use App\Models\PurchaseProduct;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {   
@@ -14,12 +16,19 @@ class ProductController extends Controller
     }
 
     //Show a single product
-    public function show($product_id){
-        $product= Product::findOrFail($product_id);
+    public function show($product_id)
+    {
+        $product = Product::findOrFail($product_id);
+        $product = Product::with('productStatistic')->findOrFail($product_id);
+        $productRevenue = $product->purchaseProducts->sum('price');
+        $reviews = $product->reviews()->get();
+    
         return view('products.show', [
             'product' => $product,
-            'reviews' => $product->reviews()->get()
+            'reviews' => $reviews,
+            'statistics' => $product->productStatistic,
+            'productRevenue' => $productRevenue,
         ]);
     }
-
 }
+
