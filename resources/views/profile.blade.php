@@ -1,20 +1,45 @@
 @extends('layouts.app')
 @section('content')
 
-<form method="POST" action="{{ route('profile.update', ['user_id' => $user->user_id]) }}" enctype="multipart/form-data">
+@php
+$user_info = $user->user()->first();
+@endphp
+
+<script>
+  var assetBaseUrl = "{{ asset('images/user_images') }}";
+</script>
+
+<form class="profile_pic" method="POST" action="{{route('profileImage.update', ['user_id' => $user->user_id])}}" enctype="multipart/form-data">
   {{ csrf_field() }}
   @method('PUT')
-  
-  <label for="image">Profile Picture</label>
-  
-  <input type="file" name="profile_picture" value="{{ old('profile_picture', $user->user()->get()[0]->profile_picture) }}">
+  <div class = "user_image">
+    <img src ="{{asset('images/user_images/' . $user_info->profile_picture)}}" alt="" />
+    <i class="fas fa-edit"></i>
+  </div>
+
+  <input type="file" name="profile_picture" hidden>
     @if ($errors->has('profile_picture'))
       <span class="error">
           {{ $errors->first('profile_picture') }}
       </span>
     @endif
+
+    <input type="text" name="old_profile_picture" value="{{ old('profile_picture', $user_info->profile_picture)}}"hidden>
+
+    <input type="text" name="user_id" value="{{ $user->user_id}}" hidden>
+
+    <input type="submit" name="update_pic" value="{{ false }}" hidden>
+
+
+</form>
+
+
+<form method="POST" action="{{ route('profile.update', ['user_id' => $user->user_id]) }}">
+  {{ csrf_field() }}
+  @method('PUT')
+
     <label for="name">Name</label>
-    <input id="name" type="text" name="name" autofocus value="{{ old('name', $user->user()->get()[0]->name) }}">
+    <input id="name" type="text" name="name" autofocus value="{{ old('name', $user_info->name) }}">
     @if ($errors->has('name'))
       <span class="error">
           {{ $errors->first('name') }}
@@ -22,7 +47,7 @@
     @endif
 
     <label for="email">E-Mail</label>
-    <input id="email" type="email" name="email" value="{{ old('email',$user->user()->get()[0]->email)}}">
+    <input id="email" type="email" name="email" value="{{ old('email',$user_info->email)}}">
     @if ($errors->has('email'))
       <span class="error">
           {{ $errors->first('email') }}

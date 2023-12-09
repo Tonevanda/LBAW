@@ -39,7 +39,7 @@ CREATE TABLE users(
     name TEXT NOT NULL,
     password TEXT NOT NULL,
     email TEXT NOT NULL CONSTRAINT email_ck UNIQUE,
-    profile_picture TEXT DEFAULT 'df_user_img.png' NOT NULL 
+    profile_picture TEXT DEFAULT 'default.png' NOT NULL 
 );
 
 CREATE TABLE admin(
@@ -88,7 +88,7 @@ CREATE TABLE product(
     author TEXT DEFAULT 'anonymous' NOT NULL,
     editor TEXT DEFAULT 'self published' NOT NULL,
     language TEXT NOT NULL,
-    image TEXT DEFAULT 'df_product_img.png' NOT NULL,
+    image TEXT DEFAULT 'default.png' NOT NULL,
     orderStatus INTEGER NOT NULL DEFAULT 0 CONSTRAINT orderStatus_ck CHECK (orderStatus >= 0)
 );
 
