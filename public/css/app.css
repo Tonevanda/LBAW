@@ -602,3 +602,20 @@ li button[name="update-review"]{
 li button[name="update-review"].visible{
   display: block;
 }
+
+#multiStepModal {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000; /* Set a high z-index value */
+}
+
+.step {
+  /* Add any necessary styles for each step */
+  background-color: #fff;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}

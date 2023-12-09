@@ -39,8 +39,11 @@ function addEventListeners() {
     deleter.addEventListener('submit', deleteReviewRequest);
   });
 
-  let reviewEditIcon= document.querySelector('li i');
-  reviewEditIcon.addEventListener('click', editReview);
+  let reviewEditIcon = document.querySelector('li i');
+  if (reviewEditIcon) {
+      reviewEditIcon.addEventListener('click', editReview);
+  }
+  
 
   let itemCreators = document.querySelectorAll('article.card form.new_item');
   [].forEach.call(itemCreators, function(creator) {
@@ -241,9 +244,58 @@ function deleteWishlistProductHandler(){
       miniMenu.style.left = rect.left - miniMenu.offsetWidth + offsetLeft + 12 + 'px';
     }
   }
-  
-    
-  
+
+  function showStep(step) {
+    // Hide all steps
+    for (let i = 1; i <= 3; i++) {
+        document.getElementById('step' + i).style.display = 'none';
+    }
+
+    // Show the selected step
+    document.getElementById('step' + step).style.display = 'block';
+}
+
+function submitForm() {
+  const formData = new FormData(document.getElementById('purchaseForm'));
+
+  fetch(document.getElementById('purchaseForm').action, {
+      method: 'POST',
+      body: formData,
+      headers: {
+          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+      }
+  })
+  .then(response => response.json())
+  .then(data => {
+      console.log('Success:', data);
+      // Handle success, e.g., close the modal or redirect the user
+      hideMultiStepModal();
+  })
+  .catch(error => {
+      console.error('Error:', error);
+      // Handle error, e.g., display an error message to the user
+  });
+
+  // Prevent default form submission
+  event.preventDefault();
+
+  // Explicitly submit the form
+  document.getElementById('purchaseForm').submit();
+}
+
+
+
+function showMultiStepModal(event) {
+  event.preventDefault(); // Prevent the default button behavior
+  document.getElementById('multiStepModal').style.display = 'block';
+  showStep(1);
+}
+
+
+function hideMultiStepModal() {
+    document.getElementById('multiStepModal').style.display = 'none';
+}
+
 addEventListeners();
   
   
