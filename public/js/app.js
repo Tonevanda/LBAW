@@ -245,7 +245,19 @@ function deleteWishlistProductHandler(){
     }
   }
 
-  function showStep(step) {
+
+  function showMultiStepModal() {
+    var modal = document.getElementById('multiStepModal');
+    modal.style.display = 'block';
+    showStep(1); // Show the first step initially
+}
+
+function hideMultiStepModal() {
+    var modal = document.getElementById('multiStepModal');
+    modal.style.display = 'none';
+}
+
+function showStep(step) {
     // Hide all steps
     for (let i = 1; i <= 3; i++) {
         document.getElementById('step' + i).style.display = 'none';
@@ -255,46 +267,9 @@ function deleteWishlistProductHandler(){
     document.getElementById('step' + step).style.display = 'block';
 }
 
-function submitForm() {
-  const formData = new FormData(document.getElementById('purchaseForm'));
-
-  fetch(document.getElementById('purchaseForm').action, {
-      method: 'POST',
-      body: formData,
-      headers: {
-          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-      }
-  })
-  .then(response => response.json())
-  .then(data => {
-      console.log('Success:', data);
-      // Handle success, e.g., close the modal or redirect the user
-      hideMultiStepModal();
-  })
-  .catch(error => {
-      console.error('Error:', error);
-      // Handle error, e.g., display an error message to the user
-  });
-
-  // Prevent default form submission
-  event.preventDefault();
-
-  // Explicitly submit the form
-  document.getElementById('purchaseForm').submit();
-}
-
-
-
-function showMultiStepModal(event) {
-  event.preventDefault(); // Prevent the default button behavior
-  document.getElementById('multiStepModal').style.display = 'block';
-  showStep(1);
-}
-
-
-function hideMultiStepModal() {
-    document.getElementById('multiStepModal').style.display = 'none';
-}
+document.addEventListener('DOMContentLoaded', function () {
+    // Add event listeners or other initialization code here if needed
+});
 
 addEventListeners();
   

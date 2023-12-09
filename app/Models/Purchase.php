@@ -27,7 +27,7 @@ class Purchase extends Model
         'orderedat',
         'orderarrivedat',
     ];
-
+    
     public function user()
     {
         return $this->belongsTo(Authenticated::class, 'user_id');
