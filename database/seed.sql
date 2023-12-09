@@ -756,7 +756,7 @@ INSERT INTO product(name, synopsis, price, discount, stock, author, editor, lang
 INSERT INTO product_category(product_id, category_type) VALUES(14, 'fantasy');
 INSERT INTO product(name, synopsis, price, discount, stock, author, editor, language, image) VALUES('The Fault in Our Stars', 'A novel by John Green. It tells the story of two teenagers, Hazel Grace Lancaster and Augustus Waters, who are dealing with the challenges of living with cancer.', 200, 0, 20, 'John Green', 'Dutton Books', 'English', 'the_fault_in_our_stars.png');
 INSERT INTO product_category(product_id, category_type) VALUES(15, 'romance');
-INSERT INTO product(name, synopsis, price, discount, stock, author, editor, language, image) VALUES('The Maze Runner', 'A dystopian science fiction novel by James Dashner. It follows a group of young people who wake up in a mysterious maze with no memory of how they got there.', 220, 0, 18, 'James Dashner', 'Delacorte Press', 'English', 'the_maze_runner.png');
+INSERT INTO product(name, synopsis, price, discount, stock, author, editor, language, image) VALUES('The Maze Runner', 'A dystopian science fiction novel by James Dashner. It follows a group of young people who wake up in a mysterious maze with no memory of how they got there.', 220, 0, 18, 'James Dashner', 'Delacorte Press', 'Portuguese', 'the_maze_runner.png');
 INSERT INTO product_category(product_id, category_type) VALUES(16, 'dystopian');
 INSERT INTO product(name, synopsis, price, discount, stock, author, editor, language, image) VALUES('The Kite Runner', 'A novel by Khaled Hosseini. It tells the story of Amir, a young boy from Kabul, and his complex relationship with his friend Hassan.', 210, 0, 16, 'Khaled Hosseini', 'Riverhead Books', 'English', 'the_kite_runner.png');
 INSERT INTO product_category(product_id, category_type) VALUES(17, 'drama');
@@ -786,7 +786,7 @@ INSERT INTO product(name, synopsis, price, discount, stock, author, editor, lang
 INSERT INTO product_category(product_id, category_type) VALUES(29, 'fiction');
 INSERT INTO product(name, synopsis, price, discount, stock, author, editor, language, image) VALUES('The Count of Monte Cristo', 'An adventure novel by Alexandre Dumas. It follows the story of Edmond Dantès, a sailor who is falsely accused of treason and seeks revenge against those who betrayed him.', 260, 0, 12, 'Alexandre Dumas', 'Le Journal des Débats', 'French', 'the_count_of_monte_cristo.png');
 INSERT INTO product_category(product_id, category_type) VALUES(30, 'adventure');
-INSERT INTO product(name, synopsis, price, discount, stock, author, editor, language, image) VALUES('The Catch-22', 'A satirical novel by Joseph Heller. It follows the experiences of a U.S. Army Air Force B-25 bombardier during World War II.', 210, 0, 16, 'Joseph Heller', 'Simon & Schuster', 'English', 'catch_22.png');
+INSERT INTO product(name, synopsis, price, discount, stock, author, editor, language, image) VALUES('Catch-22', 'A satirical novel by Joseph Heller. It follows the experiences of a U.S. Army Air Force B-25 bombardier during World War II.', 210, 0, 16, 'Joseph Heller', 'Simon & Schuster', 'English', 'catch_22.png');
 INSERT INTO product_category(product_id, category_type) VALUES(31, 'satire');
 INSERT INTO product(name, synopsis, price, discount, stock, author, editor, language, image) VALUES('The Handmaid''s Tale', 'A dystopian novel by Margaret Atwood. It is set in the near future where a totalitarian regime has taken control and subjugated women.', 230, 0, 15, 'Margaret Atwood', 'McClelland & Stewart', 'English', 'the_handmaids_tale.png');
 INSERT INTO product_category(product_id, category_type) VALUES(32, 'dystopian');
@@ -814,15 +814,11 @@ INSERT INTO product(name, synopsis, price, discount, stock, author, editor, lang
 INSERT INTO product_category(product_id, category_type) VALUES(43, 'drama');
 INSERT INTO product(name, synopsis, price, discount, stock, author, editor, language, image) VALUES('The Road to Wigan Pier', 'A social and political report by George Orwell. It examines the bleak living conditions among the working-class in England during the 1930s.', 190, 0, 12, 'George Orwell', 'Gollancz', 'English', 'the_road_to_wigan_pier.png');
 INSERT INTO product_category(product_id, category_type) VALUES(44, 'non-fiction');
-INSERT INTO product(name, synopsis, price, discount, stock, author, editor, language, image) VALUES('The Stand', 'A post-apocalyptic horror novel by Stephen King. It explores the clash between forces of good and evil in a world ravaged by a deadly pandemic.', 250, 0, 14, 'Stephen King', 'Doubleday', 'English', 'the_stand.png');
-INSERT INTO product_category(product_id, category_type) VALUES(45, 'horror');
 INSERT INTO product(name, synopsis, price, discount, stock, author, editor, language, image) VALUES('The Metamorphosis', 'A novella by Franz Kafka. It tells the story of Gregor Samsa, who wakes up one morning to find himself transformed into a giant insect.', 180, 0, 18, 'Franz Kafka', 'Kurt Wolff Verlag', 'German', 'the_metamorphosis.png');
-INSERT INTO product_category(product_id, category_type) VALUES(46, 'classic');
+INSERT INTO product_category(product_id, category_type) VALUES(45, 'classic');
 INSERT INTO product(name, synopsis, price, discount, stock, author, editor, language, image) VALUES('The Glass Castle', 'A memoir by Jeannette Walls. It recounts the unconventional, poverty-stricken upbringing Walls and her siblings had at the hands of their deeply dysfunctional parents.', 210, 0, 20, 'Jeannette Walls', 'Scribner', 'English', 'the_glass_castle.png');
-INSERT INTO product_category(product_id, category_type) VALUES(47, 'memoir');
+INSERT INTO product_category(product_id, category_type) VALUES(46, 'memoir');
 INSERT INTO product(name, synopsis, price, discount, stock, author, editor, language, image) VALUES('The Brothers Karamazov', 'A novel by Fyodor Dostoevsky. It explores the themes of faith, morality, and the consequences of free will.', 240, 0, 15, 'Fyodor Dostoevsky', 'The Russian Messenger', 'Russian', 'the_brothers_karamazov.png');
-INSERT INTO product_category(product_id, category_type) VALUES(48, 'classic');
-INSERT INTO product(name, synopsis, price, discount, stock, author, editor, language, image) VALUES('The Road Less Traveled', 'A self-help book by M. Scott Peck. It explores the importance of discipline and personal growth for a fulfilling life.', 180, 0, 18, 'M. Scott Peck', 'Simon & Schuster', 'English', 'the_road_less_traveled.png');
-INSERT INTO product_category(product_id, category_type) VALUES(49, 'self-help');
+INSERT INTO product_category(product_id, category_type) VALUES(47, 'classic');
 INSERT INTO product(name, synopsis, price, discount, stock, author, editor, language, image) VALUES('The Hitchhiker''s Guide to the Galaxy', 'A science fiction comedy series by Douglas Adams. It follows the misadventures of an unwitting human and his alien friend as they travel through space.', 220, 0, 16, 'Douglas Adams', 'Pan Books', 'English', 'the_hitchhikers_guide_to_the_galaxy.png');
-INSERT INTO product_category(product_id, category_type) VALUES(50, 'science fiction');
+INSERT INTO product_category(product_id, category_type) VALUES(48, 'science fiction');
