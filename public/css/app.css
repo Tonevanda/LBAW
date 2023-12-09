@@ -602,3 +602,7 @@ li button[name="update-review"]{
 li button[name="update-review"].visible{
   display: block;
 }
+
+.wallet , .fa-dollar-sign {
+  color: #ccc;
+}
