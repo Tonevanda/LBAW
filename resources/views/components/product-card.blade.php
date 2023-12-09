@@ -3,12 +3,12 @@
 <div class="product">
     <a href="{{ route('single-product', $product->id) }}">
         <h2> {{ $product->name }} </h2>
-        <img src="{{ asset('images/product_images/' . $product->image) }}">
+        <img src= "{{asset('images/product_images/' . $product->image)}}" alt="" />
         <p> {{ $product->price }} </p>
     </a>
     @if (auth()->check())
         @if (!Auth::user()->isAdmin())
-            <form class = "add_cart" method="" action="{{ route('shopping-cart.store', ['user_id' => Auth::user()->id]) }}">
+            <form class = "add_cart" method="" action="{{ route('shopping-cart.store', ['user_id' => Auth::user()->id]) }}" enctype="multipart/form-data">
                 {{ csrf_field() }}
                 <input type="hidden" name="product_id" value="{{ $product->id }}" required>
                 <input type="hidden" name="user_id" value="{{ Auth::user()->id }}" required>

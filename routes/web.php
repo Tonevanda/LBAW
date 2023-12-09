@@ -42,6 +42,7 @@ Route::controller(AuthenticatedController::class)->group(function () {
     Route::delete('/api/shopping-cart/{user_id}', 'destroy')->name('shopping-cart.destroy');
     Route::post('/api/wishlist/{user_id}', 'wishlistStore')->name('wishlist.store');
     Route::delete('/api/wishlist/{user_id}', 'wishlistDestroy')->name('wishlist.destroy');
+    Route::post('/api/users/{user_id}', 'updateImage')->name('profileImage.update');
 });
 /*
 Route::controller(ItemController::class)->group(function () {

@@ -10,6 +10,7 @@ use App\Models\Authenticated;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class AuthenticatedController extends Controller
 {
@@ -44,10 +45,9 @@ class AuthenticatedController extends Controller
     //Update Profile
     public function update($user_id){
         $auth = Authenticated::findOrFail($user_id);
-        $user = $auth->user()->get()[0];
+        $user = $auth->user()->first();
         if  (!request()->input('update')){
             $data = [
-                'profile_picture' => '',
                 'name' => 'deleted user',
                 'password' => '',
                 'address' => '',
@@ -67,7 +67,6 @@ class AuthenticatedController extends Controller
         else{
             if (Auth::user()->isAdmin()) {
                 $data = request()->validate([
-                    'profile_picture' => ['required'],
                     'name' => 'string|max:250',
                     'email' => ['email', 'max:250', Rule::unique('users')->ignore($user->id)],
                     'password' => ['nullable', 'min:8', 'confirmed'],
@@ -76,7 +75,6 @@ class AuthenticatedController extends Controller
             }
             else {
                 $data = request()->validate([
-                    'profile_picture' => ['required'],
                     'name' => 'string|max:250',
                     'email' => ['email', 'max:250', Rule::unique('users')->ignore($user->id)],
                     'old_password' => ['required', 'min:8', 'old_password'],
@@ -89,11 +87,31 @@ class AuthenticatedController extends Controller
             } else {
                 unset($data['password']);
             }
+
             $auth->update($data);
             $user->update($data); 
             Auth::setUser($user->fresh());
             return redirect()->route('profile', $user_id);
         }
+    }
+
+    public function updateImage(Request $request, $user_id){
+        $auth = Authenticated::findOrFail($user_id);
+        $user = $auth->user()->first();
+        $data = $request->validate([
+            'old_profile_picture' => ['required']
+        ]);
+
+        //dd($request->file('profile_picture')->getClientOriginalName());
+
+        if($data['old_profile_picture'] != "default.png")Storage::disk('public')->delete('images/user_images/' . $data['old_profile_picture']);
+        $request->file('profile_picture')->storeAs('images/user_images', $request->file('profile_picture')->getClientOriginalName() ,'public');
+        $data['profile_picture'] = $request->file('profile_picture')->getClientOriginalName();
+
+        //dd($request->all());
+        //$auth->update($data);
+        $user->update($data);
+        return response()->json($data['profile_picture'], 200);
     }
     public function showCreateUserForm(): View
     {
