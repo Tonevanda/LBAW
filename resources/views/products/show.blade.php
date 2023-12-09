@@ -3,6 +3,7 @@
 @section('content')
 
     <h2> {{ $product->name }} </h2>
+    <img src="{{ asset('images/product_images/' . $product->image) }}">
     <p> {{ $product->synopsis }} </p>
     <p> {{ $product->price }} </p>
     @if (auth()->check())

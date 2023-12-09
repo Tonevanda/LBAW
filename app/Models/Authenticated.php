@@ -53,6 +53,11 @@ class Authenticated extends Model
                     ->withPivot('id');
     }
     
+    public function wallet()
+    {
+        return $this->hasOne(Wallet::class, 'user_id');
+    }
+
     public function scopeFilter($query, array $filters)
     {
         if($filters['search'] ?? false){

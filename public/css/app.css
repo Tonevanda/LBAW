@@ -619,3 +619,26 @@ li button[name="update-review"].visible{
   border: 1px solid #ccc;
   border-radius: 5px;
 }
+
+.wallet , .fa-dollar-sign {
+  color: #ccc;
+
+}
+
+.user_image{
+  width:100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.user_image img{
+  height: 300px;
+  width: 300px;
+  border-radius: 50%;
+  border: 10px solid #ffffff;
+}
+
+form.profile_pic input[name="update_pic"]{
+  display: none;
+}

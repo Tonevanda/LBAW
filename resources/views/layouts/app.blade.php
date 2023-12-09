@@ -34,6 +34,8 @@
                         <a class="button" href="{{ route('add_products')}}">Add Products</a>
                         <a class="button" href="{{ route('logout') }}"> Logout </a> 
                     @else
+                        <p class="wallet"> {{Auth::user()->authenticated()->first()->wallet()->first()->money}} </p>
+                        <i class="fas fa-dollar-sign"></i>
                         <a class="buttonss" href="{{ route('shopping-cart',Auth::user()->id) }}">
                             <i class="fas fa-shopping-cart"></i> Shopping Cart
                         </a>  

@@ -17,17 +17,48 @@ function addEventListeners() {
   [].forEach.call(wishlistCreator, function(creator){
     creator.addEventListener('submit', createWishlistProductRequest);
   });
-  /*
+
   let priceFilter = document.querySelector('form.products_search input[name=price]');
   let priceShow = document.querySelector('form.products_search div');
-  if(priceShow.textContent == 0)priceShow.textContent = `no restrictions`;
-  priceFilter.addEventListener('input', function () {
-    priceShow.textContent = this.value;
-    if(priceShow.textContent == 0){
-      priceShow.textContent = `no restrictions`;
-    }
-  });
-  */
+  if(priceFilter != null && priceShow != null){
+    if(priceShow.textContent == 0)priceShow.textContent = `no restrictions`;
+    priceFilter.addEventListener('input', function () {
+      priceShow.textContent = this.value;
+      if(priceShow.textContent == 0){
+        priceShow.textContent = `no restrictions`;
+      }
+    });
+  }
+
+
+  let profile_pic_edit_icon = document.querySelector('.user_image i');
+
+  let profile_pic_input = document.querySelector('input[name=profile_picture]');
+
+  let profile_pic_form = document.querySelector('form.profile_pic');
+
+
+
+
+
+  if(profile_pic_form != null){
+    profile_pic_form.addEventListener('submit', updateProfilePictureRequest);
+  }
+
+  if(profile_pic_edit_icon != null){
+    profile_pic_edit_icon.addEventListener('click', function(){
+      profile_pic_input.click();
+    });
+  }
+
+  if(profile_pic_input != null){
+    profile_pic_input.addEventListener('change', function(event){
+      let update_pic_button = profile_pic_form.querySelector('input[name=update_pic');
+      update_pic_button.click();
+    });
+  }
+
+
  
    let reportCreator = document.querySelectorAll('form.report_review');
   [].forEach.call(reportCreator, function(creator){
@@ -39,11 +70,8 @@ function addEventListeners() {
     deleter.addEventListener('submit', deleteReviewRequest);
   });
 
-  let reviewEditIcon = document.querySelector('li i');
-  if (reviewEditIcon) {
-      reviewEditIcon.addEventListener('click', editReview);
-  }
-  
+  let reviewEditIcon= document.querySelector('li i');
+  if(reviewEditIcon != null)reviewEditIcon.addEventListener('click', editReview);
 
   let itemCreators = document.querySelectorAll('article.card form.new_item');
   [].forEach.call(itemCreators, function(creator) {
@@ -81,6 +109,16 @@ function addEventListeners() {
     request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     request.addEventListener('load', handler);
     request.send(encodeForAjax(data));
+  }
+
+
+  function sendAjaxRequestImage(method, url, data, handler){
+    let request = new XMLHttpRequest();
+    
+    request.open(method, url, true);
+    request.setRequestHeader('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').content);
+    request.addEventListener('load', handler);
+    request.send(data);
   }
   
   function editReview(){
@@ -148,6 +186,23 @@ function deleteCartProductRequest(event){
   event.preventDefault();
 }
 
+function updateProfilePictureRequest(event){
+  console.log(this);
+
+  let file = this.querySelector('input[name=profile_picture]').files[0];
+  let old_file = this.querySelector('input[name=old_profile_picture]').value;
+  let user_id = this.querySelector('input[name=user_id]').value;
+
+  let formData = new FormData();
+  formData.append('profile_picture', file);
+  formData.append('old_profile_picture', old_file);
+
+
+  sendAjaxRequestImage('post', '/api/users/'+user_id, formData, updateProfilePictureHandler);
+
+  event.preventDefault();
+}
+
 function deleteReviewHandler(){
   if(this.status == 200){
     console.log("deleted review");
@@ -201,6 +256,19 @@ function deleteWishlistProductHandler(){
     let response = JSON.parse(this.responseText);
     let deletion_target = document.querySelector('div[data-id="' + response + '"]');
     deletion_target.remove();
+  }
+}
+
+function updateProfilePictureHandler(){
+  if(this.status == 200){
+    let response = JSON.parse(this.responseText);
+    let profile_pic = document.querySelector('form.profile_pic img');
+    let old_profile_pic_input = document.querySelector('form.profile_pic input[name=old_profile_picture]');
+    var imagePath = response;
+    var imageUrl = assetBaseUrl + '/' + imagePath;
+    profile_pic.setAttribute('src', imageUrl);
+
+    old_profile_pic_input.value = response;
   }
 }
   

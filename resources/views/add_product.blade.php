@@ -1,8 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
+
+
+
+
 <form method="POST" action="{{ route('product.create') }}">
   {{ csrf_field() }}
+
 
   <label for="name">Name</label>
   <input id="name" type="text" name="name" value="{{ old('name') }}" required autofocus>
@@ -67,14 +72,6 @@
   @if ($errors->has('language'))
     <span class="error">
       {{ $errors->first('language') }}
-    </span>
-  @endif
-
-  <label for="image">Image</label>
-  <input id="image" type="text" name="image" value="{{ old('image') }}" required autofocus>
-  @if ($errors->has('image'))
-    <span class="error">
-      {{ $errors->first('image') }}
     </span>
   @endif
 
