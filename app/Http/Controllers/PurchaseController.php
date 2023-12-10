@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Purchase;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class PurchaseController extends Controller{
     public function store(Request $request, $user_id)
@@ -27,6 +26,5 @@ class PurchaseController extends Controller{
     //dd($data);
     // Add another debugging statement
 
-    return redirect()->route('shopping-cart', $data['user_id']);
-}
+    }
 }

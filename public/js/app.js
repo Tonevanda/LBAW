@@ -312,6 +312,7 @@ function updateProfilePictureHandler(){
       miniMenu.style.left = rect.left - miniMenu.offsetWidth + offsetLeft + 12 + 'px';
     }
   }
+  
   function showMultiStepModal() {
     var modal = document.getElementById('multiStepModal');
     modal.style.display = 'block';
@@ -341,7 +342,7 @@ document.addEventListener('DOMContentLoaded', function () {
   document.getElementById('heartButton').addEventListener('click', function() {
     this.classList.toggle('clicked');
 });
-
+  
 addEventListeners();
   
   
