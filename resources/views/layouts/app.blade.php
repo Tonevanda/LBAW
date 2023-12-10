@@ -49,6 +49,7 @@
                             <ul>
                             <li><a class="menu-button" href="{{ route('profile',Auth::user()->id)}}">Profile</a></li>
                             <li><a class="menu-button" href="{{ route('purchase_history',Auth::user()->id) }}"> Purchase History </a></li>
+                            <li><a class="menu-button" href="{{ route('wallet',Auth::user()->id) }}"> Wallet </a></li>
                             <li><a class="menu-button" href="{{ route('logout') }}"> Logout </a></li>
                             </ul>
                         </div>                        

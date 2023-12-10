@@ -9,6 +9,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AuthenticatedController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\WalletController;
 use Carbon\Carbon;
 use App\Models\User;
 use GuzzleHttp\Middleware;
@@ -27,7 +28,7 @@ use GuzzleHttp\Middleware;
 // Pages
 Route::controller(ProductController::class)->group(function () {
     Route::get('/', 'index')->name('all-products');
-    Route::get('/products/{product}', 'show')->name('single-product');
+    Route::get('/products/{product_id}', 'show')->name('single-product');
     Route::get('/product/create', 'showCreateProductForm')->name('add_products');
     Route::post('/product/create', 'createProduct')->name('product.create');
 });
@@ -43,13 +44,7 @@ Route::controller(AuthenticatedController::class)->group(function () {
     Route::post('/api/wishlist/{user_id}', 'wishlistStore')->name('wishlist.store');
     Route::delete('/api/wishlist/{user_id}', 'wishlistDestroy')->name('wishlist.destroy');
 });
-/*
-Route::controller(ItemController::class)->group(function () {
-    Route::put('/api/cards/{card_id}', 'create');
-    Route::post('/api/item/{id}', 'update');
-    Route::delete('/api/item/{id}', 'delete');
-});
-*/
+
 
 // Authentication
 Route::controller(LoginController::class)->group(function () {
@@ -83,6 +78,10 @@ Route::controller(AuthenticatedController::class)->group(function () {
 
 Route::controller(PurchaseController::class)->group(function () {
     Route::post('/checkout/{user_id}', 'store')->name('purchase.store');
+});
+
+Route::controller(WalletController::class)->group(function () {
+    Route::get('/wallet/{user_id}', 'show')->name('wallet');
 });
 
 Route::get('/about_us', function () {
