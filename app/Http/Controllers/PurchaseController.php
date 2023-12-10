@@ -25,6 +25,6 @@ class PurchaseController extends Controller{
     Purchase::create($data);
     //dd($data);
     // Add another debugging statement
-
+    return redirect()->route('shopping-cart', $data['user_id']);
     }
 }
