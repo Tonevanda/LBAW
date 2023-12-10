@@ -327,7 +327,7 @@ function hideMultiStepModal() {
 
 function showStep(step) {
     // Hide all steps
-    for (let i = 1; i <= 3; i++) {
+    for (let i = 1; i <= 4; i++) {
         document.getElementById('step' + i).style.display = 'none';
     }
 

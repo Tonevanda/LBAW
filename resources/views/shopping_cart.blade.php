@@ -36,7 +36,7 @@
 </button>
 
 <div id="multiStepModal" style="display: none;">
-    <form id="purchaseForm" method="POST" action="{{ route('purchase.store', ['user_id' => Auth::user()->id]) }}">
+    <form method="POST" action="{{ route('purchase.store', ['user_id' => Auth::user()->id]) }}">
         {{ csrf_field() }}
         <input type="hidden" name="quantity" value="{{ $productCount }}">
         <input type="hidden" name="price" value="{{ $total }}">
@@ -61,10 +61,18 @@
         </div>
 
         <div id="step3" class="step" style="display: none;">
+            <p>Step 3: Track Order</p>
+            <label for="isTracked">Is the item tracked?</label>
+            <input type="checkbox" id="isTracked" name="isTracked" value="0">
+            <button onclick="showStep(4)">Next</button>
+            <button onclick="showStep(2)">Previous</button>
+        </div>
+
+        <div id="step4" class="step" style="display: none;">
             <p>Step 3: Review and Confirm</p>
             <!-- Display a summary of the user's selections -->
             <button type="submit">Confirm Purchase</button>
-            <button onclick="showStep(2)">Previous</button>
+            <button onclick="showStep(3)">Previous</button>
         </div>
     </form>
 

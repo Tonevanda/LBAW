@@ -2,8 +2,10 @@
 
 <div class="product">
     <a href="{{ route('single-product', $product->id) }}">
-        <h2> {{ $product->name }} </h2>
+    <div class = "product_image">
         <img src= "{{asset('images/product_images/' . $product->image)}}" alt="" />
+    </div>
+    <h2> {{ $product->name }} </h2>
         <p> {{ $product->price }} </p>
     </a>
     @if (auth()->check())

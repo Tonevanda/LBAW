@@ -15,15 +15,15 @@ class PurchaseController extends Controller{
         'quantity' => 'required',
         'destination' => 'required',
         'payment_type' => 'required',
+        //'isTracked' => 'required'
     ]);
-
     // Add debugging statements
-
+    $daysToAdd = 3; // Change this to the number of days you want to add
+    $data['orderarrivedat'] = now()->addDays($daysToAdd)->toDateTimeString();
     $data['user_id'] = $user_id;
-    $data['orderarrivedat'] = '2025-09-08 14:35:03+02';
     $data['stage_state'] = "payment";
 
-    dd(Purchase::create($data));
+    Purchase::create($data);
     //dd($data);
     // Add another debugging statement
 
