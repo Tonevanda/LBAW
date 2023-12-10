@@ -19,6 +19,7 @@ class Authenticated extends Model
         'user_id',
         'address',
         'isBlocked',
+        'paymentMethod'
     ];
 
     public function user()

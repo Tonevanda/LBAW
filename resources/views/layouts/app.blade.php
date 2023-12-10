@@ -1,7 +1,13 @@
 @php
+
 $user = Auth::user();
-$auth = $user->authenticated()->first();
-$wallet = $auth->wallet();
+
+if($user != NULL){
+    $auth = $user->authenticated()->first();
+
+    $wallet = $auth->wallet();
+}
+
 @endphp
 
 <!DOCTYPE html>

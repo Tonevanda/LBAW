@@ -19,5 +19,6 @@ $wallet = $auth->wallet();
     <a href="#"> + Add funds to your Bibliophile Bliss Wallet</a>
     <p> Wallet Balance </p>
     <p> {{number_format($wallet->money, 2, ',', '.')}}{{$wallet->currencySymbol}}</p>
+    <p> {{$auth->paymentMethod == NULL ? 'You have no payment methods associated with this account.' : ''}}</p>
 </div>
 @endsection
