@@ -34,7 +34,7 @@
                         <a class="button" href="{{ route('add_products')}}">Add Products</a>
                         <a class="button" href="{{ route('logout') }}"> Logout </a> 
                     @else
-                        <p class="wallet"> {{Auth::user()->authenticated()->first()->wallet()->first()->money}} </p>
+                        <p class="wallet"> {{Auth::user()->authenticated()->first()->wallet()->money}} </p>
                         <i class="fas fa-dollar-sign"></i>
                         <a class="buttonss" href="{{ route('shopping-cart',Auth::user()->id) }}">
                             <i class="fas fa-shopping-cart"></i> Shopping Cart
@@ -49,7 +49,7 @@
                             <ul>
                             <li><a class="menu-button" href="{{ route('profile',Auth::user()->id)}}">Profile</a></li>
                             <li><a class="menu-button" href="{{ route('purchase_history',Auth::user()->id) }}"> Purchase History </a></li>
-                            <li><a class="menu-button" href="{{ route('wallet',Auth::user()->id) }}"> Wallet </a></li>
+                            <li><a class="menu-button" href="{{ route('wallet',Auth::user()->id) }}"> Wallet {{Auth::user()->authenticated()->first()->wallet()->money}}€</a></li>
                             <li><a class="menu-button" href="{{ route('logout') }}"> Logout </a></li>
                             </ul>
                         </div>                        

@@ -42,7 +42,7 @@
 <div class = "user_wallet">
     <h2> Your Bibliophile Bliss Account </h2>
     <p> Current Wallet Balance </p>
-    <h2> {{ $wallet->money }} </h2>
+    <h2> {{ $wallet->money }}€ </h2>
     <a class="button" href="#">See Account Details</a>
 </div>
 

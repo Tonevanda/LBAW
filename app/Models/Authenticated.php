@@ -55,7 +55,9 @@ class Authenticated extends Model
     
     public function wallet()
     {
-        return $this->hasOne(Wallet::class, 'user_id');
+        $wallet = $this->hasOne(Wallet::class, 'user_id')->first();
+        $wallet->money = number_format($wallet->money, 2, ',', '.');
+        return $wallet;
     }
 
     public function scopeFilter($query, array $filters)
