@@ -56,7 +56,14 @@ class Authenticated extends Model
     public function wallet()
     {
         $wallet = $this->hasOne(Wallet::class, 'user_id')->first();
-        $wallet->money = number_format($wallet->money, 2, ',', '.');
+        $currencySymbols = [
+            'euro' => '€',
+            'pound' => '£',
+            'dollar' => '$',
+            'rupee' => '₹',
+            'yen' => '¥',
+        ];
+        $wallet->currencySymbol = $currencySymbols[$wallet->currency_type] ?? '';
         return $wallet;
     }
 

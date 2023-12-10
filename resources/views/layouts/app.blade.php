@@ -1,3 +1,9 @@
+@php
+$user = Auth::user();
+$auth = $user->authenticated()->first();
+$wallet = $auth->wallet();
+@endphp
+
 <!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}">
     <head>
@@ -28,18 +34,18 @@
                 <h1><a href="{{ url('/') }}">Bibliophile's Bliss</a></h1>
                 <div class="header-buttons">
                 @if (Auth::check())
-                    @if (Auth::user()->isAdmin())
+                    @if ($user->isAdmin())
                         <a class="button" href="{{ route('users')}}">Users</a>
                         <a class="button" href="{{ route('create_user')}}">Create User</a>
                         <a class="button" href="{{ route('add_products')}}">Add Products</a>
                         <a class="button" href="{{ route('logout') }}"> Logout </a> 
                     @else
-                        <p class="wallet"> {{Auth::user()->authenticated()->first()->wallet()->money}} </p>
+                        <p class="wallet"> {{number_format($wallet->money, 2, ',', '.')}}{{$wallet->currencySymbol}} </p>
                         <i class="fas fa-dollar-sign"></i>
-                        <a class="buttonss" href="{{ route('shopping-cart',Auth::user()->id) }}">
+                        <a class="buttonss" href="{{ route('shopping-cart',$user->id) }}">
                             <i class="fas fa-shopping-cart"></i> Shopping Cart
                         </a>  
-                        <a class="buttonss" href="{{ route('wishlist',Auth::user()->id) }}">
+                        <a class="buttonss" href="{{ route('wishlist',$user->id) }}">
                             <i class="fas fa-heart"></i> Wishlist
                         </a>  
                         <div class="user-button" onclick="toggleMenu()">
@@ -47,9 +53,9 @@
                         </div>
                         <div class="mini-menu" id="miniMenu">
                             <ul>
-                            <li><a class="menu-button" href="{{ route('profile',Auth::user()->id)}}">Profile</a></li>
-                            <li><a class="menu-button" href="{{ route('purchase_history',Auth::user()->id) }}"> Purchase History </a></li>
-                            <li><a class="menu-button" href="{{ route('wallet',Auth::user()->id) }}"> Wallet {{Auth::user()->authenticated()->first()->wallet()->money}}€</a></li>
+                            <li><a class="menu-button" href="{{ route('profile',$user->id)}}">Profile</a></li>
+                            <li><a class="menu-button" href="{{ route('purchase_history',$user->id) }}"> Purchase History </a></li>
+                            <li><a class="menu-button" href="{{ route('wallet',$user->id) }}"> Wallet {{number_format($wallet->money, 2, ',', '.')}}{{$wallet->currencySymbol}}</a></li>
                             <li><a class="menu-button" href="{{ route('logout') }}"> Logout </a></li>
                             </ul>
                         </div>                        
