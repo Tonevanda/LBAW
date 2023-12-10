@@ -312,8 +312,6 @@ function updateProfilePictureHandler(){
       miniMenu.style.left = rect.left - miniMenu.offsetWidth + offsetLeft + 12 + 'px';
     }
   }
-
-
   function showMultiStepModal() {
     var modal = document.getElementById('multiStepModal');
     modal.style.display = 'block';
@@ -337,6 +335,11 @@ function showStep(step) {
 
 document.addEventListener('DOMContentLoaded', function () {
     // Add event listeners or other initialization code here if needed
+});
+
+  // Your JavaScript code
+  document.getElementById('heartButton').addEventListener('click', function() {
+    this.classList.toggle('clicked');
 });
 
 addEventListeners();

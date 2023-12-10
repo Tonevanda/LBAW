@@ -185,6 +185,34 @@ main > header a.button.button-outline {
     border-color: #003740;
   }
 
+  .heart-button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 35px; /* Adjust the size as needed */
+    color: #e5e5e5c7;
+    text-align: right;
+}
+
+.heart-button.clicked {
+    color: #003740; /* Color when clicked */
+}
+
+.heart-button:hover {
+  background-color: transparent;
+  color: #333; 
+}
+
+.button-container {
+  display: flex;
+  gap: 10px; /* Adjust the gap as needed */
+}
+
+.button-container form{
+  margin-bottom: 0;
+  margin-top: 0.5em;
+}
+
 
 .home-container {
   display: grid;
@@ -193,6 +221,7 @@ main > header a.button.button-outline {
   padding: 20px;
   margin-bottom: 1em;
   background-color: #e5e5e5c7;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
 }
 
 .product {
@@ -321,6 +350,19 @@ table {
   padding: 1em;
 }
 
+.products_search input{
+  background-color: white;
+  color: #003740;
+  border: none;
+}
+
+.products_search select{
+  background-color: white;
+  color: #003740;
+  border: none;
+}
+
+
 .about_us {
   background-color: #e5e5e5c7;
   padding: 20px;
@@ -421,9 +463,9 @@ ul.contact-list i {
   color: #003740; /* Adjust the color based on your design */
 }
 
-.product button {
-  color: #003740;
-  border-color: #003740; /* Reset font-weight for <p> inside .contact_us if needed */
+.add-card-button {
+  color: white;
+  border-color: rgb(255, 255, 255); /* Reset font-weight for <p> inside .contact_us if needed */
 }
 
 #popup {
@@ -503,7 +545,8 @@ footer p a {
   padding: 0.375rem 0.75rem;
   font-size: 1rem;
   color: #fff;
-  background-color: #005d6c;
+  background-color: #014d58;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
   border: 0;
   border-radius: 5px;
   text-decoration: none;

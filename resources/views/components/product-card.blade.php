@@ -10,14 +10,14 @@
     </a>
     @if (auth()->check())
         @if (!Auth::user()->isAdmin())
+        <div class="button-container">
             <form class = "add_cart" method="" action="{{ route('shopping-cart.store', ['user_id' => Auth::user()->id]) }}" enctype="multipart/form-data">
                 {{ csrf_field() }}
                 <input type="hidden" name="product_id" value="{{ $product->id }}" required>
                 <input type="hidden" name="user_id" value="{{ Auth::user()->id }}" required>
-                <button type="submit" name="add-to-cart" class="button button-outline" onclick="showPopup()">Add to Cart</button>
+                <button type="submit" name="add-to-cart" class = "add_cart_button" onclick="showPopup()">Add to Cart</button>
                 <div id="popup">
                     <p>Product added to cart!</p>
-                    <!-- No need for a close button if it disappears automatically -->
                 </div>
                 <div id="overlay"></div>
             </form>
@@ -25,10 +25,11 @@
                 {{ csrf_field() }}
                 <input type="hidden" name="product_id" value="{{ $product->id }}" required>
                 <input type="hidden" name="user_id" value="{{ Auth::user()->id }}" required>
-                <button type="submit" name="add-to-wishlist" class="button button-outline">
-                    Add to Wishlist
+                <button id="heartButton" class="heart-button" type="submit" name="add-to-wishlist">
+                        <i class="fas fa-heart"></i>
                 </button>
             </form>
+        </div>
         @endif
     @endif
 </div>

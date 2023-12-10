@@ -8,7 +8,7 @@
     <input type="text" name="search" value = "{{ request('search') }}">
     <label for="category">Select an option:</label>
     <select name="category">
-        <option value="" {{ request('category') == '' ? 'selected' : '' }}></option>
+        <option value="" disabled selected>All categories</option>
         @foreach(Category::all() as $category)
             <option value="{{$category->category_type}}" {{ request('category') == $category->category_type ? 'selected' : '' }}>{{$category->category_type}}</option>
         @endforeach
