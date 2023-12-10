@@ -43,7 +43,7 @@
     <h2> Your Bibliophile Bliss Account </h2>
     <p> Current Wallet Balance </p>
     <h2> {{ $wallet->money }}€ </h2>
-    <a class="button" href="#">See Account Details</a>
+    <a class="button" href="{{ route('account_details',Auth::user()->id) }}">See Account Details</a>
 </div>
 
 @endsection

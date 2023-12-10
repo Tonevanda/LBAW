@@ -91,3 +91,7 @@ Route::get('/about_us', function () {
 Route::get('/contact_us', function () {
     return view('contact_us');
 })->name('contact_us');
+
+Route::get('/account_details', function () {
+    return view('Account-Details.show');
+})->name('account_details');
