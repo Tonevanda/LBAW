@@ -313,35 +313,24 @@ function updateProfilePictureHandler(){
     }
   }
   
-  function showMultiStepModal() {
-    var modal = document.getElementById('multiStepModal');
-    modal.style.display = 'block';
-    showStep(1); // Show the first step initially
+  function showFullScreenPopup() {
+    document.body.classList.add('popup-open');
+    document.getElementById('fullScreenPopup').style.display = 'flex';
 }
 
-function hideMultiStepModal() {
-    var modal = document.getElementById('multiStepModal');
-    modal.style.display = 'none';
+function hideFullScreenPopup() {
+    document.body.classList.remove('popup-open');
+    document.getElementById('fullScreenPopup').style.display = 'none';
 }
-
-function showStep(step) {
-    // Hide all steps
-    for (let i = 1; i <= 4; i++) {
-        document.getElementById('step' + i).style.display = 'none';
-    }
-
-    // Show the selected step
-    document.getElementById('step' + step).style.display = 'block';
-}
+document.getElementById('heartButton').addEventListener('click', function() {
+  this.classList.toggle('clicked');
+});
 
 document.addEventListener('DOMContentLoaded', function () {
     // Add event listeners or other initialization code here if needed
 });
 
   // Your JavaScript code
-  document.getElementById('heartButton').addEventListener('click', function() {
-    this.classList.toggle('clicked');
-});
   
 addEventListeners();
   

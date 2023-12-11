@@ -4,11 +4,19 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    overflow-x: hidden; 
   }
 
   main {
-    flex: 1; /* Allow the main content to grow and take up the available space */
+    flex: 1;
 }
+
+@media (max-width: 500px) {
+  main {
+    width: 100vh;
+  }
+}
+
 
   main > header {
     display: flex;
@@ -18,7 +26,6 @@ body {
     align-items: center;
     background-color: #003740;
     padding: 2em;
-    margin-bottom: 1em;
     padding-right: 3em;
 }
 
@@ -216,7 +223,7 @@ main > header a.button.button-outline {
 
 .home-container {
   display: grid;
-  grid-template-columns: 0.7fr 4fr; /* Adjust the width of the sidebar as needed */
+  grid-template-columns:0.7fr 4fr; /* Adjust the width of the sidebar as needed */
   gap: 20px;
   padding: 20px;
   margin-bottom: 1em;
@@ -238,14 +245,19 @@ main > header a.button.button-outline {
   font-weight: 300;
 }
 
-.shopping-cart {
-  padding: 20px;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  margin: 20px auto;
-  max-width: 800px;
+.shopping-cart-page {
+  background-color: #e5e5e5c7;
+  padding: 1.5em 3em 3em 3em;
+  margin: 8px 0;
+  display: flex;
+  flex-direction: column;
 }
+
+.shopping-cart-page .product-info{
+  margin: 1em 0;
+  padding: 2em 3em 2em 5em;
+}
+
 
 h1, p {
   color: #003740;
@@ -316,14 +328,13 @@ table {
 }
 .home-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(800px, 1fr));
   gap: 20px;
   padding: 20px;
   width: 100%; /* Set to a specific value or percentage */
 }
 
 
-@media (min-width: 1200px) {
+@media (min-width: 900px) {
   .home-grid {
     grid-template-columns: repeat(3, 2fr);
   }
@@ -362,6 +373,46 @@ table {
   border: none;
 }
 
+.product-page {
+  background-color: #e5e5e5c7;
+  padding: 3em;
+  margin: 8px 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.product-info {
+  background-color: white;
+  padding: 4em 10em;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+  display: grid;
+  grid-template-columns: 10% 88%;
+}
+
+.product-page .product-info {
+  grid-template-columns: 20% 80%;
+  padding: 4em 10em;
+}
+
+.product-info img {
+    height: 100%;
+}
+
+
+.product-details {
+  margin-left: 4em;
+  margin-top: 0;
+  margin-right: 1em;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.synopsis {
+  font-size: 24px;
+  margin-top: 0.8em;
+  margin-bottom: 1em;
+}
 
 .about_us {
   background-color: #e5e5e5c7;
@@ -700,4 +751,78 @@ li button[name="update-review"].visible{
 
 form.profile_pic input[name="update_pic"]{
   display: none;
+}
+
+.popup-form {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+
+.popup-form {
+  font-size: medium;
+}
+
+.popup-form p {
+  font-weight: bold;
+  font-size: medium;
+}
+
+span {
+  font-weight: normal;
+  font-size: smaller;
+}
+
+.popup-form p.title {
+  font-size: x-large;
+}
+
+.cancel {
+  background-color: #d2d2d2;
+  border: #d2d2d2;
+}
+
+.popup-form form {
+  background-color: #fff;
+  padding: 2em 3em;
+  width: 800px;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+}
+
+.navigation-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.shipping-address {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Two columns with equal width */
+  gap: 25px; /* Adjust the gap between columns and rows as needed */
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
+.column label {
+  margin-bottom: 5px; /* Adjust the margin as needed for vertical space between labels */
+}
+
+
+
+/* Additional styles as needed */
+
+/* Add a class to the body when the popup is open */
+body.popup-open .popup {
+  display: flex;
 }

@@ -4,8 +4,11 @@
     $total = 0;
     $productCount = count($products);
 ?>
+
 @section('content')
-    <h1>Shopping Cart</h1>
+<div class="shopping-cart-page">
+    <h2>Shopping Cart</h2>
+    <div class="shopping-page">
     @foreach ($products as $product)
     @php
         $total = $total + $product->price;
@@ -14,14 +17,19 @@
     @endforeach
     <table>
         <tr>
-            <td colspan="1">Price</td>
-            <td colspan="1">Quantity</td>
-        </tr>
-        <tr>
-            <td>{{ $total }}</td>
+            <td>Quantity</td>
             <td>{{ $productCount }}</td>
         </tr>
+        <tr>
+            <td>Price</td>
+            <td>{{ $total }}</td>
+        </tr>
     </table>
+    <button onclick="showFullScreenPopup()">
+        Checkout
+    </button>
+</div>
+</div>
     
 @if ($errors->any())
     <div class="alert alert-danger">
@@ -32,54 +40,53 @@
         </ul>
     </div>
 @endif
-<button onclick="showMultiStepModal()" class="button button-outline">
-    Checkout
-</button>
 
-<div id="multiStepModal" style="display: none;">
+
+<div id="fullScreenPopup" class="popup-form" style="display: none;">
     <form method="POST" action="{{ route('purchase.store', ['user_id' => Auth::user()->id]) }}">
         {{ csrf_field() }}
+        <!-- Your form content here -->
         <input type="hidden" name="quantity" value="{{ $productCount }}">
         <input type="hidden" name="price" value="{{ $total }}">
-        
-        <div id="step1" class="step">
-            <p>Step 1: Shipping Address</p>
-            <label for="destination">Shipping Address:</label>
-            <input type="text" id="destination" name="destination">
-            <button onclick="showStep(2)">Next</button>
-        </div>
+        <p class="title">Checkout</p>
+        <!-- Separate fields for shipping address -->
+        <p>Purchase Destination<p>
+            <div class="shipping-address">
+                <div class="column">
+                    <label for="city">City</label>
+                    <input type="text" id="city" name="city" placeholder="Enter city">
+            
+                    <label for="street">Street</label>
+                    <input type="text" id="street" name="street" placeholder="Enter street">
+                </div>
+                <div class="column">
+                    <label for="state">State</label>
+                    <input type="text" id="state" name="state" placeholder="Enter state">
+            
+                    <label for="postal_code">Postal Code</label>
+                    <input type="text" id="postal_code" name="postal_code" placeholder="Enter Postal Code">
+                </div>
+            </div>
 
-        <div id="step2" class="step" style="display: none;">
-            <p>Step 2: Payment Method</p>
-            <label for="payment_type">Payment Method:</label>
-            <select id="payment_type" name="payment_type">
-                <option value="paypal">PayPal</option>
-                <option value="credit/debit card">Credit/Debit Card</option>
-                <option value="store money">Wallet</option>
-            </select>
-            <button onclick="showStep(3)">Next</button>
-            <button onclick="showStep(1)">Previous</button>
-        </div>
+        <!-- Payment Method -->
+        <p>Payment Method<p>
+        <label for="payment_type">Choose a payment method:</label>
+        <select id="payment_type" name="payment_type">
+            <option value="paypal">PayPal</option>
+            <option value="credit/debit card">Credit/Debit Card</option>
+            <option value="store money">Wallet</option>
+        </select>
 
-        <div id="step3" class="step" style="display: none;">
-            <p>Step 3: Track Order</p>
-            <label for="isTracked">Is the item tracked?</label>
-            <input type="checkbox" id="isTracked" name="isTracked" value="0">
-            <button onclick="showStep(4)">Next</button>
-            <button onclick="showStep(2)">Previous</button>
-        </div>
-
-        <div id="step4" class="step" style="display: none;">
-            <p>Step 3: Review and Confirm</p>
-            <!-- Display a summary of the user's selections -->
+        <!-- Tracking -->
+        <p>Tracking<p>
+        <label for="isTracked">Do you want to track your order?</label>
+        <input type="checkbox" id="isTracked" name="isTracked" value="0">
+        <span>Yes, I want my order to be tracked.</span>
+        <!-- Add buttons for navigation -->
+        <div class="navigation-buttons">
+            <button class="cancel" onclick="hideFullScreenPopup()">Cancel</button>
             <button type="submit">Confirm Purchase</button>
-            <button onclick="showStep(3)">Previous</button>
         </div>
     </form>
-
-    <button onclick="hideMultiStepModal()">Cancel</button>
 </div>
-
-    
-
 @endsection

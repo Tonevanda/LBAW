@@ -1,21 +1,40 @@
 @extends('layouts.app') 
 
 @section('content')
-
-    <h2> {{ $product->name }} </h2>
+<div class = 'product-page'>
+    <div class="product-info">
+    <div class = "product_img">
     <img src="{{ asset('images/product_images/' . $product->image) }}">
-    <p> {{ $product->synopsis }} </p>
-    <p> {{ $product->price }} </p>
+    </div>
+    <div class="product-details">
+    <h2> {{ $product->name }} </h2>
+    <p><b>Author: </b>{{ $product->author }} </p>
+    <p><b>Editor: </b>{{ $product->editor }} </p>
+    <p class="synopsis"> {{ $product->synopsis }} </p>
+    <p><b>Language: </b>{{ $product->language }} </p>
+    <p><b>Price: </b>{{ $product->price }} </p>
     @if (auth()->check())
         @if (!Auth::user()->isAdmin())
-            <form class = "add_cart" method="" action="{{ route('shopping-cart.store', ['user_id' => Auth::user()->id]) }}">
+        <div class="button-container">
+            <form class = "add_cart" method="" action="{{ route('shopping-cart.store', ['user_id' => Auth::user()->id]) }}" enctype="multipart/form-data">
                 {{ csrf_field() }}
                 <input type="hidden" name="product_id" value="{{ $product->id }}" required>
                 <input type="hidden" name="user_id" value="{{ Auth::user()->id }}" required>
-                <button type="submit" name="add-to-cart" class="button button-outline">
-                    Add to Cart
+                <button type="submit" name="add-to-cart" class = "add_cart_button" onclick="showPopup()">Add to Cart</button>
+                <div id="popup">
+                    <p>Product added to cart!</p>
+                </div>
+                <div id="overlay"></div>
+            </form>
+            <form class = "add_wishlist" method="" action="{{ route('wishlist.store', ['user_id' => Auth::user()->id]) }}">
+                {{ csrf_field() }}
+                <input type="hidden" name="product_id" value="{{ $product->id }}" required>
+                <input type="hidden" name="user_id" value="{{ Auth::user()->id }}" required>
+                <button id="heartButton" class="heart-button" type="submit" name="add-to-wishlist">
+                        <i class="fas fa-heart"></i>
                 </button>
             </form>
+        </div>
             @else
             <ul>
                 @foreach ($statistics as $statistic)
@@ -27,6 +46,8 @@
             <p>Product Revenue: ${{ $productRevenue }}</p>
         @endif
     @endif
+    </div>
+</div>
     <!--review forms-->
     @if (auth()->check())
         @if (!Auth::user()->isAdmin())
@@ -136,4 +157,5 @@
             @endforeach
         </ul>
     </div>
+</div>
 @endsection
