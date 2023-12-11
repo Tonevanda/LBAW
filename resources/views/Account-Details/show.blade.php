@@ -39,6 +39,8 @@ $wallet = $auth->wallet();
         <button type="submit">
             Delete Account
         </button>
+        <p> - After deleting the account all of your reviews will remain in Bibliophile Bliss, avaliable for everyone, but with your name removed.</p>
     </form>
+    
 </div>
 @endsection
