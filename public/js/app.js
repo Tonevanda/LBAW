@@ -17,17 +17,48 @@ function addEventListeners() {
   [].forEach.call(wishlistCreator, function(creator){
     creator.addEventListener('submit', createWishlistProductRequest);
   });
-  /*
+  
   let priceFilter = document.querySelector('form.products_search input[name=price]');
   let priceShow = document.querySelector('form.products_search div');
-  if(priceShow.textContent == 0)priceShow.textContent = `no restrictions`;
-  priceFilter.addEventListener('input', function () {
-    priceShow.textContent = this.value;
-    if(priceShow.textContent == 0){
-      priceShow.textContent = `no restrictions`;
-    }
-  });
-  */
+  if(priceFilter != null && priceShow != null){
+    if(priceShow.textContent == 500)priceShow.textContent = `MAX`;
+    priceFilter.addEventListener('input', function () {
+      priceShow.textContent = this.value;
+      if(priceShow.textContent == 500){
+        priceShow.textContent = `MAX`;
+      }
+    });
+  }
+
+
+  let profile_pic_edit_icon = document.querySelector('.user_image i');
+
+  let profile_pic_input = document.querySelector('input[name=profile_picture]');
+
+  let profile_pic_form = document.querySelector('form.profile_pic');
+
+
+
+
+
+  if(profile_pic_form != null){
+    profile_pic_form.addEventListener('submit', updateProfilePictureRequest);
+  }
+
+  if(profile_pic_edit_icon != null){
+    profile_pic_edit_icon.addEventListener('click', function(){
+      profile_pic_input.click();
+    });
+  }
+
+  if(profile_pic_input != null){
+    profile_pic_input.addEventListener('change', function(event){
+      let update_pic_button = profile_pic_form.querySelector('input[name=update_pic');
+      update_pic_button.click();
+    });
+  }
+
+
  
    let reportCreator = document.querySelectorAll('form.report_review');
   [].forEach.call(reportCreator, function(creator){

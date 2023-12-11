@@ -254,9 +254,11 @@ BEGIN
         LOOP
             EXECUTE 'SELECT price, discount FROM product WHERE id = $1' INTO price, discount USING productID;
             
-            price := price-discount;
+            price := price - price*discount/100;
     
             EXECUTE 'INSERT INTO purchase_product (purchase_id, product_id, price) VALUES ($1, $2, $3)' USING NEW.id, productID, price;
+
+            UPDATE product SET stock = stock-1 WHERE product.id = productID;
 
         END LOOP;
         EXECUTE 'DELETE FROM shopping_cart WHERE user_id = $1' USING NEW.user_id;
