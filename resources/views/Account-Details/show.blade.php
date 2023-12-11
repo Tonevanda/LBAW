@@ -16,9 +16,29 @@ $wallet = $auth->wallet();
 
     <i class="fas fa-shopping-cart"> History - Store and Purchases</i>
 
-    <a href="#"> + Add funds to your Bibliophile Bliss Wallet</a>
+    <a class = "button" href="{{ route('wallet',$user->id) }}"> + Add funds to your Bibliophile Bliss Wallet</a>
     <p> Wallet Balance </p>
     <p> {{number_format($wallet->money, 2, ',', '.')}}{{$wallet->currencySymbol}}</p>
     <p> {{$auth->paymentMethod == NULL ? 'You have no payment methods associated with this account.' : ''}}</p>
+    <a class = "button" href="#"> Add a payment method to this account</a>
+    <a class = "button" href="{{route('purchase_history',$user->id)}}"> View Purchase History</a>
+    <p> If you've moved to a different country, you can update your Bibliophile Bliss Wallet currency and how you view the Books.</p>
+    <a class = "button" href="#"> Update Currency</a>
+</div>
+
+<div class = "details_box">
+
+    <i class="fas fa-user"> PROFILE INFORMATION</i>
+
+    <p> Name: {{$user->name}} </p>
+    <p> E-mail: {{$user->email}} </p>
+    <a class = "button" href="{{route('profile', $user->id)}}">Change profile information</a>
+    <form method="POST" action="{{ route('user.delete', ['user_id' => $user->id]) }}">
+        {{ csrf_field() }}
+        @method('DELETE')
+        <button type="submit">
+            Delete Account
+        </button>
+    </form>
 </div>
 @endsection
