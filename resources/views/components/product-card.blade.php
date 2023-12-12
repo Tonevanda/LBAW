@@ -5,6 +5,8 @@
         <h2> {{ $product->name }} </h2>
         <p> {{ $product->synopsis }} </p>
         <p> {{ $product->price }} </p>
+        <p> {{ $product->discount }} </p>
+        <p> {{ $product->stock }} </p>
     </a>
     @if (auth()->check())
         @if (!Auth::user()->isAdmin())

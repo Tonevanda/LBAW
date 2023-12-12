@@ -40,7 +40,7 @@ Route::controller(ProductController::class)->group(function () {
 
 Route::controller(AuthenticatedController::class)->group(function () {
     Route::post('/api/shopping-cart/{user_id}', 'store')->name('shopping-cart.store');
-    Route::delete('/api/shopping-cart/{user_id}', 'destroy')->name('shopping-cart.destroy');
+    Route::delete('/api/shopping-cart/{user_id}', 'destroyCartProduct')->name('shopping-cart.destroy');
     Route::post('/api/wishlist/{user_id}', 'wishlistStore')->name('wishlist.store');
     Route::delete('/api/wishlist/{user_id}', 'wishlistDestroy')->name('wishlist.destroy');
 });
@@ -71,6 +71,7 @@ Route::controller(AuthenticatedController::class)->group(function () {
     Route::get('/users/{user_id}', 'show')->name('profile')->middleware('adminOrAuth');
     Route::get('/user/create', 'showCreateUserForm')->name('create_user');
     Route::post('/user/create', 'create')->name('user.create');
+    Route::delete('/users/{user_id}', 'destroy')->name('user.delete');
     Route::get('/users', 'index')->name('users');
     Route::put('/users/{user_id}', 'update')->name('profile.update');
     Route::get('/purchase-history/{user_id}', 'showPurchases')->name('purchase_history');
@@ -92,7 +93,6 @@ Route::get('/contact_us', function () {
     return view('contact_us');
 })->name('contact_us');
 
-
-Route::get('/account_details{user_id}', function () {
+Route::get('/account_details/{user_id}', function () {
     return view('Account-Details.show');
 })->name('account_details');

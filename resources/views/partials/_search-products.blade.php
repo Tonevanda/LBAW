@@ -14,7 +14,7 @@
         @endforeach
     </select>
     <label for="price">Select a price:</label>
-    <input type="range" name="price" min="0" max="500" step="1" value= "{{ request('price') }}">
+    <input type="range" name="price" min="1" max="500" step="1" value= "{{ request('price') }}">
     <div>
         {{ request('price') == '' ? '250' : request('price')}}
     </div>

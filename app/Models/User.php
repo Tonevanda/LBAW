@@ -58,6 +58,16 @@ class User extends Authenticatable
         return $this->admin()->exists();
     }
 
+    public function reviews()
+    {
+        return $this->hasMany(Review::class, 'user_id');
+    }
+
+    public function getReviewFromProduct($productId)
+    {
+        return $this->reviews()->where('product_id', $productId);
+    }
+
     public function admin()
     {
         return $this->hasOne(Admin::class, 'admin_id');
