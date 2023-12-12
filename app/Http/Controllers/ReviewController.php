@@ -7,6 +7,10 @@ use Illuminate\Http\Request;
 
 class ReviewController extends Controller
 {
+
+    /*public function show(Request $request, $user_id){
+        return 
+    }*/
     public function store($user_id){
         $data = request()->validate([
             'product_id' => 'required',

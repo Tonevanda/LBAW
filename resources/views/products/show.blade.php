@@ -52,7 +52,9 @@
     @if (auth()->check())
         @if (!Auth::user()->isAdmin())
             @php
-                $userReview = Auth::user()->authenticated()->get()[0]->getReviewFromProduct($product->id);
+                $user = Auth::user();
+                $userReview = $user->getReviewFromProduct($product->id)->first();
+                $user_info = $user->first();
                 empty($userReview) ? $flag = false : $flag = true;
             @endphp
             @if ($flag===false)
@@ -92,7 +94,7 @@
                         <strong>
                             {{--add pfp later--}}
                             {{ \Carbon\Carbon::parse($userReview->date)->format('Y-m-d')}}
-                            {{ $userReview->getAuthor()->get()[0]->user()->get()[0]->name}}
+                            {{ $user_info->name}}
                             {{ $userReview->title}}
                         </strong>
                         <textarea type="text" name="description" required readonly>{{ $userReview->description }}</textarea>
@@ -119,7 +121,7 @@
             @foreach ($reviews as $review)
                 @php
                     #dd($review);
-                    $user = $review->getAuthor()->get()[0]->user()->get()[0];    
+                    $user = $review->getAuthor()->first();  
                 @endphp
                 @if(!auth()->check() || Auth::user()->id!==$user->id)
                     <li class="list-group-item" data-id="{{$review->id}}">

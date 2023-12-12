@@ -17,15 +17,15 @@ function addEventListeners() {
   [].forEach.call(wishlistCreator, function(creator){
     creator.addEventListener('submit', createWishlistProductRequest);
   });
-
+  
   let priceFilter = document.querySelector('form.products_search input[name=price]');
   let priceShow = document.querySelector('form.products_search div');
   if(priceFilter != null && priceShow != null){
-    if(priceShow.textContent == 0)priceShow.textContent = `no restrictions`;
+    if(priceShow.textContent == 500)priceShow.textContent = `MAX`;
     priceFilter.addEventListener('input', function () {
       priceShow.textContent = this.value;
-      if(priceShow.textContent == 0){
-        priceShow.textContent = `no restrictions`;
+      if(priceShow.textContent == 500){
+        priceShow.textContent = `MAX`;
       }
     });
   }
@@ -36,6 +36,9 @@ function addEventListeners() {
   let profile_pic_input = document.querySelector('input[name=profile_picture]');
 
   let profile_pic_form = document.querySelector('form.profile_pic');
+
+
+
 
 
   if(profile_pic_form != null){

@@ -27,7 +27,7 @@ class Review extends Model
 
     public function getAuthor()
     {
-        return $this->belongsTo(Authenticated::class, 'user_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
 
@@ -35,4 +35,14 @@ class Review extends Model
     {
         return $this->belongsTo(Product::class, 'product_id');
     }
+
+    public function scopeFilter($query, $user_id)
+    {
+        $query->where('user_id', '=', $user_id);
+    }
+
+    /*public function getReviewFromProduct($productId)
+    {
+        return $this->reviews()->where('product_id', $productId)->first();
+    }  */ 
 }

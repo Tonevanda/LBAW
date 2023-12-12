@@ -46,7 +46,7 @@ class AuthenticatedController extends Controller
     public function update($user_id){
         $auth = Authenticated::findOrFail($user_id);
         $user = $auth->user()->first();
-        if  (!request()->input('update')){
+        /*if  (!request()->input('update')){
             $data = [
                 'name' => 'deleted user',
                 'password' => '',
@@ -63,17 +63,16 @@ class AuthenticatedController extends Controller
             session()->regenerateToken();
             return redirect()->route('login')
                 ->withSuccess('You have successfully deleted the account!');}
-        }
-        else{
-            if (Auth::user()->isAdmin()) {
+        }*/
+        if (Auth::user()->isAdmin()) {
                 $data = request()->validate([
                     'name' => 'string|max:250',
                     'email' => ['email', 'max:250', Rule::unique('users')->ignore($user->id)],
                     'password' => ['nullable', 'min:8', 'confirmed'],
                     'address' => 'string|max:250',
                 ]);
-            }
-            else {
+        }
+        else {
                 $data = request()->validate([
                     'name' => 'string|max:250',
                     'email' => ['email', 'max:250', Rule::unique('users')->ignore($user->id)],
@@ -81,18 +80,32 @@ class AuthenticatedController extends Controller
                     'password' => ['nullable', 'min:8', 'confirmed'],
                     'address' => 'string|max:250',
                 ]);
-            }
-            if (!is_null($data['password'])) {
+        }
+        if (!is_null($data['password'])) {
                 $data['password'] = Hash::make($data['password']);
-            } else {
+        } else {
                 unset($data['password']);
-            }
-
+        }
             $auth->update($data);
             $user->update($data); 
             Auth::setUser($user->fresh());
             return redirect()->route('profile', $user_id);
-        }
+    }
+
+    public function updateImage(Request $request, $user_id){
+        $auth = Authenticated::findOrFail($user_id);
+        $user = $auth->user()->first();
+        $data = $request->validate([
+            'old_profile_picture' => ['required']
+        ]);
+
+
+        if($data['old_profile_picture'] != "default.png")Storage::disk('public')->delete('images/user_images/' . $data['old_profile_picture']);
+        $request->file('profile_picture')->storeAs('images/user_images', $request->file('profile_picture')->getClientOriginalName() ,'public');
+        $data['profile_picture'] = $request->file('profile_picture')->getClientOriginalName();
+
+        $user->update($data);
+        return response()->json($data['profile_picture'], 200);
     }
 
     public function updateImage(Request $request, $user_id){
@@ -173,6 +186,14 @@ class AuthenticatedController extends Controller
         return response()->json([], 201);
     }
 
+    public function destroy($user_id){
+        $auth = Authenticated::findOrFail($user_id);
+        $auth->delete();
+        session()->invalidate();
+        session()->regenerateToken();
+        return redirect()->route('login');
+    }
+
     public function wishlistStore(Request $request, $user_id){
         $user = Authenticated::findOrFail($user_id);
         $data = $request->validate([
@@ -191,7 +212,7 @@ class AuthenticatedController extends Controller
         return response()->json($data['wishlist_id'], 200);
     }
 
-    public function destroy(Request $request, $user_id){
+    public function destroyCartProduct(Request $request, $user_id){
         $user = Authenticated::findOrFail($user_id);
         $data = $request->validate([
             'cart_id' => 'required'

@@ -28,4 +28,10 @@ class Wallet extends Model
         return $this->has(Currency::class, 'currency_type');
     }
 
+
+    public function scopeFilter($query, $user_id)
+    {
+        $query->where('user_id', '=', $user_id);
+    }
+
 }

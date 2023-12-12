@@ -46,6 +46,11 @@ class Product extends Model
             $filters['price'] = '250';
         }
 
+        if($filters['price'] == 500){
+            $filters['price'] = '1000000';
+        }
+
+
         if($filters['category'] ?? false){
             $category_filter = 'category_type = ?';
         }

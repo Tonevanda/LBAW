@@ -19,6 +19,7 @@ class Authenticated extends Model
         'user_id',
         'address',
         'isBlocked',
+        'paymentMethod'
     ];
 
     public function user()
@@ -31,15 +32,10 @@ class Authenticated extends Model
         return $this->hasMany(Purchase::class, 'user_id');
     }
 
-    public function reviews()
-    {
-        return $this->hasMany(Review::class, 'user_id');
-    }
-
-    public function getReviewFromProduct($productId)
+    /*public function getReviewFromProduct($productId)
     {
         return $this->reviews()->where('product_id', $productId)->first();
-    }
+    }*/
     
     public function shoppingCart()
     {
@@ -55,7 +51,16 @@ class Authenticated extends Model
     
     public function wallet()
     {
-        return $this->hasOne(Wallet::class, 'user_id');
+        $wallet = $this->hasOne(Wallet::class, 'user_id')->first();
+        $currencySymbols = [
+            'euro' => '€',
+            'pound' => '£',
+            'dollar' => '$',
+            'rupee' => '₹',
+            'yen' => '¥',
+        ];
+        $wallet->currencySymbol = $currencySymbols[$wallet->currency_type] ?? '';
+        return $wallet;
     }
 
     public function scopeFilter($query, array $filters)
