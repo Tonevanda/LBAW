@@ -1,6 +1,6 @@
 @props(['product'])
 
-<div class="product">
+<div class="product" id="product-{{ $product->id }}">
     <a href="{{ route('single-product', $product->id) }}">
     <div class = "product_image">
         <img src= "{{asset('images/product_images/' . $product->image)}}" alt="" />
@@ -25,8 +25,11 @@
                 {{ csrf_field() }}
                 <input type="hidden" name="product_id" value="{{ $product->id }}" required>
                 <input type="hidden" name="user_id" value="{{ Auth::user()->id }}" required>
+                @if(Auth::user()->authenticated()->get()->first()->wishlist->contains($product))
+                    <input type="hidden" name="wishlist_id" value="{{ Auth::user()->authenticated()->get()->first()->wishlist->where('id', $product->id)->first()->pivot->id }}" required>
+                @endif
                 <button id="heartButton" class="heart-button" type="submit" name="add-to-wishlist">
-                        <i class="fas fa-heart"></i>
+                    <i class="fas fa-heart"></i>
                 </button>
             </form>
         </div>

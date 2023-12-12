@@ -72,14 +72,15 @@ Route::controller(ReviewController::class)->group(function () {
 });
 
 Route::controller(AuthenticatedController::class)->group(function () {
-    Route::get('/shopping-cart/{user_id}', 'showShoppingCart')->name('shopping-cart');
-    Route::get('/wishlist/{user_id}', 'showWishlist')->name('wishlist');
+    Route::get('/shopping-cart/show/{user_id}', 'showShoppingCart')->name('shopping-cart');
+    Route::get('/wishlists/{user_id}', 'showWishlist')->name('wishlist');
     Route::get('/users/{user_id}', 'show')->name('profile')->middleware('adminOrAuth');
     Route::get('/user/create', 'showCreateUserForm')->name('create_user');
     Route::post('/user/create', 'create')->name('user.create');
     Route::get('/users', 'index')->name('users');
     Route::put('/users/{user_id}', 'update')->name('profile.update');
     Route::get('/purchase-history/{user_id}', 'showPurchases')->name('purchase_history');
+    Route::get('/wishlist/test/{user_id}', 'getWishlist')->name('getWishlist');
 });
 
 Route::controller(PurchaseController::class)->group(function () {

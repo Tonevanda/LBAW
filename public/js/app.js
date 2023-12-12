@@ -38,9 +38,6 @@ function addEventListeners() {
   let profile_pic_form = document.querySelector('form.profile_pic');
 
 
-
-
-
   if(profile_pic_form != null){
     profile_pic_form.addEventListener('submit', updateProfilePictureRequest);
   }
@@ -59,8 +56,7 @@ function addEventListeners() {
   }
 
 
- 
-   let reportCreator = document.querySelectorAll('form.report_review');
+  let reportCreator = document.querySelectorAll('form.report_review');
   [].forEach.call(reportCreator, function(creator){
     creator.addEventListener('submit', createReportRequest);
   });
@@ -72,67 +68,48 @@ function addEventListeners() {
 
   let reviewEditIcon= document.querySelector('li i');
   if(reviewEditIcon != null)reviewEditIcon.addEventListener('click', editReview);
-
-  let itemCreators = document.querySelectorAll('article.card form.new_item');
-  [].forEach.call(itemCreators, function(creator) {
-    creator.addEventListener('submit', sendCreateItemRequest);
-  });
-
-  let itemDeleters = document.querySelectorAll('article.card li a.delete');
-  [].forEach.call(itemDeleters, function(deleter) {
-    deleter.addEventListener('click', sendDeleteItemRequest);
-  });
-
-  let cardDeleters = document.querySelectorAll('article.card header a.delete');
-  [].forEach.call(cardDeleters, function(deleter) {
-    deleter.addEventListener('click', sendDeleteCardRequest);
-  });
-
-  let cardCreator = document.querySelector('article.card form.new_card');
-  if (cardCreator != null)
-    cardCreator.addEventListener('submit', sendCreateCardRequest);
-  }
+}
   
-  function encodeForAjax(data) {
-    if (data == null) return null;
-    return Object.keys(data).map(function(k){
-      return encodeURIComponent(k) + '=' + encodeURIComponent(data[k])
-    }).join('&');
-  }
+function encodeForAjax(data) {
+  if (data == null) return null;
+  return Object.keys(data).map(function(k){
+    return encodeURIComponent(k) + '=' + encodeURIComponent(data[k])
+  }).join('&');
+}
 
 
-  function sendAjaxRequest(method, url, data, handler) {
-    let request = new XMLHttpRequest();
-    
-    request.open(method, url, true);
-    request.setRequestHeader('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').content);
-    request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    request.addEventListener('load', handler);
-    request.send(encodeForAjax(data));
-  }
-
-
-  function sendAjaxRequestImage(method, url, data, handler){
-    let request = new XMLHttpRequest();
-    
-    request.open(method, url, true);
-    request.setRequestHeader('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').content);
-    request.addEventListener('load', handler);
-    request.send(data);
-  }
+function sendAjaxRequest(method, url, data, handler) {
+  let request = new XMLHttpRequest();
   
-  function editReview(){
-    document.querySelector('li textarea[name=description]').readOnly = false; 
-    let button= document.querySelector('li button[name=update-review]');
-    button.classList.toggle('visible');
-    if(this.classList.contains("fa-edit")){
-      this.classList.remove("fa-edit");
-      this.classList.add("fa-times");
-      document.querySelector('li form').addEventListener('submit', updateReviewRequest);
-    }
-    else{
-      this.classList.remove("fa-times");
-      this.classList.add("fa-edit");
+  request.open(method, url, true);
+  request.setRequestHeader('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').content);
+  request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+  request.addEventListener('load', handler);
+  request.send(encodeForAjax(data));
+}
+
+
+function sendAjaxRequestImage(method, url, data, handler){
+  let request = new XMLHttpRequest();
+  
+  request.open(method, url, true);
+  request.setRequestHeader('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').content);
+  request.addEventListener('load', handler);
+  request.send(data);
+}
+  
+function editReview(){
+  document.querySelector('li textarea[name=description]').readOnly = false; 
+  let button= document.querySelector('li button[name=update-review]');
+  button.classList.toggle('visible');
+  if(this.classList.contains("fa-edit")){
+    this.classList.remove("fa-edit");
+    this.classList.add("fa-times");
+    document.querySelector('li form').addEventListener('submit', updateReviewRequest);
+  }
+  else{
+    this.classList.remove("fa-times");
+    this.classList.add("fa-edit");
   }
 }
 function updateReviewRequest(event){
@@ -161,7 +138,16 @@ function deleteReviewRequest(event){
 function createWishlistProductRequest(event){
   let user_id = this.querySelector('input[name=user_id]').value;
   let product_id = this.querySelector('input[name=product_id]').value;
-  sendAjaxRequest('post', '/api/wishlist/'+user_id, {product_id: product_id}, createCartProductHandler);
+  console.log(this);
+  if (this.querySelector('.heart-button').classList.contains('clicked')) {
+    let wishlist_id = this.querySelector('input[name=wishlist_id]').value;
+    this.querySelector('.heart-button').classList.remove('clicked')
+    sendAjaxRequest('delete', '/api/wishlist/'+user_id, {wishlist_id: wishlist_id}, deleteWishlistProductHandler);
+  }
+  else{
+    this.querySelector('.heart-button').classList.add('clicked')
+    sendAjaxRequest('post', '/api/wishlist/'+user_id, {product_id: product_id}, createCartProductHandler);
+  }
   event.preventDefault();
 }
 function createCartProductRequest(event){
@@ -272,66 +258,77 @@ function updateProfilePictureHandler(){
   }
 }
   
-    // Function to show the popup
-    function showPopup() {
-      var popup = document.getElementById('popup');
-      var overlay = document.getElementById('overlay');
+// Function to show the popup
+function showPopup() {
+  var popup = document.getElementById('popup');
+  var overlay = document.getElementById('overlay');
 
-      popup.style.display = 'block';
-      overlay.style.display = 'block';
+  popup.style.display = 'block';
+  overlay.style.display = 'block';
 
-      // Hide the popup after 3 seconds (adjust as needed)
-      setTimeout(function () {
-          hidePopup();
-      }, 1500);
+  // Hide the popup after 3 seconds (adjust as needed)
+  setTimeout(function () {
+    hidePopup();
+  }, 1500);
+}
+
+// Function to hide the popup
+function hidePopup() {
+  var popup = document.getElementById('popup');
+  var overlay = document.getElementById('overlay');
+
+  // Hiding the popup and overlay
+  popup.style.display = 'none';
+  overlay.style.display = 'none';
+}
+
+
+function toggleMenu() {
+  var miniMenu = document.getElementById('miniMenu');
+  var userButton = document.querySelector('.user-button');
+
+  // Toggle the 'active' class to control visibility
+  miniMenu.classList.toggle('active');
+
+  if (miniMenu.classList.contains('active')) {
+    // Calculate position when showing the menu
+    var rect = userButton.getBoundingClientRect();
+    var offsetLeft = (window.innerWidth - rect.left - rect.width) / 2; // Adjust this offset as needed
+    miniMenu.style.top = rect.bottom + window.scrollY + 12 + 'px';
+    miniMenu.style.left = rect.left - miniMenu.offsetWidth + offsetLeft + 12 + 'px';
   }
+}
 
-  // Function to hide the popup
-  function hidePopup() {
-      var popup = document.getElementById('popup');
-      var overlay = document.getElementById('overlay');
-
-      // Hiding the popup and overlay
-      popup.style.display = 'none';
-      overlay.style.display = 'none';
-  }
-
-
-  function toggleMenu() {
-    var miniMenu = document.getElementById('miniMenu');
-    var userButton = document.querySelector('.user-button');
-  
-    // Toggle the 'active' class to control visibility
-    miniMenu.classList.toggle('active');
-  
-    if (miniMenu.classList.contains('active')) {
-      // Calculate position when showing the menu
-      var rect = userButton.getBoundingClientRect();
-      var offsetLeft = (window.innerWidth - rect.left - rect.width) / 2; // Adjust this offset as needed
-      miniMenu.style.top = rect.bottom + window.scrollY + 12 + 'px';
-      miniMenu.style.left = rect.left - miniMenu.offsetWidth + offsetLeft + 12 + 'px';
-    }
-  }
-  
-  function showFullScreenPopup() {
-    document.body.classList.add('popup-open');
-    document.getElementById('fullScreenPopup').style.display = 'flex';
+function showFullScreenPopup() {
+  document.body.classList.add('popup-open');
+  document.getElementById('fullScreenPopup').style.display = 'flex';
 }
 
 function hideFullScreenPopup() {
-    document.body.classList.remove('popup-open');
-    document.getElementById('fullScreenPopup').style.display = 'none';
+  document.body.classList.remove('popup-open');
+  document.getElementById('fullScreenPopup').style.display = 'none';
 }
-document.getElementById('heartButton').addEventListener('click', function() {
-  this.classList.toggle('clicked');
-});
 
-document.addEventListener('DOMContentLoaded', function () {
-    // Add event listeners or other initialization code here if needed
-});
-
-  // Your JavaScript code
-  
+window.onload = function() {
+  let forms = document.querySelectorAll('.add_wishlist'); // Select all forms
+  if (!forms) return;
+  console.log(forms);
+  let user_id = forms[0].querySelector('input[name=user_id]').value;
+  console.log(user_id);
+  // Send an AJAX request to the server to get all the products in the user's wishlist
+  fetch('/wishlist/test/' + user_id)
+  .then(response => response.json())
+  .then(data => {
+    forms.forEach(form => {
+      let productId = form.querySelector('input[name=product_id]').value; // Get the product id from the form
+      // If the product is in the user's wishlist, set the form's action to the remove route
+      if (data.wishlist.some(item => item.id == productId)) {
+        console.log(form.querySelector('.heart-button'));
+        form.querySelector('.heart-button').classList.add('clicked');
+      }
+    });
+  });
+}
 addEventListeners();
   
   

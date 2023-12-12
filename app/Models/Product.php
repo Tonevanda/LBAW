@@ -33,6 +33,11 @@ class Product extends Model
         return $this->belongsToMany(Purchase::class, 'purchase_product', 'product_id', 'purchase_id');
     }
 
+    public function wishlists()
+    {
+        return $this->belongsToMany(Authenticated::class, 'wishlist', 'product_id', 'user_id');
+    }
+
     public function scopeFilter($query, array $filters)
     {
         $search_filter = '1 = ?';
@@ -79,4 +84,5 @@ class Product extends Model
         return $this->hasMany(PurchaseProduct::class, 'product_id');
     }
 
+    
 }

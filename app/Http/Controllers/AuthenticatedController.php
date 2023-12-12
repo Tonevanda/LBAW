@@ -127,6 +127,14 @@ class AuthenticatedController extends Controller
         ]);
     } 
 
+    
+    public function getWishlist($user_id){
+        // Get the user's wishlist from the database
+        $wishlist = Authenticated::findOrFail($user_id)->wishlist()->get();
+        // Return the wishlist as a JSON response
+        return response()->json(['wishlist' => $wishlist]);
+    }
+
     public function create(Request $request)
     {
         $request->validate([
