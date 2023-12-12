@@ -17,7 +17,13 @@ class PurchasePolicy
 
     public function list(User $user, Purchase $purchase): bool
     {
-        // Any (authenticated) user can list its own cards.
+        return $user->id === $purchase->user_id;
+    }
+
+
+    public function create(User $user, Purchase $purchase): bool
+    {
+        
         return $user->id === $purchase->user_id;
     }
     

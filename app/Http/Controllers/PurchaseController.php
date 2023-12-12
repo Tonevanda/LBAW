@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 
 class PurchaseController extends Controller
 {
+
+    
     public function store(Request $request, $user_id)
     {
         $data = $request->validate([

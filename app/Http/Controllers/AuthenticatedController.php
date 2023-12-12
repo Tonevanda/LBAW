@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Admin;
+use App\Models\Product;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 use App\Models\Authenticated;
@@ -107,14 +108,11 @@ class AuthenticatedController extends Controller
             'old_profile_picture' => ['required']
         ]);
 
-        //dd($request->file('profile_picture')->getClientOriginalName());
 
         if($data['old_profile_picture'] != "default.png")Storage::disk('public')->delete('images/user_images/' . $data['old_profile_picture']);
         $request->file('profile_picture')->storeAs('images/user_images', $request->file('profile_picture')->getClientOriginalName() ,'public');
         $data['profile_picture'] = $request->file('profile_picture')->getClientOriginalName();
 
-        //dd($request->all());
-        //$auth->update($data);
         $user->update($data);
         return response()->json($data['profile_picture'], 200);
     }
@@ -174,6 +172,8 @@ class AuthenticatedController extends Controller
         $data = $request->validate([
             'product_id' => 'required'
         ]);
+        $product = Product::findOrFail($data['product_id']);
+        $this->authorize('addToCart', $product);
         $user->shoppingCart()->attach($data['product_id']);
         return response()->json([], 201);
     }
