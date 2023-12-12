@@ -142,7 +142,7 @@ function createWishlistProductRequest(event){
   if (this.querySelector('.heart-button').classList.contains('clicked')) {
     let wishlist_id = this.querySelector('input[name=wishlist_id]').value;
     this.querySelector('.heart-button').classList.remove('clicked')
-    sendAjaxRequest('delete', '/api/wishlist/'+user_id, {wishlist_id: wishlist_id}, deleteWishlistProductHandler);
+    sendAjaxRequest('delete', '/api/wishlist/'+user_id, {wishlist_id: wishlist_id}, deleteHomeWishlistProductHandler);
   }
   else{
     this.querySelector('.heart-button').classList.add('clicked')
@@ -235,6 +235,11 @@ function deleteCartProductHandler(){
   }
 }
 
+function deleteHomeWishlistProductHandler(){
+  if(this.status == 200){
+    console.log("removed from wishlist");
+  }
+}
 function deleteWishlistProductHandler(){
   if(this.status == 200){
     console.log(this)
