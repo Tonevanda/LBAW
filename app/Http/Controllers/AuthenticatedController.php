@@ -92,21 +92,7 @@ class AuthenticatedController extends Controller
             return redirect()->route('profile', $user_id);
     }
 
-    public function updateImage(Request $request, $user_id){
-        $auth = Authenticated::findOrFail($user_id);
-        $user = $auth->user()->first();
-        $data = $request->validate([
-            'old_profile_picture' => ['required']
-        ]);
-
-
-        if($data['old_profile_picture'] != "default.png")Storage::disk('public')->delete('images/user_images/' . $data['old_profile_picture']);
-        $request->file('profile_picture')->storeAs('images/user_images', $request->file('profile_picture')->getClientOriginalName() ,'public');
-        $data['profile_picture'] = $request->file('profile_picture')->getClientOriginalName();
-
-        $user->update($data);
-        return response()->json($data['profile_picture'], 200);
-    }
+ 
 
     public function updateImage(Request $request, $user_id){
         $auth = Authenticated::findOrFail($user_id);
