@@ -23,6 +23,7 @@ class AuthenticatedController extends Controller
 
     public function showShoppingCart($user_id){
         $user = Authenticated::findOrFail($user_id);
+
         return view('shopping_cart', [
             'products' => $user->shoppingCart()->get()
         ]);
@@ -30,8 +31,12 @@ class AuthenticatedController extends Controller
 
     public function showPurchases($user_id){
         $user = Authenticated::findOrFail($user_id);
+        $purchases = $user->purchases()->get();
+        foreach($purchases as $purchase){
+            $this->authorize('list', $purchase);
+        }
         return view('purchase_history', [
-            'purchases' => $user->purchases()->get()
+            'purchases' => $purchases
         ]);
     }
     
