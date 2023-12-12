@@ -7,6 +7,7 @@ use App\Models\Admin;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 use App\Models\Authenticated;
+use App\Models\Product;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -190,12 +191,13 @@ class AuthenticatedController extends Controller
     }
 
     public function wishlistDestroy(Request $request, $user_id){
-        $user = Authenticated::findOrFail($user_id);
         $data = $request->validate([
-            'wishlist_id' => 'required'
+            'product_id' => 'required'
         ]);
-        $user->wishlist()->wherePivot('id', $data['wishlist_id'])->detach();
-        return response()->json($data['wishlist_id'], 200);
+        $user = Authenticated::findOrFail($user_id);
+        $product = Product::findOrFail($data['product_id']);
+        $user->wishlist()->wherePivot('id', $user->wishlist->where('id', $product->id)->first()->pivot->id)->detach();
+        return response()->json($data['product_id'], 200);
     }
 
     public function destroyCartProduct(Request $request, $user_id){

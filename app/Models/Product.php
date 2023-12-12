@@ -35,7 +35,7 @@ class Product extends Model
 
     public function wishlists()
     {
-        return $this->belongsToMany(Authenticated::class, 'wishlist', 'product_id', 'user_id');
+        return $this->belongsToMany(Authenticated::class, 'wishlist', 'product_id', 'user_id')->withPivot('id');
     }
 
     public function scopeFilter($query, array $filters)

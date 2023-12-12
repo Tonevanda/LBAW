@@ -142,16 +142,18 @@ function createWishlistProductRequest(event){
   let user_id = this.querySelector('input[name=user_id]').value;
   let product_id = this.querySelector('input[name=product_id]').value;
   console.log(this);
+  event.preventDefault();
   if (this.querySelector('.heart-button').classList.contains('clicked')) {
-    let wishlist_id = this.querySelector('input[name=wishlist_id]').value;
+    let wishlist_id = this.querySelector('input[name=product_id]').value;
     this.querySelector('.heart-button').classList.remove('clicked')
-    sendAjaxRequest('delete', '/api/wishlist/'+user_id, {wishlist_id: wishlist_id}, deleteHomeWishlistProductHandler);
+    console.log("entered delete");
+    sendAjaxRequest('delete', '/api/wishlist/'+user_id, {product_id: product_id}, deleteHomeWishlistProductHandler);
   }
   else{
     this.querySelector('.heart-button').classList.add('clicked')
+    console.log("entered delete");
     sendAjaxRequest('post', '/api/wishlist/'+user_id, {product_id: product_id}, createCartProductHandler);
   }
-  event.preventDefault();
 }
 function createCartProductRequest(event){
   let user_id = this.querySelector('input[name=user_id]').value;
@@ -164,8 +166,8 @@ function createCartProductRequest(event){
 function deleteWishlistProductRequest(event){
   console.log('ola');
   let user_id = this.querySelector('input[name=user_id]').value;
-  let wishlist_id = this.querySelector('input[name=wishlist_id]').value;
-  sendAjaxRequest('delete', '/api/wishlist/'+user_id, {wishlist_id: wishlist_id}, deleteWishlistProductHandler);
+  let product_id = this.querySelector('input[name=product_id]').value;
+  sendAjaxRequest('delete', '/api/wishlist/'+user_id, {product_id: product_id}, deleteWishlistProductHandler);
   event.preventDefault();
 }
 function deleteCartProductRequest(event){
@@ -319,10 +321,10 @@ function hideFullScreenPopup() {
 
 window.onload = function() {
   let forms = document.querySelectorAll('.add_wishlist'); // Select all forms
-  if (!forms) return;
-  console.log(forms);
+  console.log("checking");
+  console.log(forms.length);
+  if (forms.length == 0) return;
   let user_id = forms[0].querySelector('input[name=user_id]').value;
-  console.log(user_id);
   // Send an AJAX request to the server to get all the products in the user's wishlist
   fetch('/wishlist/test/' + user_id)
   .then(response => response.json())
