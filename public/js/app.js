@@ -124,6 +124,7 @@ function updateReviewRequest(event){
   console.log(this);
   let review_id = this.querySelector('input[name=review_id]').value;
   let description = this.querySelector('textarea[name=description]').value;
+  console.log(review_id, description);
   sendAjaxRequest('put', '/review/'+review_id, {review_id: review_id, description: description}, reviewHandler);
   event.preventDefault();
 }
@@ -251,11 +252,15 @@ function reviewCreateHandler(){
   if(this.status == 201){
     let user_review_option = document.querySelector('div.user_review_option');
     let response = JSON.parse(this.responseText);
+    let image_path = assetBaseUrl + '/' + response.profile_picture;
     user_review_option.innerHTML = `
                             <li class="my-review" data-id="${response.review_id}">
                             <form class="edit_review" method="" action="">
                               <input type="hidden" name="review_id" value="${response.review_id}" required>
                               <strong>${response.date} ${response.title}</strong>
+                              <div class = "user_image">
+                                <img src ="${image_path}" alt="" />
+                              </div>
                               <textarea type="text" name="description" required readonly>${response.description}</textarea>
                               ${response.rating}
                               <button type="submit" name="update-review">Save</button>

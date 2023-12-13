@@ -22,6 +22,9 @@ class ReviewController extends Controller
         $data['date']=date('Y-m-d H:i:s');
         $review = Review::create($data);
         $data['review_id'] = $review->id;
+        $user = $review->getAuthor()->first();
+        $data['profile_picture'] = $user->profile_picture;
+        $data['name'] = $user->profile_picture;
         return response()->json($data, 201);
     }
     public function destroy(Request $request, $review_id){

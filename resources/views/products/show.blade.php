@@ -65,10 +65,10 @@
                 empty($userReview) ? $flag = false : $flag = true;
             @endphp
             @if ($flag===false)
-                <form class = "add_review" method="POST" action="{{ route('review.store', ['user_id' => Auth::user()->id]) }}">
+                <form class = "add_review" method="POST" action="{{ route('review.store', ['user_id' => $user->id]) }}">
                     {{ csrf_field() }}
                     <div class = "user_image">
-                        <img src ="{{asset('images/user_images/' . Auth::user()->profile_picture)}}" alt="" />
+                        <img src ="{{asset('images/user_images/' . $user->profile_picture)}}" alt="" />
                     </div>
                     <input type="hidden" name="product_id" value="{{ $product->id }}" required>
                     <input type="hidden" name="user_id" value="{{ Auth::user()->id }}" required>
@@ -108,6 +108,9 @@
                             {{ $user_info->name}}
                             {{ $userReview->title}}
                         </strong>
+                        <div class = "user_image">
+                            <img src ="{{asset('images/user_images/' . $user->profile_picture)}}" alt="" />
+                        </div>
                         <textarea type="text" name="description" required readonly>{{ $userReview->description }}</textarea>
                         {{ $userReview->rating }}
                         <button type="submit" name="update-review">
@@ -143,6 +146,9 @@
                             {{ $user->name}}
                             {{ $review->title}}
                         </strong>
+                        <div class = "user_image">
+                            <img src ="{{asset('images/user_images/' . $user->profile_picture)}}" alt="" />
+                        </div>
                         {{ $review->description }}
                         {{ $review->rating }}
                         @if(auth()->check())
