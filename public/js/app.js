@@ -64,10 +64,10 @@ function addEventListeners() {
     creator.addEventListener('submit', createReportRequest);
   });
 
-  let deleteReview = document.querySelectorAll('form.delete_review');
-  [].forEach.call(deleteReview, function(deleter){
-    deleter.addEventListener('submit', deleteReviewRequest);
-  });
+  let deleteReview = document.querySelector('form.delete_review');
+  if(deleteReview != null){
+    deleteReview.addEventListener('submit', deleteReviewRequest);
+  }
 
   let reviewEditIcon= document.querySelector('li i');
   if(reviewEditIcon != null)reviewEditIcon.addEventListener('click', editReview);
@@ -214,16 +214,61 @@ function deleteReviewHandler(){
   if(this.status == 200){
     console.log("deleted review");
     let response = JSON.parse(this.responseText);
-    let deletion_target = document.querySelector('li[data-id="' + response + '"]');
+    let deletion_target = document.querySelector('li[data-id="' + response.review_id + '"]');
     deletion_target.remove();
-    //let add_review_box = document.querySelector('div.user_review_option');
+    let user_review_option = document.querySelector('div.user_review_option');
+
+
+    user_review_option.innerHTML = `
+                    <form class="add_review" method="" action="">
+                        <input type="hidden" name="product_id" value="${response.product_id}" required>
+                        <input type="hidden" name="user_id" value="${response.user_id}" required>
+                        <label for="title">Title</label>
+                        <input id="title" type="text" name="title" required>
+                        <label for="description">Description</label>
+                        <textarea id="description" type="text" name="description" required> </textarea>
+                        <label for="rating">Rating</label>
+                        <input id="rating" type="number" name="rating" min="1" max="5" required>
+                        <button type="submit" name="add-review" class="button button-outline">
+                            Add Review
+                        </button>
+                    </form>
+                              `;
+
+    let reviewCreate1 = document.querySelector('form.add_review');
+    reviewCreate1.addEventListener('submit', createReviewRequest);
+
   }
 }
 
 function reviewCreateHandler(){
   if(this.status == 201){
-    
+    let user_review_option = document.querySelector('div.user_review_option');
+    let response = JSON.parse(this.responseText);
+    user_review_option.innerHTML = `
+                            <li class="my-review" data-id="${response.review_id}">
+                            <form class="edit_review" method="" action="">
+                              <input type="hidden" name="review_id" value="${response.review_id}" required>
+                              <strong>${response.date} ${response.title}</strong>
+                              <textarea type="text" name="description" required readonly>${response.description}</textarea>
+                              ${response.rating}
+                              <button type="submit" name="update-review">Save</button>
+                              <i class="fas fa-edit"></i>
+                            </form>
+                            <form class="delete_review" method="" action="">
+                              <input type="hidden" name="product_id" value="${response.product_id}" required>
+                              <input type="hidden" name="review_id" value="${response.review_id}" required>
+                              <button type="submit" name="delete-review" class="button button-outline">Delete Review</button>
+                            </form>
+                          </li>
+                                  `;
+
+    let deleteRev = document.querySelector('form.delete_review');
+    deleteRev.addEventListener('submit', deleteReviewRequest);
+    let reviewEditIcon2= document.querySelector('li i');
+    reviewEditIcon2.addEventListener('click', editReview);
   }
+  
 }
 
 function reviewHandler(){

@@ -20,13 +20,22 @@ class ReviewController extends Controller
         ]);
         $data['user_id']=$user_id;
         $data['date']=date('Y-m-d H:i:s');
-        Review::create($data);
-        return response()->json([], 201);
+        $review = Review::create($data);
+        $data['review_id'] = $review->id;
+        return response()->json($data, 201);
     }
     public function destroy(Request $request, $review_id){
+        $data = $request->validate([
+            'product_id' => 'required',
+        ]);
         $review = Review::findOrFail($review_id);
         $review->delete();
-        return response()->json($review_id,200);
+        $data['review_id'] = $review_id;
+        $data['user_id'] = $review->user_id;
+        $user = $review->getAuthor()->first();
+        $data['profile_picture'] = $user->profile_picture;
+        $data['name'] = $user->name;
+        return response()->json($data,200);
     }
     public function report(Request $request, $review_id){
         //é preciso adicionar um popup para o user escrever o motivo do report

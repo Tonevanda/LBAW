@@ -49,6 +49,7 @@
     </div>
 </div>
     <!--review forms-->
+    <div class = "user_review_option">
     @if (auth()->check())
         @if (!Auth::user()->isAdmin())
             @php
@@ -117,6 +118,7 @@
             @endif
         @endif
     @endif
+            </div>
     <div class="reviews">
         <ul class="list-group">
             @foreach ($reviews as $review)
