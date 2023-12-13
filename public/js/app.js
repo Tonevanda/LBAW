@@ -168,6 +168,7 @@ function deleteWishlistProductRequest(event){
 function deleteCartProductRequest(event){
   let user_id = this.querySelector('input[name=user_id]').value;
   let cart_id = this.querySelector('input[name=cart_id]').value;
+  console.log(user_id, cart_id);
   sendAjaxRequest('delete', '/api/shopping-cart/'+user_id, {cart_id: cart_id}, deleteCartProductHandler);
   event.preventDefault();
 }
@@ -219,6 +220,11 @@ function createCartProductHandler(){
     console.log("added to shopping cart");
     
   }
+  if(this.status == 301){
+    //error on adding to shopping cart
+    let response = JSON.parse(this.responseText);
+    console.log(response);
+  }
 }
 
 function deleteCartProductHandler(){
@@ -232,6 +238,10 @@ function deleteCartProductHandler(){
     new_total_price.textContent= new_total_price.textContent-deletion_price;
     new_total_quantity.textContent = new_total_quantity.textContent-1;
     deletion_target.remove();
+  }
+  if(this.status == 301){
+    let response = JSON.parse(this.responseText);
+    console.log(response);
   }
 }
 

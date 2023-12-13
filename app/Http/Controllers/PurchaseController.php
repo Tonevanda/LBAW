@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Purchase;
 use Illuminate\Http\Request;
+use Illuminate\Auth\Access\AuthorizationException;
 
 class PurchaseController extends Controller
 {
@@ -32,11 +33,20 @@ class PurchaseController extends Controller
         $data['user_id'] = $user_id;
         $data['stage_state'] = "payment";
 
-        // Create the Purchase record
-        Purchase::create($data);
 
-        // Redirect to the shopping cart or any other route as needed
-        return redirect()->route('shopping-cart', $data['user_id']);
+        // Create the Purchase record
+
+        try {
+            $this->authorize('create', Purchase::class);
+            Purchase::create($data);
+            return redirect()->route('shopping-cart', $data['user_id']);
+        } catch (AuthorizationException $e) {
+            return redirect()->route('all-products');
+        }
+
+
+
+
     }
 }
 

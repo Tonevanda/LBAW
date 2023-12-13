@@ -12,6 +12,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Auth\Access\AuthorizationException;
 
 class AuthenticatedController extends Controller
 {
@@ -34,11 +35,15 @@ class AuthenticatedController extends Controller
         $user = Authenticated::findOrFail($user_id);
         $purchases = $user->purchases()->get();
         foreach($purchases as $purchase){
-            $this->authorize('list', $purchase);
+            try{
+                $this->authorize('list', $purchase);
+                return view('purchase_history', [
+                    'purchases' => $purchases
+                ]);
+            }catch (AuthorizationException $e){
+                return redirect()->route('all-products');
+            }
         }
-        return view('purchase_history', [
-            'purchases' => $purchases
-        ]);
     }
     
     //Show Profile
@@ -173,9 +178,14 @@ class AuthenticatedController extends Controller
             'product_id' => 'required'
         ]);
         $product = Product::findOrFail($data['product_id']);
-        $this->authorize('addToCart', $product);
-        $user->shoppingCart()->attach($data['product_id']);
-        return response()->json([], 201);
+
+        try {
+            $this->authorize('addToCart', $product);
+            $user->shoppingCart()->attach($data['product_id']);
+            return response()->json([], 201);
+        } catch (AuthorizationException $e) {
+            return response()->json($e->getMessage(), 301);
+        }
     }
 
     public function wishlistStore(Request $request, $user_id){
@@ -197,11 +207,19 @@ class AuthenticatedController extends Controller
     }
 
     public function destroy(Request $request, $user_id){
+        //dd($request);
         $user = Authenticated::findOrFail($user_id);
         $data = $request->validate([
             'cart_id' => 'required'
         ]);
-        $user->shoppingCart()->wherePivot('id', $data['cart_id'])->detach();
-        return response()->json($data['cart_id'],200);
+
+
+        try {
+            $this->authorize('removeFromCart', Product::class);
+            $user->shoppingCart()->wherePivot('id', $data['cart_id'])->detach();
+            return response()->json($data['cart_id'],200);
+        } catch (AuthorizationException $e) {
+            return response()->json($e->getMessage(), 301);
+        }
     }
 }

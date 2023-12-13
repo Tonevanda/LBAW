@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Models\User;
 use App\Models\Product;
+use Illuminate\Auth\Access\AuthorizationException;
 
 class ProductPolicy
 {
@@ -18,11 +19,23 @@ class ProductPolicy
 
     public function addToCart(User $user, Product $product): bool
     {
-        return $product->stock > 0 && !$user->isAdmin() && $user->authenticated()->first()->shoppingCart()->where('product_id', $product->id)->count() < $product->stock;
+        if($product->stock <= 0){
+            throw new AuthorizationException("Can't add a book with 0 stock to a shopping cart");
+        }
+        if($user->isAdmin()){
+            throw new AuthorizationException("Can't add a book to shopping cart if you are an Admin");
+        }
+        if($user->authenticated()->first()->shoppingCart()->where('product_id', $product->id)->count() > $product->stock){
+            throw new AuthorizationException("Your shopping cart will exceed this book's stock");
+        }
+        return true;
     }
 
-    public function removeFromCart(User $user, Product $product): bool
+    public function removeFromCart(User $user): bool
     {
-        return $product->stock > 0 && !$user->isAdmin() && $user->authenticated()->first()->shoppingCart()->where('product_id', $product->id)->count() < $product->stock;
+        if($user->isAdmin()){
+            throw new AuthorizationException("Admins cant remove a book from the shopping cart");
+        }
+        return true;
     }
 }

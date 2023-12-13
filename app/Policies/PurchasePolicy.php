@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Models\User;
 use App\Models\Purchase;
+use Illuminate\Auth\Access\AuthorizationException;
 
 class PurchasePolicy
 {
@@ -17,14 +18,20 @@ class PurchasePolicy
 
     public function list(User $user, Purchase $purchase): bool
     {
-        return $user->id === $purchase->user_id;
+        if($user->id != $purchase->user_id){
+            throw new AuthorizationException("The person making the purchase isn't the one in the account currently logged in");
+        }
+        return true;
     }
 
 
-    public function create(User $user, Purchase $purchase): bool
+    public function create(User $user): bool
     {
         
-        return $user->id === $purchase->user_id;
+        if($user->isAdmin()){
+            throw new AuthorizationException("Admins can't make purchases");
+        }
+        return true;
     }
     
 }
