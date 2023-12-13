@@ -70,6 +70,7 @@
                     <div class = "user_image">
                         <img src ="{{asset('images/user_images/' . $user->profile_picture)}}" alt="" />
                     </div>
+                    <p class = "user_name"> {{$user->name}} </p>
                     <input type="hidden" name="product_id" value="{{ $product->id }}" required>
                     <input type="hidden" name="user_id" value="{{ Auth::user()->id }}" required>
                     <label for="title">Title</label>
@@ -111,6 +112,10 @@
                         <div class = "user_image">
                             <img src ="{{asset('images/user_images/' . $user->profile_picture)}}" alt="" />
                         </div>
+                        <p class = "user_name"> {{$user->name}} </p>
+                        <label>Title</label>
+                        <textarea type="text" name="title" required readonly>{{ $userReview->title }}</textarea>
+                        <label>Description</label>
                         <textarea type="text" name="description" required readonly>{{ $userReview->description }}</textarea>
                         {{ $userReview->rating }}
                         <button type="submit" name="update-review">
@@ -136,6 +141,7 @@
             @foreach ($reviews as $review)
                 @php
                     #dd($review);
+
                     $user = $review->getAuthor()->first();  
                 @endphp
                 @if(!auth()->check() || Auth::user()->id!==$user->id)
@@ -149,7 +155,11 @@
                         <div class = "user_image">
                             <img src ="{{asset('images/user_images/' . $user->profile_picture)}}" alt="" />
                         </div>
-                        {{ $review->description }}
+                        <p class = "user_name"> {{$user->name}} </p>
+                        <label>Title</label>
+                        <textarea type="text" name="title" required readonly>{{ $review->title }}</textarea>
+                        <label>Description</label>
+                        <textarea type="text" name="description" required readonly>{{ $review->description }}</textarea>
                         {{ $review->rating }}
                         @if(auth()->check())
                             @if(Auth::user()->isAdmin())

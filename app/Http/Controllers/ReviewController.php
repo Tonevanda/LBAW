@@ -24,7 +24,7 @@ class ReviewController extends Controller
         $data['review_id'] = $review->id;
         $user = $review->getAuthor()->first();
         $data['profile_picture'] = $user->profile_picture;
-        $data['name'] = $user->profile_picture;
+        $data['name'] = $user->name;
         return response()->json($data, 201);
     }
     public function destroy(Request $request, $review_id){
@@ -51,7 +51,7 @@ class ReviewController extends Controller
     public function update(Request $request, $review_id){
         $review = Review::findOrFail($review_id);
         $data = $request->validate([
-            //'title' => 'required',
+            'title' => 'required',
             'description' => 'required',
             //'rating' => 'required',
         ]);

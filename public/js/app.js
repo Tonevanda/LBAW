@@ -107,7 +107,10 @@ function sendAjaxRequestImage(method, url, data, handler){
 }
   
 function editReview(){
-  document.querySelector('li textarea[name=description]').readOnly = false; 
+  let description = document.querySelector('li textarea[name=description]');
+  description.readOnly = !description.readOnly;
+  let title = document.querySelector('li textarea[name=title]');
+  title.readOnly = !title.readOnly;
   let button= document.querySelector('li button[name=update-review]');
   button.classList.toggle('visible');
   if(this.classList.contains("fa-edit")){
@@ -124,8 +127,9 @@ function updateReviewRequest(event){
   console.log(this);
   let review_id = this.querySelector('input[name=review_id]').value;
   let description = this.querySelector('textarea[name=description]').value;
+  let title = this.querySelector('textarea[name=title]').value;
   console.log(review_id, description);
-  sendAjaxRequest('put', '/review/'+review_id, {review_id: review_id, description: description}, reviewHandler);
+  sendAjaxRequest('put', '/review/'+review_id, {review_id: review_id, description: description, title: title}, reviewHandler);
   event.preventDefault();
 }
 
@@ -261,6 +265,10 @@ function reviewCreateHandler(){
                               <div class = "user_image">
                                 <img src ="${image_path}" alt="" />
                               </div>
+                              <p class = "user_name"> ${response.name} </p>
+                              <label for="title">Title</label>
+                              <textarea type="text" name="title" required readonly>${response.title}</textarea>
+                              <label for="description">Description</label>
                               <textarea type="text" name="description" required readonly>${response.description}</textarea>
                               ${response.rating}
                               <button type="submit" name="update-review">Save</button>
@@ -288,6 +296,9 @@ function reviewHandler(){
   }
   else if(this.status == 200){
     console.log("updated review");
+    let reviewEditIcon1= document.querySelector('li i');
+    reviewEditIcon1.editReview = editReview.bind(reviewEditIcon1);
+    reviewEditIcon1.editReview();
     
   }
 }
