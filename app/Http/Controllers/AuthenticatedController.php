@@ -20,15 +20,29 @@ class AuthenticatedController extends Controller
 
     public function index(Request $request){
         $users = Authenticated::filter($request->input())->paginate(10);
-        return view('user_search', ['users' => $users]);
+        try {
+            $this->authorize('list', Authenticated::class);
+            return view('user_search', ['users' => $users]);
+        } catch (AuthorizationException $e) {
+            return redirect()->route('all-products');
+        }
     }
 
     public function showShoppingCart($user_id){
         $user = Authenticated::findOrFail($user_id);
+        $cart_products = $user->shoppingCart()->get();
+        foreach($cart_products as $cart_product){
+            try{
+                $this->authorize('list', [Product::class, $cart_product->pivot->user_id]);
+                return view('shopping_cart', [
+                    'products' => $cart_products
+                ]);
+            }
+            catch(AuthorizationException $e){
+                return redirect()->route('all-products');
+            }
+        }
 
-        return view('shopping_cart', [
-            'products' => $user->shoppingCart()->get()
-        ]);
     }
 
     public function showPurchases($user_id){

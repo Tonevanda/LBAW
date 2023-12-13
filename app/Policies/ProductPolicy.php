@@ -38,4 +38,16 @@ class ProductPolicy
         }
         return true;
     }
+
+    public function list(User $user, $product_user_id){
+        if($user->isAdmin()){
+            throw new AuthorizationException("Admins can't view this kind of products");
+        }
+
+        if($user->id != $product_user_id){
+            throw new AuthorizationException("Theres a product in this page that shouldn't be");
+        }
+
+        return true;
+    }
 }
