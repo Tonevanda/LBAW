@@ -1,6 +1,12 @@
 @extends('layouts.app') 
 
 @section('content')
+
+<script>
+    var assetBaseUrl = "{{ asset('images/user_images') }}";
+  </script>
+
+
 <div class = 'product-page'>
     <div class="product-info">
     <div class = "product_img">
@@ -61,6 +67,9 @@
             @if ($flag===false)
                 <form class = "add_review" method="POST" action="{{ route('review.store', ['user_id' => Auth::user()->id]) }}">
                     {{ csrf_field() }}
+                    <div class = "user_image">
+                        <img src ="{{asset('images/user_images/' . Auth::user()->profile_picture)}}" alt="" />
+                    </div>
                     <input type="hidden" name="product_id" value="{{ $product->id }}" required>
                     <input type="hidden" name="user_id" value="{{ Auth::user()->id }}" required>
                     <label for="title">Title</label>

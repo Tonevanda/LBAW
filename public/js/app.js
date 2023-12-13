@@ -216,11 +216,17 @@ function deleteReviewHandler(){
     let response = JSON.parse(this.responseText);
     let deletion_target = document.querySelector('li[data-id="' + response.review_id + '"]');
     deletion_target.remove();
+    console.log(response);
     let user_review_option = document.querySelector('div.user_review_option');
+
+    let image_path = assetBaseUrl + '/' + response.profile_picture;
 
 
     user_review_option.innerHTML = `
                     <form class="add_review" method="" action="">
+                        <div class = "user_image">
+                          <img src ="${image_path}" alt="" />
+                        </div>
                         <input type="hidden" name="product_id" value="${response.product_id}" required>
                         <input type="hidden" name="user_id" value="${response.user_id}" required>
                         <label for="title">Title</label>
