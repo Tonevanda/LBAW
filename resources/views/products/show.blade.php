@@ -61,6 +61,7 @@
                 <form class = "add_review" method="POST" action="{{ route('review.store', ['user_id' => Auth::user()->id]) }}">
                     {{ csrf_field() }}
                     <input type="hidden" name="product_id" value="{{ $product->id }}" required>
+                    <input type="hidden" name="user_id" value="{{ Auth::user()->id }}" required>
                     <label for="title">Title</label>
                     <input id="title" type="text" name="title" required>
                     @if ($errors->has('title'))
@@ -69,7 +70,7 @@
                         </span>
                     @endif
                     <label for="description">Description</label>
-                    <input id="description" type="text" name="description" required>
+                    <textarea id="description" type="text" name="description" required> </textarea>
                     @if ($errors->has('description'))
                         <span class="error">
                             {{ $errors->first('description') }}

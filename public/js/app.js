@@ -71,6 +71,11 @@ function addEventListeners() {
 
   let reviewEditIcon= document.querySelector('li i');
   if(reviewEditIcon != null)reviewEditIcon.addEventListener('click', editReview);
+
+  let reviewCreate = document.querySelector('form.add_review');
+  if(reviewCreate != null){
+    reviewCreate.addEventListener('submit', createReviewRequest);
+  }
 }
   
 function encodeForAjax(data) {
@@ -120,6 +125,17 @@ function updateReviewRequest(event){
   let review_id = this.querySelector('input[name=review_id]').value;
   let description = this.querySelector('textarea[name=description]').value;
   sendAjaxRequest('put', '/review/'+review_id, {review_id: review_id, description: description}, reviewHandler);
+  event.preventDefault();
+}
+
+function createReviewRequest(event){
+  console.log(this);
+  let product_id = this.querySelector('input[name=product_id]').value;
+  let user_id = this.querySelector('input[name=user_id]').value;
+  let title = this.querySelector('input[name=title]').value;
+  let description = this.querySelector('textarea[name=description]').value;
+  let rating = this.querySelector('input[name=rating]').value;
+  sendAjaxRequest('post', '/review/create/'+user_id, {user_id: user_id, product_id: product_id, title: title, description: description, rating: rating}, reviewCreateHandler);
   event.preventDefault();
 }
 
@@ -200,6 +216,13 @@ function deleteReviewHandler(){
     let response = JSON.parse(this.responseText);
     let deletion_target = document.querySelector('li[data-id="' + response + '"]');
     deletion_target.remove();
+    //let add_review_box = document.querySelector('div.user_review_option');
+  }
+}
+
+function reviewCreateHandler(){
+  if(this.status == 201){
+    
   }
 }
 

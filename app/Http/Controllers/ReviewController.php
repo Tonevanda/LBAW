@@ -11,8 +11,8 @@ class ReviewController extends Controller
     /*public function show(Request $request, $user_id){
         return 
     }*/
-    public function store($user_id){
-        $data = request()->validate([
+    public function store(Request $request, $user_id){
+        $data = $request->validate([
             'product_id' => 'required',
             'title' => 'required',
             'description' => 'required',
@@ -21,7 +21,7 @@ class ReviewController extends Controller
         $data['user_id']=$user_id;
         $data['date']=date('Y-m-d H:i:s');
         Review::create($data);
-        return redirect()->route('single-product', $data['product_id']);
+        return response()->json([], 201);
     }
     public function destroy(Request $request, $review_id){
         $review = Review::findOrFail($review_id);
