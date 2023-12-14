@@ -39,13 +39,25 @@ class ProductPolicy
         return true;
     }
 
-    public function list(User $user, $product_user_id){
+    public function listCart(User $user, $product_user_id){
         if($user->isAdmin()){
-            throw new AuthorizationException("Admins can't view this kind of products");
+            throw new AuthorizationException("Admins can't view the shopping cart");
         }
 
         if($user->id != $product_user_id){
-            throw new AuthorizationException("Theres a product in this page that shouldn't be");
+            throw new AuthorizationException("You are not at your shopping cart");
+        }
+
+        return true;
+    }
+
+    public function listWishlist(User $user, $product_user_id){
+        if($user->isAdmin()){
+            throw new AuthorizationException("Admins can't view the wishlist");
+        }
+
+        if($user->id != $product_user_id){
+            throw new AuthorizationException("You are not at your wishlist");
         }
 
         return true;

@@ -33,7 +33,7 @@ class AuthenticatedController extends Controller
         $cart_products = $user->shoppingCart()->get();
         foreach($cart_products as $cart_product){
             try{
-                $this->authorize('list', [Product::class, $cart_product->pivot->user_id]);
+                $this->authorize('listCart', [Product::class, $cart_product->pivot->user_id]);
                 return view('shopping_cart', [
                     'products' => $cart_products
                 ]);
@@ -143,10 +143,19 @@ class AuthenticatedController extends Controller
 
     public function showWishlist($user_id){
         $user = Authenticated::findOrFail($user_id);
-        return view('wishlist', [
-            'products' => $user->wishlist()->get(),
-            'user' => $user
-        ]);
+        $wishlist_products = $user->wishlist()->get();
+        foreach($wishlist_products as $wishlist_product){
+            try{
+                $this->authorize('listWishlist', [Product::class, $wishlist_product->pivot->user_id]);
+                return view('wishlist', [
+                    'products' => $wishlist_products,
+                    'user' => $user
+                ]);
+
+            }catch(AuthorizationException $e){
+                return redirect()->route('all-products');
+            }
+        }
     } 
 
     
