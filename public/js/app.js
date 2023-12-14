@@ -248,6 +248,10 @@ function deleteHomeWishlistProductHandler(){
   if(this.status == 200){
     console.log("removed from wishlist");
   }
+  if(this.status == 301){
+    let response = JSON.parse(this.responseText);
+    console.log(response);
+  }
 }
 function deleteWishlistProductHandler(){
   if(this.status == 200){
