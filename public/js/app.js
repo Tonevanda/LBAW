@@ -221,7 +221,6 @@ function createCartProductHandler(){
     
   }
   if(this.status == 301){
-    //error on adding to shopping cart
     let response = JSON.parse(this.responseText);
     console.log(response);
   }

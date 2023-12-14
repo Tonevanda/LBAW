@@ -22,4 +22,5 @@ class AuthenticatedPolicy
         }
         return true;
     }
+
 }

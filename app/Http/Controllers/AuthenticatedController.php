@@ -34,14 +34,14 @@ class AuthenticatedController extends Controller
         foreach($cart_products as $cart_product){
             try{
                 $this->authorize('listCart', [Product::class, $cart_product->pivot->user_id]);
-                return view('shopping_cart', [
-                    'products' => $cart_products
-                ]);
             }
             catch(AuthorizationException $e){
                 return redirect()->route('all-products');
             }
         }
+        return view('shopping_cart', [
+            'products' => $cart_products
+        ]);
 
     }
 
@@ -51,13 +51,13 @@ class AuthenticatedController extends Controller
         foreach($purchases as $purchase){
             try{
                 $this->authorize('list', $purchase);
-                return view('purchase_history', [
-                    'purchases' => $purchases
-                ]);
             }catch (AuthorizationException $e){
                 return redirect()->route('all-products');
             }
         }
+        return view('purchase_history', [
+            'purchases' => $purchases
+        ]);
     }
     
     //Show Profile
@@ -147,15 +147,15 @@ class AuthenticatedController extends Controller
         foreach($wishlist_products as $wishlist_product){
             try{
                 $this->authorize('listWishlist', [Product::class, $wishlist_product->pivot->user_id]);
-                return view('wishlist', [
-                    'products' => $wishlist_products,
-                    'user' => $user
-                ]);
 
             }catch(AuthorizationException $e){
                 return redirect()->route('all-products');
             }
         }
+        return view('wishlist', [
+            'products' => $wishlist_products,
+            'user' => $user
+        ]);
     } 
 
     
@@ -168,6 +168,7 @@ class AuthenticatedController extends Controller
 
     public function create(Request $request)
     {
+
         $request->validate([
             'name' => 'required|string|max:250',
             'email' => 'required|email|max:250|unique:users',
@@ -203,7 +204,7 @@ class AuthenticatedController extends Controller
         $product = Product::findOrFail($data['product_id']);
 
         try {
-            $this->authorize('addToCart', $product);
+            $this->authorize('addToCart', [$product, $user_id]);
             $user->shoppingCart()->attach($data['product_id']);
             return response()->json([], 201);
         } catch (AuthorizationException $e) {
@@ -216,8 +217,14 @@ class AuthenticatedController extends Controller
         $data = $request->validate([
             'product_id' => 'required'
         ]);
-        $user->wishlist()->attach($data['product_id']);
-        return response()->json([], 201);
+        $product = Product::findOrFail($data['product_id']);
+        try{
+            $this->authorize('addToWishlist', [$product, $user_id]);
+            $user->wishlist()->attach($data['product_id']);
+            return response()->json([], 201);
+        }catch(AuthorizationException $e){
+            return response()->json([], 301);
+        }
     }
 
     public function wishlistDestroy(Request $request, $user_id){

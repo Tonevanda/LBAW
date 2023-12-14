@@ -17,16 +17,33 @@ class ProductPolicy
     }
 
 
-    public function addToCart(User $user, Product $product): bool
+    public function addToCart(User $user, Product $product, $user_id): bool
     {
+        if($user->id != $user_id){
+            throw new AuthorizationException("This isn't your shopping cart");
+        }
         if($product->stock <= 0){
             throw new AuthorizationException("Can't add a book with 0 stock to a shopping cart");
         }
         if($user->isAdmin()){
             throw new AuthorizationException("Can't add a book to shopping cart if you are an Admin");
         }
-        if($user->authenticated()->first()->shoppingCart()->where('product_id', $product->id)->count() > $product->stock){
+        if($user->authenticated()->first()->shoppingCart()->where('product_id', $product->id)->count() >= $product->stock){
             throw new AuthorizationException("Your shopping cart will exceed this book's stock");
+        }
+        return true;
+    }
+
+    public function addToWishlist(User $user, Product $product, $user_id): bool
+    {
+        if($user->id != $user_id){
+            throw new AuthorizationException("This isn't your wishlist");
+        }
+        if($user->isAdmin()){
+            throw new AuthorizationException("Can't add a book to shopping cart if you are an Admin");
+        }
+        if($user->authenticated()->first()->wishlist()->where('product_id', $product->id)->count() == 1){
+            throw new AuthorizationException("Your wishlist already contains this book");
         }
         return true;
     }
