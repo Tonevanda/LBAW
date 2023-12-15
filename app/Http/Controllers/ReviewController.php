@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Review;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 
 class ReviewController extends Controller
@@ -16,6 +17,7 @@ class ReviewController extends Controller
         ]);
         $data['user_id']=$user_id;
         $data['date']=date('Y-m-d H:i:s');
+
         Review::create($data);
         return redirect()->route('single-product', $data['product_id']);
     }

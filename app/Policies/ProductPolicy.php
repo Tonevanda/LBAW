@@ -79,4 +79,12 @@ class ProductPolicy
 
         return true;
     }
+
+    public function create(User $user){
+        if(!$user->isAdmin()){
+            throw new AuthorizationException("Non admins can't create new products");
+        }
+
+        return true;
+    }
 }

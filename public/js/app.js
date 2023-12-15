@@ -329,7 +329,7 @@ function hideFullScreenPopup() {
 
 window.onload = function() {
   let forms = document.querySelectorAll('.add_wishlist'); // Select all forms
-  if (!forms) return;
+  if (forms.length === 0) return;
   console.log(forms);
   let user_id = forms[0].querySelector('input[name=user_id]').value;
   console.log(user_id);

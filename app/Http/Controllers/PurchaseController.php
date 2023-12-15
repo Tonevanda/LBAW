@@ -38,12 +38,12 @@ class PurchaseController extends Controller
 
         try {
             $this->authorize('create', Purchase::class);
-            Purchase::create($data);
-            return redirect()->route('shopping-cart', $data['user_id']);
         } catch (AuthorizationException $e) {
             return redirect()->route('all-products');
         }
 
+        Purchase::create($data);
+        return redirect()->route('shopping-cart', $data['user_id']);
 
 
 
