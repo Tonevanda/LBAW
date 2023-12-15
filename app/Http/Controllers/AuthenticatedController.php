@@ -59,6 +59,16 @@ class AuthenticatedController extends Controller
             'purchases' => $purchases
         ]);
     }
+
+    public function showAccountDetails($user_id){
+        $user = Authenticated::findOrFail($user_id);
+        try{
+            $this->authorize('showAccountDetails', $user);
+        }catch (AuthorizationException $e){
+            return redirect()->route('all-products');
+        }
+        return view('Account-Details.show');
+    }
     
     //Show Profile
     public function show($user_id){

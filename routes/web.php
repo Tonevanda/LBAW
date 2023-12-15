@@ -77,6 +77,7 @@ Route::controller(AuthenticatedController::class)->group(function () {
     Route::put('/users/{user_id}', 'update')->name('profile.update');
     Route::get('/purchase-history/{user_id}', 'showPurchases')->name('purchase_history');
     Route::get('/wishlist/test/{user_id}', 'getWishlist')->name('getWishlist');
+    Route::get('/account_details/{user_id}', 'showAccountDetails')->name('account_details');
 });
 
 Route::controller(PurchaseController::class)->group(function () {
@@ -95,6 +96,3 @@ Route::get('/contact_us', function () {
     return view('contact_us');
 })->name('contact_us');
 
-Route::get('/account_details/{user_id}', function () {
-    return view('Account-Details.show');
-})->name('account_details');
