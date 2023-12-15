@@ -5,7 +5,7 @@ namespace App\Policies;
 use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
 
-class AuthenticatedPolicy
+class ReviewPolicy
 {
     /**
      * Create a new policy instance.
@@ -15,12 +15,10 @@ class AuthenticatedPolicy
         //
     }
 
-    public function list(User $user): bool
-    {
-        if(!$user->isAdmin()){
-            throw new AuthorizationException("Non Admins can't view other users account information");
+    public function create(User $user): bool{
+        if($user->isAdmin()){
+            throw new AuthorizationException("Admins can't create reviews");
         }
         return true;
     }
-
 }

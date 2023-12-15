@@ -194,6 +194,7 @@ function deleteWishlistProductRequest(event){
 function deleteCartProductRequest(event){
   let user_id = this.querySelector('input[name=user_id]').value;
   let cart_id = this.querySelector('input[name=cart_id]').value;
+  console.log(user_id, cart_id);
   sendAjaxRequest('delete', '/api/shopping-cart/'+user_id, {cart_id: cart_id}, deleteCartProductHandler);
   event.preventDefault();
 }
@@ -314,6 +315,10 @@ function createCartProductHandler(){
     console.log("added to shopping cart");
     
   }
+  if(this.status == 301){
+    let response = JSON.parse(this.responseText);
+    console.log(response);
+  }
 }
 
 function deleteCartProductHandler(){
@@ -328,11 +333,19 @@ function deleteCartProductHandler(){
     new_total_quantity.textContent = new_total_quantity.textContent-1;
     deletion_target.remove();
   }
+  if(this.status == 301){
+    let response = JSON.parse(this.responseText);
+    console.log(response);
+  }
 }
 
 function deleteHomeWishlistProductHandler(){
   if(this.status == 200){
     console.log("removed from wishlist");
+  }
+  if(this.status == 301){
+    let response = JSON.parse(this.responseText);
+    console.log(response);
   }
 }
 function deleteWishlistProductHandler(){
@@ -411,9 +424,8 @@ function hideFullScreenPopup() {
 
 window.onload = function() {
   let forms = document.querySelectorAll('.add_wishlist'); // Select all forms
-  console.log("checking");
-  console.log(forms.length);
-  if (forms.length == 0) return;
+  if (forms.length === 0) return;
+  console.log(forms);
   let user_id = forms[0].querySelector('input[name=user_id]').value;
   // Send an AJAX request to the server to get all the products in the user's wishlist
   fetch('/wishlist/test/' + user_id)

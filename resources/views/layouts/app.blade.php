@@ -2,7 +2,7 @@
 
 $user = Auth::user();
 
-if($user != NULL){
+if($user != NULL && !$user->isAdmin()){
     $auth = $user->authenticated()->first();
 
     $wallet = $auth->wallet();

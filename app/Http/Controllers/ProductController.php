@@ -6,6 +6,7 @@ use Illuminate\View\View;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Models\PurchaseProduct;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
@@ -47,12 +48,14 @@ class ProductController extends Controller
             'author' => 'required|string|max:250',
             'editor' => 'required|string|max:250',
             'language' => 'required|string|max:250',
-            'image' => 'required|string|min:0',
             #'category' => 'required|string|max:250',
         ]);
-        //$imageName = time().'.'.$request->image->extension();  
-        //$request->image->move(public_path('images'), $imageName);
-        $product = Product::create([
+        try{
+            $this->authorize('create', Product::class);
+        }catch(AuthorizationException $e){
+            return redirect()->route('all-products');
+        }
+        Product::create([
             'name' => $request->name,
             'synopsis' => $request->synopsis,
             'price' => (int)$request->price,
@@ -60,7 +63,6 @@ class ProductController extends Controller
             'author' => $request->author,
             'editor' => $request->editor,
             'language' => $request->language,
-            'image' => $request->image,
             #'category' => $request->category
         ]);
         return redirect()->route('add_products');
