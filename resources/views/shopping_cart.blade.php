@@ -25,7 +25,7 @@
             <td>{{ $total }}</td>
         </tr>
     </table>
-    <button onclick="showFullScreenPopup()">
+    <button class="show_popup">
         Checkout
     </button>
 </div>
@@ -43,7 +43,7 @@
 
 
 <div id="fullScreenPopup" class="popup-form" style="display: none;">
-    <form method="POST" action="{{ route('purchase.store', ['user_id' => Auth::user()->id]) }}">
+    <form class = "checkout" method="POST" action="{{ route('purchase.store', ['user_id' => Auth::user()->id]) }}">
         {{ csrf_field() }}
         <!-- Your form content here -->
         <input type="hidden" name="quantity" value="{{ $productCount }}">
@@ -84,7 +84,7 @@
         <span>Yes, I want my order to be tracked.</span>
         <!-- Add buttons for navigation -->
         <div class="navigation-buttons">
-            <button class="cancel" onclick="hideFullScreenPopup()">Cancel</button>
+            <button name="cancel">Cancel</button>
             <button type="submit">Confirm Purchase</button>
         </div>
     </form>

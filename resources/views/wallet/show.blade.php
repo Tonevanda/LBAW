@@ -16,47 +16,37 @@
 
 <div class = "money_fund_option">
     <h3> Add 5€ </h3>
-    <form class = "add_funds_form" method = "" action = "">
-        <button type = "submit">
-            Add funds
-        </button>
-    </form>
+    <button class = "show_popup">
+        Add funds
+    </button>
 </div>
 
 <div class = "money_fund_option">
     <h3> Add 10€ </h3>
-    <form class = "add_funds_form" method = "" action = "">
-        <button type = "submit">
-            Add funds
-        </button>
-    </form>
+    <button class = "show_popup">
+        Add funds
+    </button>
 </div>
 
 <div class = "money_fund_option">
     <h3> Add 25€ </h3>
-    <form class = "add_funds_form" method = "" action = "">
-        <button type = "submit">
-            Add funds
-        </button>
-    </form>
+    <button class = "show_popup">
+        Add funds
+    </button>
 </div>
 
 <div class = "money_fund_option">
     <h3> Add 50€ </h3>
-    <form class = "add_funds_form" method = "" action = "">
-        <button type = "submit">
-            Add funds
-        </button>
-    </form>
+    <button class = "show_popup">
+        Add funds
+    </button>
 </div>
 
 <div class = "money_fund_option">
     <h3> Add 100€ </h3>
-    <form class = "add_funds_form" method = "" action = "">
-        <button type = "submit">
-            Add funds
-        </button>
-    </form>
+    <button class = "show_popup">
+        Add funds
+    </button>
 </div>
 
 <div class = "user_wallet">
@@ -64,6 +54,53 @@
     <p> Current Wallet Balance </p>
     <h2> {{ number_format($wallet->money, 2, ',', '.') }}{{$wallet->currencySymbol}} </h2>
     <a class="button" href="{{ route('account_details',Auth::user()->id) }}">See Account Details</a>
+</div>
+
+
+<div id="fullScreenPopup" class="popup-form" style="display: none;">
+    <form class = "add_funds_form" method="POST" action="{{ route('purchase.store', ['user_id' => Auth::user()->id]) }}">
+        {{ csrf_field() }}
+        <!-- Your form content here -->
+        <p class="title">Checkout</p>
+        <!-- Separate fields for shipping address -->
+        <p>Purchase Destination<p>
+            <div class="shipping-address">
+                <div class="column">
+                    <label for="city">City</label>
+                    <input type="text" id="city" name="city" placeholder="Enter city">
+            
+                    <label for="street">Street</label>
+                    <input type="text" id="street" name="street" placeholder="Enter street">
+                </div>
+                <div class="column">
+                    <label for="state">State</label>
+                    <input type="text" id="state" name="state" placeholder="Enter state">
+            
+                    <label for="postal_code">Postal Code</label>
+                    <input type="text" id="postal_code" name="postal_code" placeholder="Enter Postal Code">
+                </div>
+            </div>
+
+        <!-- Payment Method -->
+        <p>Payment Method<p>
+        <label for="payment_type">Choose a payment method:</label>
+        <select id="payment_type" name="payment_type">
+            <option value="paypal">PayPal</option>
+            <option value="credit/debit card">Credit/Debit Card</option>
+            <option value="store money">Wallet</option>
+        </select>
+
+        <!-- Tracking -->
+        <p>Tracking<p>
+        <label for="isTracked">Do you want to track your order?</label>
+        <input type="checkbox" id="isTracked" name="isTracked" value="0">
+        <span>Yes, I want my order to be tracked.</span>
+        <!-- Add buttons for navigation -->
+        <div class="navigation-buttons">
+            <button name="cancel">Cancel</button>
+            <button type="submit">Confirm Purchase</button>
+        </div>
+    </form>
 </div>
 
 @endsection

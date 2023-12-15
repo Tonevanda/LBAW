@@ -76,6 +76,27 @@ function addEventListeners() {
   if(reviewCreate != null){
     reviewCreate.addEventListener('submit', createReviewRequest);
   }
+
+  let addFundsButtons = document.querySelectorAll('button.show_popup');
+  [].forEach.call(addFundsButtons, function(button){
+    button.addEventListener('click', showFullScreenPopup);
+  });
+
+  let cancel_button = document.querySelector('button[name=cancel]');
+  if(cancel_button != null){
+    console.log(cancel_button);
+    cancel_button.addEventListener('click', hideFullScreenPopup);
+  }
+
+  let addFundsForm = document.querySelector('form.add_funds_form');
+  if(addFundsForm != null){
+    addFundsForm.addEventListener('submit', addFundsRequest);
+  }
+
+  let checkoutForm = document.querySelector('form.checkout');
+  if(checkoutForm != null){
+    checkoutForm.addEventListener('submit', createPurchaseRequest);
+  }
 }
   
 function encodeForAjax(data) {
@@ -131,6 +152,27 @@ function updateReviewRequest(event){
   console.log(review_id, description);
   sendAjaxRequest('put', '/review/'+review_id, {review_id: review_id, description: description, title: title}, reviewHandler);
   event.preventDefault();
+}
+
+
+function createPurchaseRequest(event){
+  console.log(this);
+  /*let review_id = this.querySelector('input[name=review_id]').value;
+  let description = this.querySelector('textarea[name=description]').value;
+  let title = this.querySelector('textarea[name=title]').value;
+  console.log(review_id, description);
+  sendAjaxRequest('put', '/review/'+review_id, {review_id: review_id, description: description, title: title}, reviewHandler);*/
+  //event.preventDefault();
+}
+
+function addFundsRequest(event){
+  console.log(this);
+  /*let review_id = this.querySelector('input[name=review_id]').value;
+  let description = this.querySelector('textarea[name=description]').value;
+  let title = this.querySelector('textarea[name=title]').value;
+  console.log(review_id, description);
+  sendAjaxRequest('put', '/review/'+review_id, {review_id: review_id, description: description, title: title}, reviewHandler);*/
+  //event.preventDefault();
 }
 
 function createReviewRequest(event){
@@ -433,9 +475,10 @@ function showFullScreenPopup() {
   document.getElementById('fullScreenPopup').style.display = 'flex';
 }
 
-function hideFullScreenPopup() {
+function hideFullScreenPopup(event) {
   document.body.classList.remove('popup-open');
   document.getElementById('fullScreenPopup').style.display = 'none';
+  event.preventDefault();
 }
 
 window.onload = function() {
