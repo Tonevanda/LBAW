@@ -16,27 +16,47 @@
 
 <div class = "money_fund_option">
     <h3> Add 5€ </h3>
-    <a class="button" href="#">Add funds</a>
+    <form class = "add_funds_form" method = "" action = "">
+        <button type = "submit">
+            Add funds
+        </button>
+    </form>
 </div>
 
 <div class = "money_fund_option">
     <h3> Add 10€ </h3>
-    <a class="button" href="#">Add funds</a>
+    <form class = "add_funds_form" method = "" action = "">
+        <button type = "submit">
+            Add funds
+        </button>
+    </form>
 </div>
 
 <div class = "money_fund_option">
     <h3> Add 25€ </h3>
-    <a class="button" href="#">Add funds</a>
+    <form class = "add_funds_form" method = "" action = "">
+        <button type = "submit">
+            Add funds
+        </button>
+    </form>
 </div>
 
 <div class = "money_fund_option">
     <h3> Add 50€ </h3>
-    <a class="button" href="#">Add funds</a>
+    <form class = "add_funds_form" method = "" action = "">
+        <button type = "submit">
+            Add funds
+        </button>
+    </form>
 </div>
 
 <div class = "money_fund_option">
     <h3> Add 100€ </h3>
-    <a class="button" href="#">Add funds</a>
+    <form class = "add_funds_form" method = "" action = "">
+        <button type = "submit">
+            Add funds
+        </button>
+    </form>
 </div>
 
 <div class = "user_wallet">
