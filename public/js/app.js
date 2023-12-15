@@ -217,7 +217,11 @@ function updateProfilePictureRequest(event){
 }
 
 function deleteReviewHandler(){
-  if(this.status == 200){
+  if(this.status == 301){
+    let response = JSON.parse(this.responseText);
+    console.log(response);
+  }
+  else if(this.status == 200){
     console.log("deleted review");
     let response = JSON.parse(this.responseText);
     let deletion_target = document.querySelector('li[data-id="' + response.review_id + '"]');
@@ -288,12 +292,20 @@ function reviewCreateHandler(){
     let reviewEditIcon2= document.querySelector('li i');
     reviewEditIcon2.addEventListener('click', editReview);
   }
+  if(this.status == 301){
+    let response = JSON.parse(this.responseText);
+    console.log(response);
+  }
   
 }
 
 function reviewHandler(){
   if(this.status == 201){
     console.log("reported");
+  }
+  else if(this.status == 301){
+    let response = JSON.parse(this.responseText);
+    console.log(response);
   }
   else if(this.status == 200){
     console.log("updated review");
@@ -307,6 +319,10 @@ function reviewHandler(){
 function createReportHandler(){
   if(this.status == 201){
     console.log("reported");
+  }
+  if(this.status == 301){
+    let response = JSON.parse(this.responseText);
+    console.log(response);
   }
 }
   

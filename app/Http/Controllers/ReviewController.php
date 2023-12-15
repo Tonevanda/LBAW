@@ -19,6 +19,11 @@ class ReviewController extends Controller
             'description' => 'required',
             'rating' => 'required',
         ]);
+        try{
+            $this->authorize('create', Review::class);
+        }catch(AuthorizationException $e){
+            return response()->json($e->getMessage(), 301);
+        }
         $data['user_id']=$user_id;
         $data['date']=date('Y-m-d H:i:s');
         $review = Review::create($data);
@@ -33,6 +38,11 @@ class ReviewController extends Controller
             'product_id' => 'required',
         ]);
         $review = Review::findOrFail($review_id);
+        try{
+            $this->authorize('destroy', $review);
+        }catch(AuthorizationException $e){
+            return response()->json($e->getMessage(), 301);
+        }
         $review->delete();
         $data['review_id'] = $review_id;
         $data['user_id'] = $review->user_id;
@@ -43,7 +53,12 @@ class ReviewController extends Controller
     }
     public function report(Request $request, $review_id){
         //é preciso adicionar um popup para o user escrever o motivo do report
-        //$review = Review::findOrFail($review_id);
+        $review = Review::findOrFail($review_id);
+        try{
+            $this->authorize('createReport', $review);
+        }catch(AuthorizationException $e){
+            return response()->json($e->getMessage(), 301);
+        }
         //$review->reported = 1;
         //dd($review);
         //$review->save();
@@ -56,6 +71,11 @@ class ReviewController extends Controller
             'description' => 'required',
             //'rating' => 'required',
         ]);
+        try{
+            $this->authorize('update', $review);
+        }catch(AuthorizationException $e){
+            return response()->json($e->getMessage(), 301);
+        }
         $review->update($data);
         return response()->json($data['description'], 200);
     }
