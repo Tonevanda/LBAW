@@ -48,10 +48,18 @@ class ProductPolicy
         return true;
     }
 
-    public function removeFromCart(User $user): bool
+    public function removeFromCart(User $user, $cart_id): bool
     {
         if($user->isAdmin()){
             throw new AuthorizationException("Admins cant remove a book from the shopping cart");
+        }
+        $cart_product = $user->authenticated()->first()->shoppingCart()->wherePivot('id', $cart_id);
+        if($cart_product->count() == 0){
+            throw new AuthorizationException("That product isn't in your shopping cart");
+        }
+
+        if($cart_product->first()->pivot->user_id != $user->id){
+            throw new AuthorizationException("This isn't your shopping cart");
         }
         return true;
     }

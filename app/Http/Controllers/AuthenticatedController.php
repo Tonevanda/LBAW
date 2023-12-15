@@ -257,7 +257,7 @@ class AuthenticatedController extends Controller
 
 
         try {
-            $this->authorize('removeFromCart', Product::class);
+            $this->authorize('removeFromCart', [Product::class, $data['cart_id']]);
         } catch (AuthorizationException $e) {
             return response()->json($e->getMessage(), 301);
         }
