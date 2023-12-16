@@ -71,28 +71,39 @@
     <form class = "add_funds_form" method="POST" action="{{ route('purchase.store', ['user_id' => $user->id]) }}">
         {{ csrf_field() }}
         <!-- Your form content here -->
-        <p class="title">Payment Information</p>
+        <h3 class="title">Payment Information</h3>
         <!-- Separate fields for shipping address -->
-        <p>Billing information<p>
+        <h4>Billing information</h4>
             <div class="shipping-address">
                 <div class="column">
                     <label for="name">Name</label>
-                    <input type="text" id="name" name="name" placeholder="Enter name">
+                    <input type="text" name="name" placeholder="Enter name">
 
                     <label for="address">Billing address</label>
-                    <input type="text" id="street" name="address" placeholder="Enter Billing address">
+                    <input type="text" name="address" placeholder="Enter Billing address">
+
+                    <label for="country">Country</label>
+                    <select name="category">
+                        <option value="" selected></option>
+                        <option value="Portugal">Portugal</option>
+                        <option value="USA">United States of America</option>
+                    
+                    </select>
                 </div>
                 <div class="column">
                     <label for="city">City</label>
-                    <input type="text" id="city" name="city" placeholder="Enter city">
+                    <input type="text" name="city" placeholder="Enter city">
             
                     <label for="postal_code">Postal Code</label>
-                    <input type="text" id="postal_code" name="postal_code" placeholder="Enter Postal Code">
+                    <input type="text" name="postal_code" placeholder="Enter Postal Code">
+
+                    <label for="phone">Phone Number</label>
+                    <input type="text" name="phone" placeholder="Enter Phone Number">
                 </div>
             </div>
 
         <!-- Payment Method -->
-        <p>Payment Method<p>
+        <h4>Payment Method</h4>
         <label for="payment_type">Choose a payment method:</label>
         <select id="payment_type" name="payment_type">
             @foreach($payments as $payment)
@@ -106,9 +117,9 @@
 
         <!-- Tracking -->
         <input type="checkbox" id="isTracked" name="isTracked" value="0">
-        <span>Save my payment information to make checkout easier next time</span>
+        <p>Save my payment information to make checkout easier next time</p>
 
-        <span>You will have the opportunity to review your purchase before finalizing it.</span>
+        <p>You will have the opportunity to review your purchase before finalizing it.</p>
         <!-- Add buttons for navigation -->
         <div class="navigation-buttons">
             <button name="cancel">Cancel</button>
@@ -129,17 +140,17 @@
             <div class="shipping-address">
                 <div class="column">
                     <label for="name">Name</label>
-                    <input type="text" id="name" name="name" placeholder="Enter name">
+                    <input type="text" name="name" placeholder="Enter name">
 
                     <label for="address">Billing address</label>
-                    <input type="text" id="street" name="address" placeholder="Enter Billing address">
+                    <input type="text" name="address" placeholder="Enter Billing address">
                 </div>
                 <div class="column">
                     <label for="city">City</label>
-                    <input type="text" id="city" name="city" placeholder="Enter city">
+                    <input type="text" name="city" placeholder="Enter city">
             
                     <label for="postal_code">Postal Code</label>
-                    <input type="text" id="postal_code" name="postal_code" placeholder="Enter Postal Code">
+                    <input type="text" name="postal_code" placeholder="Enter Postal Code">
                 </div>
             </div>
 
@@ -157,7 +168,7 @@
         </select>
 
         <!-- Tracking -->
-        <input type="checkbox" id="isTracked" name="isTracked" value="0">
+        <input type="checkbox" name="isTracked" value="0">
         <span>Save my payment information to make checkout easier next time</span>
         <!-- Add buttons for navigation -->
         <div class="navigation-buttons">
