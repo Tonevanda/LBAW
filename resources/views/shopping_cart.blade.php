@@ -1,9 +1,16 @@
 @extends('layouts.app')
 
-<?php
+@php
+    use App\Models\Payment;
+
+    $payments = Payment::all();
+    $user = Auth::user();
+    if(!$user->isAdmin()){
+        $auth = $user->authenticated()->first();
+    }
     $total = 0;
     $productCount = count($products);
-?>
+@endphp
 
 @section('content')
 <div class="shopping-cart-page">
@@ -43,7 +50,7 @@
 
 
 <div id="fullScreenPopup" class="popup-form" style="display: none;">
-    <form class = "checkout" method="POST" action="{{ route('purchase.store', ['user_id' => Auth::user()->id]) }}">
+    <form class = "checkout" method="POST" action="{{ route('purchase.store', ['user_id' => $user->id]) }}">
         {{ csrf_field() }}
         <!-- Your form content here -->
         <input type="hidden" name="quantity" value="{{ $productCount }}">
@@ -72,9 +79,13 @@
         <p>Payment Method<p>
         <label for="payment_type">Choose a payment method:</label>
         <select id="payment_type" name="payment_type">
-            <option value="paypal">PayPal</option>
-            <option value="credit/debit card">Credit/Debit Card</option>
-            <option value="store money">Wallet</option>
+            @foreach($payments as $payment)
+                @if($auth->paymentMethod == $payment->payment_type)
+                    <option value="{{$payment->payment_type}}" selected>{{$payment->payment_type}}</option>
+                @else
+                    <option value="{{$payment->payment_type}}">{{$payment->payment_type}}</option>
+                @endif
+            @endforeach
         </select>
 
         <!-- Tracking -->

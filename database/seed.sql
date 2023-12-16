@@ -493,9 +493,10 @@ INSERT INTO currency VALUES('dollar');
 INSERT INTO currency VALUES('rupee');
 INSERT INTO currency VALUES('yen');
 
+
+INSERT INTO payment VALUES('store money');
 INSERT INTO payment VALUES('paypal');
 INSERT INTO payment VALUES('credit/debit card');
-INSERT INTO payment VALUES('store money');
 
 INSERT INTO stage VALUES('payment');
 INSERT INTO stage VALUES('order');

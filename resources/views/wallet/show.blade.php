@@ -2,10 +2,20 @@
 
 @section('content')
 
+@php
+    use App\Models\Payment;
+
+    $user = Auth::user();
+    if(!$user->isAdmin()){
+        $auth = $user->authenticated()->first();
+        $payments = Payment::filter("store money")->get();
+    }
+@endphp
+
 
 <h2> Add funds to your wallet </h2>
 
-<h4> Add funds to {{Auth::user()->name}}'s wallet</h4>
+<h4> Add funds to {{$user->name}}'s wallet</h4>
 
 
 <p> Funds in your wallet can be used to purchase any book on Bibliophile Bliss.
@@ -53,12 +63,12 @@
     <h2> Your Bibliophile Bliss Account </h2>
     <p> Current Wallet Balance </p>
     <h2> {{ number_format($wallet->money, 2, ',', '.') }}{{$wallet->currencySymbol}} </h2>
-    <a class="button" href="{{ route('account_details',Auth::user()->id) }}">See Account Details</a>
+    <a class="button" href="{{ route('account_details',$user->id) }}">See Account Details</a>
 </div>
 
 
 <div id="fullScreenPopup" class="popup-form" style="display: none;">
-    <form class = "add_funds_form" method="POST" action="{{ route('purchase.store', ['user_id' => Auth::user()->id]) }}">
+    <form class = "add_funds_form" method="POST" action="{{ route('purchase.store', ['user_id' => $user->id]) }}">
         {{ csrf_field() }}
         <!-- Your form content here -->
         <p class="title">Checkout</p>
@@ -85,16 +95,18 @@
         <p>Payment Method<p>
         <label for="payment_type">Choose a payment method:</label>
         <select id="payment_type" name="payment_type">
-            <option value="paypal">PayPal</option>
-            <option value="credit/debit card">Credit/Debit Card</option>
-            <option value="store money">Wallet</option>
+            @foreach($payments as $payment)
+                @if($auth->paymentMethod == $payment->payment_type)
+                    <option value="{{$payment->payment_type}}" selected>{{$payment->payment_type}}</option>
+                @else
+                    <option value="{{$payment->payment_type}}">{{$payment->payment_type}}</option>
+                @endif
+            @endforeach
         </select>
 
         <!-- Tracking -->
-        <p>Tracking<p>
-        <label for="isTracked">Do you want to track your order?</label>
         <input type="checkbox" id="isTracked" name="isTracked" value="0">
-        <span>Yes, I want my order to be tracked.</span>
+        <span>Save my payment information to make checkout easier next time</span>
         <!-- Add buttons for navigation -->
         <div class="navigation-buttons">
             <button name="cancel">Cancel</button>

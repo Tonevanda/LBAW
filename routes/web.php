@@ -86,7 +86,7 @@ Route::controller(PurchaseController::class)->group(function () {
 
 Route::controller(WalletController::class)->group(function () {
     Route::get('/wallet/{user_id}', 'show')->name('wallet');
-    Route::put('/wallet/{user_id}/add', 'show')->name('wallet');
+    //Route::put('/wallet/{user_id}/add', 'show')->name('wallet');
 });
 
 Route::get('/about_us', function () {

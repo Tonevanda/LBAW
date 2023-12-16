@@ -172,7 +172,7 @@ function addFundsRequest(event){
   let title = this.querySelector('textarea[name=title]').value;
   console.log(review_id, description);
   sendAjaxRequest('put', '/review/'+review_id, {review_id: review_id, description: description, title: title}, reviewHandler);*/
-  //event.preventDefault();
+  event.preventDefault();
 }
 
 function createReviewRequest(event){
