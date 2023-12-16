@@ -25,36 +25,36 @@
 
 
 <div class = "money_fund_option">
-    <h3> Add 5€ </h3>
-    <button name = "show_popup">
+    <h3> Add 5{{$wallet->currencySymbol}} </h3>
+    <button name = "show_popup" data-money = {{"5" . $wallet->currencySymbol}}>
         Add funds
     </button>
 </div>
 
 <div class = "money_fund_option">
-    <h3> Add 10€ </h3>
-    <button name = "show_popup">
+    <h3> Add 10{{$wallet->currencySymbol}} </h3>
+    <button name = "show_popup" data-money = {{"10" . $wallet->currencySymbol}}>
         Add funds
     </button>
 </div>
 
 <div class = "money_fund_option">
-    <h3> Add 25€ </h3>
-    <button name = "show_popup">
+    <h3> Add 25{{$wallet->currencySymbol}} </h3>
+    <button name = "show_popup" data-money = {{"25" . $wallet->currencySymbol}}>
         Add funds
     </button>
 </div>
 
 <div class = "money_fund_option">
-    <h3> Add 50€ </h3>
-    <button name = "show_popup">
+    <h3> Add 50{{$wallet->currencySymbol}} </h3>
+    <button name = "show_popup" data-money = {{"50" . $wallet->currencySymbol}}>
         Add funds
     </button>
 </div>
 
 <div class = "money_fund_option">
-    <h3> Add 100€ </h3>
-    <button name = "show_popup">
+    <h3> Add 100{{$wallet->currencySymbol}} </h3>
+    <button name = "show_popup" data-money = {{"100" . $wallet->currencySymbol}}>
         Add funds
     </button>
 </div>
@@ -133,44 +133,20 @@
 <div id="fullScreenPopup2" class="popup-form" style="display: none;">
     <form class = "add_funds_form" method="POST" action="{{ route('purchase.store', ['user_id' => $user->id]) }}">
         {{ csrf_field() }}
-        <!-- Your form content here -->
-        <p class="title">Payment Information</p>
-        <!-- Separate fields for shipping address -->
-        <p>Billing information<p>
-            <div class="shipping-address">
-                <div class="column">
-                    <label for="name">Name</label>
-                    <input type="text" name="name" placeholder="Enter name">
+        <div class="shipping-address">
+            <div class="column">
+                <p>Being added to your Steam Wallet</p>
 
-                    <label for="address">Billing address</label>
-                    <input type="text" name="address" placeholder="Enter Billing address">
-                </div>
-                <div class="column">
-                    <label for="city">City</label>
-                    <input type="text" name="city" placeholder="Enter city">
-            
-                    <label for="postal_code">Postal Code</label>
-                    <input type="text" name="postal_code" placeholder="Enter Postal Code">
-                </div>
             </div>
+            <div class="column">
+                <p></p>
+            </div>
+        </div>
 
         <!-- Payment Method -->
-        <p>Payment Method<p>
-        <label for="payment_type">Choose a payment method:</label>
-        <select id="payment_type" name="payment_type">
-            @foreach($payments as $payment)
-                @if($auth->paymentMethod == $payment->payment_type)
-                    <option value="{{$payment->payment_type}}" selected>{{$payment->payment_type}}</option>
-                @else
-                    <option value="{{$payment->payment_type}}">{{$payment->payment_type}}</option>
-                @endif
-            @endforeach
-        </select>
+        <label for="payment_type">Payment method:</label>
+        <input type = "text" name = "payment_type" value = "" readonly>
 
-        <!-- Tracking -->
-        <input type="checkbox" name="isTracked" value="0">
-        <span>Save my payment information to make checkout easier next time</span>
-        <!-- Add buttons for navigation -->
         <div class="navigation-buttons">
             <button name="cancel2">Cancel</button>
             <button type = "submit">Confirm Purchase</button>

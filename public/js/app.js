@@ -83,6 +83,11 @@ function addEventListeners() {
   [].forEach.call(popupButtons, function(button){
     button.addEventListener('click', function(event){
       event.preventDefault();
+      let money = button.getAttribute('data-money');
+      if(money != null){
+        document.querySelector('div#fullScreenPopup2 form div div.column:nth-child(2)').textContent = money;
+        //document.querySelector('div#fullScreenPopup form')
+      }
       showFullScreenPopup.bind(fullScreenPopup)();
     });
   });
