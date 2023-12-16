@@ -48,6 +48,9 @@ CREATE TABLE admin(
 
 CREATE TABLE authenticated(
     user_id INTEGER PRIMARY KEY REFERENCES users (id) ON UPDATE CASCADE ON DELETE CASCADE,
+    name TEXT,
+    city TEXT,
+    postalCode TEXT,
     address TEXT,
     isBlocked BOOLEAN DEFAULT FALSE NOT NULL,
     paymentMethod TEXT REFERENCES payment (payment_type) ON UPDATE CASCADE ON DELETE SET NULL

@@ -71,20 +71,20 @@
     <form class = "add_funds_form" method="POST" action="{{ route('purchase.store', ['user_id' => $user->id]) }}">
         {{ csrf_field() }}
         <!-- Your form content here -->
-        <p class="title">Checkout</p>
+        <p class="title">Payment Information</p>
         <!-- Separate fields for shipping address -->
-        <p>Purchase Destination<p>
+        <p>Billing information<p>
             <div class="shipping-address">
+                <div class="column">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" placeholder="Enter name">
+
+                    <label for="address">Billing address</label>
+                    <input type="text" id="street" name="address" placeholder="Enter Billing address">
+                </div>
                 <div class="column">
                     <label for="city">City</label>
                     <input type="text" id="city" name="city" placeholder="Enter city">
-            
-                    <label for="street">Street</label>
-                    <input type="text" id="street" name="street" placeholder="Enter street">
-                </div>
-                <div class="column">
-                    <label for="state">State</label>
-                    <input type="text" id="state" name="state" placeholder="Enter state">
             
                     <label for="postal_code">Postal Code</label>
                     <input type="text" id="postal_code" name="postal_code" placeholder="Enter Postal Code">
