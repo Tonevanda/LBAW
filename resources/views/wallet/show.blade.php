@@ -83,7 +83,7 @@
                     <input type="text" name="address" placeholder="Enter Billing address">
 
                     <label for="country">Country</label>
-                    <select name="category">
+                    <select name="country">
                         <option value="" selected></option>
                         <option value="Portugal">Portugal</option>
                         <option value="USA">United States of America</option>

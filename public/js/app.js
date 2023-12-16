@@ -108,9 +108,10 @@ function addEventListeners() {
         const address = document.querySelector('div#fullScreenPopup form input[name=address]').value;
         const city = document.querySelector('div#fullScreenPopup form input[name=city]').value;
         const postal_code = document.querySelector('div#fullScreenPopup form input[name=postal_code]').value;
+        const country = document.querySelector('div#fullScreenPopup form select[name=country]').value;
 
         let address_tag = document.querySelector('div#fullScreenPopup2 form div.column p.payment_info');
-        address_tag.textContent = "Billing Address: " + address + ", " +city + ", "+ postal_code + ", ";
+        address_tag.textContent = "Billing Address: " + address + " " +city + ", "+ postal_code + " " + country;
         
       }
       hideFullScreenPopup.bind(fullScreenPopup)();
