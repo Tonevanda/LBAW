@@ -4,8 +4,9 @@ $user = Auth::user();
 
 if($user != NULL && !$user->isAdmin()){
     $auth = $user->authenticated()->first();
-
-    $wallet = $auth->wallet();
+    if (!$user->isAdmin()) {
+        $wallet = $auth->wallet();
+    }
 }
 
 @endphp
@@ -46,6 +47,7 @@ if($user != NULL && !$user->isAdmin()){
                         <a class="button" href="{{ route('add_products')}}">Add Products</a>
                         <a class="button" href="{{ route('logout') }}"> Logout </a> 
                     @else
+                        <a class="button" href="{{ route('notifications',$user->id)}}">Notifications</a>
                         <p class="wallet"> {{number_format($wallet->money, 2, ',', '.')}}{{$wallet->currencySymbol}} </p>
                         <i class="fas fa-dollar-sign"></i>
                         <a class="buttonss" href="{{ route('shopping-cart',$user->id) }}">

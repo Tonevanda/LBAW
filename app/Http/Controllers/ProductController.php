@@ -48,6 +48,7 @@ class ProductController extends Controller
             'author' => 'required|string|max:250',
             'editor' => 'required|string|max:250',
             'language' => 'required|string|max:250',
+            #'image' => 'required|string|min:0',
             #'category' => 'required|string|max:250',
         ]);
         try{
@@ -63,6 +64,7 @@ class ProductController extends Controller
             'author' => $request->author,
             'editor' => $request->editor,
             'language' => $request->language,
+            #'image' => $request->image,
             #'category' => $request->category
         ]);
         return redirect()->route('add_products');

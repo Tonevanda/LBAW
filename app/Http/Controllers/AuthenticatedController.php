@@ -274,4 +274,11 @@ class AuthenticatedController extends Controller
         $user->shoppingCart()->wherePivot('id', $data['cart_id'])->detach();
         return response()->json($data['cart_id'],200);
     }
+
+    public function showNotifications($user_id){
+        $user = Authenticated::findOrFail($user_id);
+        return view('notifications', [
+            'notifications' => $user->notifications()->get()
+        ]);
+    }
 }

@@ -41,7 +41,7 @@
                 </button>
             </form>
         </div>
-            @else
+        @else
             <ul>
                 @foreach ($statistics as $statistic)
                     <li>
@@ -50,6 +50,19 @@
                 @endforeach
             </ul>
             <p>Product Revenue: ${{ $productRevenue }}</p>
+            <button onclick="showFullScreenPopup()">
+                Edit
+            </button>
+            <div id="fullScreenPopup" class="popup-form" style="display: none;">
+                <form method="POST" action="{{ route('product.update', ['product_id' => $product->id]) }}">
+                    {{ csrf_field() }}
+                    
+                    <div class="navigation-buttons">
+                        <button class="cancel" onclick="hideFullScreenPopup()">Cancel</button>
+                        <button type="submit">Confirm Purchase</button>
+                    </div>
+                </form>
+            </div>
         @endif
     @endif
     </div>
@@ -171,7 +184,7 @@
                                         Delete Review
                                     </button>
                                 </form>
-                                @else
+                            @else
                                 <form class="report_review" method="" action="{{ route('review.report', ['review_id' => $review->id]) }}">
                                     {{ csrf_field() }}
                                     <input type="hidden" name="product_id" value="{{ $product->id }}" required>
