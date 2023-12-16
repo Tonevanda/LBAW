@@ -105,7 +105,7 @@
         <!-- Payment Method -->
         <h4>Payment Method</h4>
         <label for="payment_type">Choose a payment method:</label>
-        <select id="payment_type" name="payment_type">
+        <select name="payment_type">
             @foreach($payments as $payment)
                 @if($auth->paymentMethod == $payment->payment_type)
                     <option value="{{$payment->payment_type}}" selected>{{$payment->payment_type}}</option>
@@ -135,7 +135,7 @@
         {{ csrf_field() }}
         <div class="shipping-address">
             <div class="column">
-                <p>Being added to your Steam Wallet</p>
+                <p>Being added to your Bibliophile Bliss Wallet</p>
 
             </div>
             <div class="column">
@@ -143,9 +143,17 @@
             </div>
         </div>
 
-        <!-- Payment Method -->
-        <label for="payment_type">Payment method:</label>
-        <input type = "text" name = "payment_type" value = "" readonly>
+        <p class = "payment_info">Bibliophile Bliss Account: {{$user->name}}</p>
+        <p class = "payment_info"></p>
+        <p class = "payment_info"></p>
+
+        <div class="column">
+            <p class = "payment_info"></p>
+
+        </div>
+        <div class="column">
+            <p class = "payment_info"></p>
+        </div>
 
         <div class="navigation-buttons">
             <button name="cancel2">Cancel</button>

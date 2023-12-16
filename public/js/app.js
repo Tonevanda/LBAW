@@ -79,15 +79,13 @@ function addEventListeners() {
   let fullScreenPopup = document.getElementById('fullScreenPopup');
   let fullScreenPopup2 = document.getElementById('fullScreenPopup2');
 
+  let money;
+
   let popupButtons = document.querySelectorAll('button[name=show_popup]');
   [].forEach.call(popupButtons, function(button){
     button.addEventListener('click', function(event){
       event.preventDefault();
-      let money = button.getAttribute('data-money');
-      if(money != null){
-        document.querySelector('div#fullScreenPopup2 form div div.column:nth-child(2)').textContent = money;
-        //document.querySelector('div#fullScreenPopup form')
-      }
+      money = button.getAttribute('data-money');
       showFullScreenPopup.bind(fullScreenPopup)();
     });
   });
@@ -96,6 +94,24 @@ function addEventListeners() {
   [].forEach.call(popupButtons2, function(button){
     button.addEventListener('click', function(event){
       event.preventDefault();
+      if(money != null){
+        document.querySelector('div#fullScreenPopup2 form div div.column:nth-child(2) p').textContent = money;
+        const payment_method = document.querySelector('div#fullScreenPopup form select[name=payment_type]').value;
+        const name = document.querySelector('div#fullScreenPopup form input[name=name]').value;
+
+        let payment_method_tag = document.querySelector('div#fullScreenPopup2 form p.payment_info + p');
+        payment_method_tag.textContent = "Payment Method: "+payment_method;
+
+        let name_tag = document.querySelector('div#fullScreenPopup2 form p.payment_info + p + p');
+        name_tag.textContent = "Name: "+name;
+
+        const address = document.querySelector('div#fullScreenPopup form input[name=address]').value;
+        const city = document.querySelector('div#fullScreenPopup form input[name=city]').value;
+
+        let address_tag = document.querySelector('div#fullScreenPopup2 form div.column p.payment_info');
+        address_tag.textContent = "Billing Address: " + address + ", " +city + ", ";
+        
+      }
       hideFullScreenPopup.bind(fullScreenPopup)();
       showFullScreenPopup.bind(fullScreenPopup2)();
     });
