@@ -67,9 +67,12 @@
 </div>
 
 
+
 <div id="fullScreenPopup" class="popup-form" style="display: none;">
     <form class = "add_funds_form" method="POST" action="{{ route('purchase.store', ['user_id' => $user->id]) }}">
         {{ csrf_field() }}
+
+        <input type = "text" name = "user_id" value = "{{$user->id}}" hidden>
         <!-- Your form content here -->
         <h3 class="title">Payment Information</h3>
         <!-- Separate fields for shipping address -->
@@ -115,8 +118,7 @@
             @endforeach
         </select>
 
-        <!-- Tracking -->
-        <input type="checkbox" id="isTracked" name="isTracked" value="0">
+        <input type="checkbox" name="remember">
         <p>Save my payment information to make checkout easier next time</p>
 
         <p>You will have the opportunity to review your purchase before finalizing it.</p>
@@ -162,7 +164,7 @@
 
         <div class="navigation-buttons">
             <button name="cancel2">Cancel</button>
-            <button type = "submit">Confirm Purchase</button>
+            <button>Confirm Payment</button>
         </div>
     </form>
 </div>

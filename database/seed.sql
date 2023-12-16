@@ -228,7 +228,7 @@ CREATE OR REPLACE FUNCTION manage_deleted_account() RETURNS TRIGGER AS
 $BODY$
 BEGIN
         UPDATE users
-        SET name = 'Deleted Account', profile_picture = 'df_user_img.png'
+        SET name = 'Deleted Account', profile_picture = 'default.png'
     
         WHERE users.id = OLD.user_id;
         RETURN OLD;

@@ -1,3 +1,5 @@
+let money;
+
 function addEventListeners() {
   let cartDeleter = document.querySelectorAll('form.remove_cart');
   [].forEach.call(cartDeleter, function(deleter){
@@ -79,8 +81,6 @@ function addEventListeners() {
   let fullScreenPopup = document.getElementById('fullScreenPopup');
   let fullScreenPopup2 = document.getElementById('fullScreenPopup2');
 
-  let money;
-
   let popupButtons = document.querySelectorAll('button[name=show_popup]');
   [].forEach.call(popupButtons, function(button){
     button.addEventListener('click', function(event){
@@ -151,6 +151,11 @@ function addEventListeners() {
     });
   });
 
+  let add_funds_button = document.querySelector('div#fullScreenPopup2 form div.navigation-buttons button + button');
+  if(add_funds_button != null){
+    add_funds_button.addEventListener('click', updateMoneyRequest);
+  }
+
   /*let addFundsForm = document.querySelector('div#fullScreenPopup form.add_funds_form');
   if(addFundsForm != null){
     addFundsForm.addEventListener('submit', addFundsRequest);
@@ -218,6 +223,18 @@ function updateReviewRequest(event){
   event.preventDefault();
 }
 
+function updateMoneyRequest(event){
+  const add_funds_form = document.querySelector('div#fullScreenPopup form');
+  const user_id = add_funds_form.querySelector('input[name=user_id').value;
+  if(document.querySelector('input[name=remember]').checked){
+    console.log(user_id);
+    //sendAjaxRequest('put', '/review/'+review_id, {review_id: review_id, description: description, title: title}, reviewHandler);
+  }
+
+  sendAjaxRequest('put', '/wallet/' + user_id + '/add', {money: money}, updateMoneyHandler);
+  event.preventDefault();
+}
+
 
 function createPurchaseRequest(event){
   console.log(this);
@@ -229,15 +246,6 @@ function createPurchaseRequest(event){
   //event.preventDefault();
 }
 
-function addFundsRequest(event){
-  console.log(this);
-  /*let review_id = this.querySelector('input[name=review_id]').value;
-  let description = this.querySelector('textarea[name=description]').value;
-  let title = this.querySelector('textarea[name=title]').value;
-  console.log(review_id, description);
-  sendAjaxRequest('put', '/review/'+review_id, {review_id: review_id, description: description, title: title}, reviewHandler);*/
-  event.preventDefault();
-}
 
 function createReviewRequest(event){
   console.log(this);
@@ -403,6 +411,12 @@ function reviewCreateHandler(){
     console.log(response);
   }
   
+}
+
+function updateMoneyHandler(){
+  if(this.status==200){
+    console.log("hello");
+  }
 }
 
 function reviewHandler(){

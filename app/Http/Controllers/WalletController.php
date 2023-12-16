@@ -32,4 +32,9 @@ class WalletController extends Controller
             'wallet' => $wallet
         ]);
     }
+
+
+    public function update(Request $request, $user_id){
+        return response()->json([], 200);
+    }
 }
