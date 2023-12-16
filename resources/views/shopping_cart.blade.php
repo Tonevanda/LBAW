@@ -32,7 +32,7 @@
             <td>{{ $total }}</td>
         </tr>
     </table>
-    <button class="show_popup">
+    <button name="show_popup">
         Checkout
     </button>
 </div>

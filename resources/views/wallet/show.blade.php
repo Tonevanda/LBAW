@@ -26,35 +26,35 @@
 
 <div class = "money_fund_option">
     <h3> Add 5€ </h3>
-    <button class = "show_popup">
+    <button name = "show_popup">
         Add funds
     </button>
 </div>
 
 <div class = "money_fund_option">
     <h3> Add 10€ </h3>
-    <button class = "show_popup">
+    <button name = "show_popup">
         Add funds
     </button>
 </div>
 
 <div class = "money_fund_option">
     <h3> Add 25€ </h3>
-    <button class = "show_popup">
+    <button name = "show_popup">
         Add funds
     </button>
 </div>
 
 <div class = "money_fund_option">
     <h3> Add 50€ </h3>
-    <button class = "show_popup">
+    <button name = "show_popup">
         Add funds
     </button>
 </div>
 
 <div class = "money_fund_option">
     <h3> Add 100€ </h3>
-    <button class = "show_popup">
+    <button name = "show_popup">
         Add funds
     </button>
 </div>
@@ -107,10 +107,62 @@
         <!-- Tracking -->
         <input type="checkbox" id="isTracked" name="isTracked" value="0">
         <span>Save my payment information to make checkout easier next time</span>
+
+        <span>You will have the opportunity to review your purchase before finalizing it.</span>
         <!-- Add buttons for navigation -->
         <div class="navigation-buttons">
             <button name="cancel">Cancel</button>
-            <button type="submit">Confirm Purchase</button>
+            <button name="show_popup2">Continue</button>
+        </div>
+    </form>
+</div>
+
+
+
+<div id="fullScreenPopup2" class="popup-form" style="display: none;">
+    <form class = "add_funds_form" method="POST" action="{{ route('purchase.store', ['user_id' => $user->id]) }}">
+        {{ csrf_field() }}
+        <!-- Your form content here -->
+        <p class="title">Payment Information</p>
+        <!-- Separate fields for shipping address -->
+        <p>Billing information<p>
+            <div class="shipping-address">
+                <div class="column">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" placeholder="Enter name">
+
+                    <label for="address">Billing address</label>
+                    <input type="text" id="street" name="address" placeholder="Enter Billing address">
+                </div>
+                <div class="column">
+                    <label for="city">City</label>
+                    <input type="text" id="city" name="city" placeholder="Enter city">
+            
+                    <label for="postal_code">Postal Code</label>
+                    <input type="text" id="postal_code" name="postal_code" placeholder="Enter Postal Code">
+                </div>
+            </div>
+
+        <!-- Payment Method -->
+        <p>Payment Method<p>
+        <label for="payment_type">Choose a payment method:</label>
+        <select id="payment_type" name="payment_type">
+            @foreach($payments as $payment)
+                @if($auth->paymentMethod == $payment->payment_type)
+                    <option value="{{$payment->payment_type}}" selected>{{$payment->payment_type}}</option>
+                @else
+                    <option value="{{$payment->payment_type}}">{{$payment->payment_type}}</option>
+                @endif
+            @endforeach
+        </select>
+
+        <!-- Tracking -->
+        <input type="checkbox" id="isTracked" name="isTracked" value="0">
+        <span>Save my payment information to make checkout easier next time</span>
+        <!-- Add buttons for navigation -->
+        <div class="navigation-buttons">
+            <button name="cancel2">Cancel</button>
+            <button type = "submit">Confirm Purchase</button>
         </div>
     </form>
 </div>

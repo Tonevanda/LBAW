@@ -76,27 +76,52 @@ function addEventListeners() {
   if(reviewCreate != null){
     reviewCreate.addEventListener('submit', createReviewRequest);
   }
+  let fullScreenPopup = document.getElementById('fullScreenPopup');
+  let fullScreenPopup2 = document.getElementById('fullScreenPopup2');
 
-  let addFundsButtons = document.querySelectorAll('button.show_popup');
-  [].forEach.call(addFundsButtons, function(button){
-    button.addEventListener('click', showFullScreenPopup);
+  let popupButtons = document.querySelectorAll('button[name=show_popup]');
+  [].forEach.call(popupButtons, function(button){
+    button.addEventListener('click', function(event){
+      event.preventDefault();
+      showFullScreenPopup.bind(fullScreenPopup)();
+    });
   });
 
-  let cancel_button = document.querySelector('button[name=cancel]');
-  if(cancel_button != null){
-    console.log(cancel_button);
-    cancel_button.addEventListener('click', hideFullScreenPopup);
-  }
+  let popupButtons2 = document.querySelectorAll('button[name=show_popup2]');
+  [].forEach.call(popupButtons2, function(button){
+    button.addEventListener('click', function(event){
+      event.preventDefault();
+      hideFullScreenPopup.bind(fullScreenPopup)();
+      showFullScreenPopup.bind(fullScreenPopup2)();
+    });
+  });
 
-  let addFundsForm = document.querySelector('form.add_funds_form');
+  let cancelButtons = document.querySelectorAll('button[name=cancel]');
+  [].forEach.call(cancelButtons, function(button){
+    button.addEventListener('click', function(event){
+      event.preventDefault();
+      hideFullScreenPopup.bind(fullScreenPopup)();
+    });
+  });
+
+  let cancelButtons2 = document.querySelectorAll('button[name=cancel2]');
+  [].forEach.call(cancelButtons2, function(button){
+    button.addEventListener('click', function(event){
+      event.preventDefault();
+      hideFullScreenPopup.bind(fullScreenPopup2)();
+    });
+  });
+
+  /*let addFundsForm = document.querySelector('div#fullScreenPopup form.add_funds_form');
   if(addFundsForm != null){
     addFundsForm.addEventListener('submit', addFundsRequest);
-  }
+  }*/
 
   let checkoutForm = document.querySelector('form.checkout');
   if(checkoutForm != null){
     checkoutForm.addEventListener('submit', createPurchaseRequest);
   }
+
 }
   
 function encodeForAjax(data) {
@@ -472,14 +497,16 @@ function toggleMenu() {
 
 function showFullScreenPopup() {
   document.body.classList.add('popup-open');
-  document.getElementById('fullScreenPopup').style.display = 'flex';
+  this.style.display = 'flex';
+  console.log(this);
 }
 
-function hideFullScreenPopup(event) {
+function hideFullScreenPopup() {
   document.body.classList.remove('popup-open');
-  document.getElementById('fullScreenPopup').style.display = 'none';
-  event.preventDefault();
+  this.style.display = 'none';
 }
+
+
 
 window.onload = function() {
   let forms = document.querySelectorAll('.add_wishlist'); // Select all forms
