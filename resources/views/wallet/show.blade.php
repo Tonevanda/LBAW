@@ -145,17 +145,20 @@
 
         <p class = "payment_info">Bibliophile Bliss Account: {{$user->name}}</p>
         <p class = "payment_info"></p>
-        <p class = "payment_info"></p>
 
         <div class="shipping-address">
             <div class="column">
                 <p class = "payment_info"></p>
+                <p class = "payment_info"></p>
 
             </div>
             <div class="column">
+                <button name="back"> Change </button>
                 <p class = "payment_info"></p>
             </div>
         </div>
+
+
 
         <div class="navigation-buttons">
             <button name="cancel2">Cancel</button>

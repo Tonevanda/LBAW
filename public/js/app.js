@@ -99,10 +99,10 @@ function addEventListeners() {
         const payment_method = document.querySelector('div#fullScreenPopup form select[name=payment_type]').value;
         const name = document.querySelector('div#fullScreenPopup form input[name=name]').value;
 
-        let payment_method_tag = document.querySelector('div#fullScreenPopup2 form p.payment_info + p');
+        let payment_method_tag = document.querySelector('div#fullScreenPopup2 form div.column p.payment_info');
         payment_method_tag.textContent = "Payment Method: "+payment_method;
 
-        let name_tag = document.querySelector('div#fullScreenPopup2 form p.payment_info + p + p');
+        let name_tag = document.querySelector('div#fullScreenPopup2 form p.payment_info + p');
         name_tag.textContent = "Name: "+name;
 
         const address = document.querySelector('div#fullScreenPopup form input[name=address]').value;
@@ -112,7 +112,7 @@ function addEventListeners() {
 
         
 
-        let address_tag = document.querySelector('div#fullScreenPopup2 form div.column p.payment_info');
+        let address_tag = document.querySelector('div#fullScreenPopup2 form div.column p + p');
         address_tag.textContent = "Billing Address: " + address + " " +city + ", "+ postal_code + " " + country;
 
         const phone = document.querySelector('div#fullScreenPopup form input[name=phone]').value;
@@ -123,6 +123,15 @@ function addEventListeners() {
       }
       hideFullScreenPopup.bind(fullScreenPopup)();
       showFullScreenPopup.bind(fullScreenPopup2)();
+    });
+  });
+
+  let backButtons = document.querySelectorAll('button[name=back]');
+  [].forEach.call(backButtons, function(button){
+    button.addEventListener('click', function(event){
+      event.preventDefault();
+      hideFullScreenPopup.bind(fullScreenPopup2)();
+      showFullScreenPopup.bind(fullScreenPopup)();
     });
   });
 
