@@ -230,7 +230,7 @@ function updateMoneyRequest(event){
     const country = add_funds_form.querySelector('select[name=country]').value;
     const postal_code = add_funds_form.querySelector('input[name=postal_code]').value;
     const phone = add_funds_form.querySelector('input[name=phone]').value;
-    sendAjaxRequest('put', '/users/location/' + user_id, {payment_method: payment_method, name: name, address: address, city: city, country: country, postal_code: postal_code, phone: phone}, updateLocationHandler);
+    sendAjaxRequest('put', '/users/location/' + user_id, {payment_method: payment_method, name: name, address: address, city: city, country: country, postal_code: postal_code, phone_number: phone}, updateLocationHandler);
   }
 
   sendAjaxRequest('put', '/wallet/' + user_id + '/add', {money: money}, updateMoneyHandler);
@@ -586,6 +586,7 @@ function resetInputs(){
 
   [].forEach.call(selects, function(select){
     if(select.getAttribute('data-info') != null){
+      console.log(select);
       select.value = select.getAttribute('data-info');
     }
   });

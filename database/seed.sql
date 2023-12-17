@@ -51,11 +51,11 @@ CREATE TABLE authenticated(
     name TEXT,
     city TEXT,
     country TEXT,
-    phoneNumber INT,
-    postalCode TEXT,
+    phone_number INT,
+    postal_code TEXT,
     address TEXT,
     isBlocked BOOLEAN DEFAULT FALSE NOT NULL,
-    paymentMethod TEXT REFERENCES payment (payment_type) ON UPDATE CASCADE ON DELETE SET NULL
+    payment_method TEXT REFERENCES payment (payment_type) ON UPDATE CASCADE ON DELETE SET NULL
 );
 
 

@@ -20,11 +20,11 @@ class Authenticated extends Model
         'name',
         'city',
         'country',
-        'phoneNumber',
-        'postalCode',
+        'phone_number',
+        'postal_code',
         'address',
         'isBlocked',
-        'paymentMethod',
+        'payment_method'
     ];
 
     public function user()

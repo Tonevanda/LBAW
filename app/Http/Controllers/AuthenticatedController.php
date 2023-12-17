@@ -137,7 +137,7 @@ class AuthenticatedController extends Controller
             'name' => 'nullable',
             'country' => 'nullable',
             'address' => 'nullable',
-            'phone' => 'nullable',
+            'phone_number' => 'nullable',
             'postal_code' => 'nullable',
             'payment_method' => 'nullable',
             'city' => 'nullable'

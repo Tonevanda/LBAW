@@ -98,17 +98,17 @@
                     <input type="text" name="city" placeholder="Enter city" data-info = "{{$auth->city == NULL ? '' : $auth->city}}">
             
                     <label for="postal_code">Postal Code</label>
-                    <input type="text" name="postal_code" placeholder="Enter Postal Code" data-info = "{{$auth->postalCode == NULL ? '' : $auth->postalCode}}">
+                    <input type="text" name="postal_code" placeholder="Enter Postal Code" data-info = "{{$auth->postal_code == NULL ? '' : $auth->postal_code}}">
 
                     <label for="phone">Phone Number</label>
-                    <input type="text" name="phone" placeholder="Enter Phone Number" data-info = "{{$auth->phoneNumber == NULL ? '' : $auth->phoneNumber}}">
+                    <input type="text" name="phone" placeholder="Enter Phone Number" data-info = "{{$auth->phone_number == NULL ? '' : $auth->phone_number}}">
                 </div>
             </div>
 
         <!-- Payment Method -->
         <h4>Payment Method</h4>
         <label for="payment_type">Choose a payment method:</label>
-        <select name="payment_type" data-info = "{{$auth->paymentMethod == NULL ? '' : $auth->paymentMethod}}">
+        <select name="payment_type" data-info = "{{$auth->payment_method == NULL ? $payments->first() : $auth->payment_method}}">
             @foreach($payments as $payment)
                 <option value="{{$payment->payment_type}}">{{$payment->payment_type}}</option>
             @endforeach
