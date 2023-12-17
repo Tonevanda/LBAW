@@ -79,10 +79,6 @@ function addEventListeners() {
     reviewCreate.addEventListener('submit', createReviewRequest);
   }
 
-  const phone_input = document.querySelector('div#fullScreenPopup form input[name=phone]');
-  if(phone_input != null){
-    phone_input.addEventListener('input', validatePhoneInput);
-  }
 
   let fullScreenPopup = document.getElementById('fullScreenPopup');
   let fullScreenPopup2 = document.getElementById('fullScreenPopup2');
@@ -101,7 +97,19 @@ function addEventListeners() {
   [].forEach.call(popupButtons2, function(button){
     button.addEventListener('click', function(event){
       event.preventDefault();
-      if(!phone_input.classList.contains('error')){
+      let inputs = document.querySelectorAll('div#fullScreenPopup form input');
+      let error_check = false;
+      [].forEach.call(inputs, function(input){
+        if(!validateRequired.bind(input)() && input.getAttribute('name') != 'phone') {
+          console.log(input.value);
+          error_check = true;
+        }
+        if(input.getAttribute('name') == 'phone'){
+          if(!validatePhoneInput.bind(input)()) error_check = true;
+          console.log(error_check);
+        }
+      });
+      if(!error_check){
         if(money != null){
           document.querySelector('div#fullScreenPopup2 form div div.column:nth-child(2) p').textContent = money;
           const payment_method = document.querySelector('div#fullScreenPopup form select[name=payment_type]').value;
@@ -647,13 +655,29 @@ window.onload = function() {
 
 function validatePhoneInput(){
   const value = this.value;
-  if (value == '' || /^\d{9}$/.test(value)){
+  if (value == "" || /^\d{9}$/.test(value)){
     if(this.classList.contains('error'))
       this.classList.remove('error');
+    return true;
   } 
   else{
       if(!this.classList.contains('error'))
         this.classList.add('error');
+      return false;
+  }
+}
+
+function validateRequired(){
+  const value = this.value;
+  if(value != ""){
+    if(this.classList.contains('error'))
+      this.classList.remove('error');
+    return true;
+  }
+  else{
+    if(!this.classList.contains('error'))
+        this.classList.add('error');
+    return false;
   }
 }
 
