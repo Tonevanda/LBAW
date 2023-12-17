@@ -127,6 +127,7 @@
 
 
 
+
 <div id="fullScreenPopup2" class="popup-form" style="display: none;">
     <form class = "add_funds_form" method="" action="">
         {{ csrf_field() }}

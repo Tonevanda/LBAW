@@ -162,6 +162,13 @@ function addEventListeners() {
     checkoutForm.addEventListener('submit', createPurchaseRequest);
   }
 
+  const change_language_option = document.querySelector('div#fullScreenPopup form select[name=country] option + option');
+  if(change_language_option != null){
+    change_language_option.addEventListener('click', function(){
+      window.location.href = '/';
+    });
+  }
+
 }
   
 function encodeForAjax(data) {
