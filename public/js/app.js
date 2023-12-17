@@ -432,9 +432,17 @@ function updateMoneyHandler(){
 function updateLocationHandler(){
   if(this.status===200){
     let response = JSON.parse(this.responseText);
-    console.log(response);
+    const popup_form = document.querySelector('div#fullScreenPopup form');
+    set_data_info.bind(popup_form, 'input[name=name]', response.name)();
+    set_data_info.bind(popup_form, 'input[name=address]', response.address)();
+    set_data_info.bind(popup_form, 'input[name=postal_code]', response.postal_code)();
+    set_data_info.bind(popup_form, 'input[name=phone]', response.phone_number)();
+    set_data_info.bind(popup_form, 'select[name=country]', response.country)();
+    set_data_info.bind(popup_form, 'input[name=city]', response.city)();
+    set_data_info.bind(popup_form, 'select[name=payment_type]', response.payment_method)();
   }
 }
+
 
 function reviewHandler(){
   if(this.status == 201){
@@ -522,6 +530,11 @@ function updateProfilePictureHandler(){
 
     old_profile_pic_input.value = response;
   }
+}
+
+function set_data_info(tag, value){
+  if(value != null)
+    this.querySelector(tag).setAttribute('data-info', value);
 }
   
 // Function to show the popup

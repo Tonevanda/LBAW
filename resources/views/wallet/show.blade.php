@@ -69,7 +69,7 @@
 
 
 <div id="fullScreenPopup" class="popup-form" style="display: none;">
-    <form class = "add_funds_form" method="POST" action="{{ route('purchase.store', ['user_id' => $user->id]) }}">
+    <form class = "add_funds_form" method="" action="">
         {{ csrf_field() }}
 
         <input type = "text" name = "user_id" data-info = "{{$user->id}}" hidden>
@@ -129,7 +129,7 @@
 
 
 <div id="fullScreenPopup2" class="popup-form" style="display: none;">
-    <form class = "add_funds_form" method="POST" action="{{ route('purchase.store', ['user_id' => $user->id]) }}">
+    <form class = "add_funds_form" method="" action="">
         {{ csrf_field() }}
         <div class="shipping-address">
             <div class="column">
