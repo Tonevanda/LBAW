@@ -132,7 +132,18 @@ class AuthenticatedController extends Controller
     }
 
     public function updateLocation(Request $request, $user_id){
-        return response()->json([], 200);
+        $auth = Authenticated::findOrFail($user_id);
+        $data = $request->validate([
+            'name' => 'nullable',
+            'country' => 'nullable',
+            'address' => 'nullable',
+            'phone' => 'nullable',
+            'postal_code' => 'nullable',
+            'payment_method' => 'nullable',
+            'city' => 'nullable'
+        ]);
+        $auth->update($data);
+        return response()->json($data, 200);
     }
 
 

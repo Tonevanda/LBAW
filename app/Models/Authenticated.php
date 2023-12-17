@@ -17,9 +17,14 @@ class Authenticated extends Model
 
     protected $fillable = [
         'user_id',
+        'name',
+        'city',
+        'country',
+        'phoneNumber',
+        'postalCode',
         'address',
         'isBlocked',
-        'paymentMethod'
+        'paymentMethod',
     ];
 
     public function user()

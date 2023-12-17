@@ -431,7 +431,8 @@ function updateMoneyHandler(){
 
 function updateLocationHandler(){
   if(this.status===200){
-    console.log("hello");
+    let response = JSON.parse(this.responseText);
+    console.log(response);
   }
 }
 
