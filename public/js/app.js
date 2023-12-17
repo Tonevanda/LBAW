@@ -86,6 +86,7 @@ function addEventListeners() {
     button.addEventListener('click', function(event){
       event.preventDefault();
       money = button.getAttribute('data-money');
+      resetInputs.bind(fullScreenPopup)();
       showFullScreenPopup.bind(fullScreenPopup)();
     });
   });
@@ -563,12 +564,14 @@ function toggleMenu() {
 function showFullScreenPopup() {
   document.body.classList.add('popup-open');
   this.style.display = 'flex';
-  console.log(this);
 }
 
 function hideFullScreenPopup() {
   document.body.classList.remove('popup-open');
   this.style.display = 'none';
+}
+
+function resetInputs(){
   let inputs = this.querySelectorAll('input');
   [].forEach.call(inputs, function(input){
     if(input.getAttribute('data-info') != null){
