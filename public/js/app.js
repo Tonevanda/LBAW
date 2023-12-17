@@ -214,22 +214,23 @@ function editReview(){
   }
 }
 function updateReviewRequest(event){
-  console.log(this);
   let review_id = this.querySelector('input[name=review_id]').value;
   let description = this.querySelector('textarea[name=description]').value;
   let title = this.querySelector('textarea[name=title]').value;
-  console.log(review_id, description);
   sendAjaxRequest('put', '/review/'+review_id, {review_id: review_id, description: description, title: title}, reviewHandler);
   event.preventDefault();
 }
 
 function updateMoneyRequest(event){
   const add_funds_form = document.querySelector('div#fullScreenPopup form');
+  let popup2 = document.querySelector('div#fullScreenPopup2');
+  hideFullScreenPopup.bind(popup2)();
   const user_id = add_funds_form.querySelector('input[name=user_id').value;
   if(document.querySelector('input[name=remember]').checked){
     console.log(user_id);
     //sendAjaxRequest('put', '/review/'+review_id, {review_id: review_id, description: description, title: title}, reviewHandler);
   }
+
 
   sendAjaxRequest('put', '/wallet/' + user_id + '/add', {money: money}, updateMoneyHandler);
   event.preventDefault();
@@ -414,8 +415,10 @@ function reviewCreateHandler(){
 }
 
 function updateMoneyHandler(){
-  if(this.status==200){
-    console.log("hello");
+  if(this.status===200){
+    let response = JSON.parse(this.responseText);
+    document.querySelector('div.user_wallet p + h2').textContent = response.money + response.currencySymbol;
+
   }
 }
 

@@ -13,9 +13,12 @@ class Wallet extends Model
 
     protected $primaryKey = 'user_id';
 
+    public $timestamps = false;
+
     protected $fillable = [
         'money',
-        'currency_type'
+        'currency_type',
+        'transaction_date',
     ];
 
     public function user()
@@ -28,10 +31,5 @@ class Wallet extends Model
         return $this->has(Currency::class, 'currency_type');
     }
 
-
-    public function scopeFilter($query, $user_id)
-    {
-        $query->where('user_id', '=', $user_id);
-    }
 
 }

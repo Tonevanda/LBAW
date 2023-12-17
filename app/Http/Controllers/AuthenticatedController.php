@@ -81,24 +81,6 @@ class AuthenticatedController extends Controller
     public function update($user_id){
         $auth = Authenticated::findOrFail($user_id);
         $user = $auth->user()->first();
-        /*if  (!request()->input('update')){
-            $data = [
-                'name' => 'deleted user',
-                'password' => '',
-                'address' => '',
-            ];
-            $auth->update($data);
-            $user->update($data); 
-            if (Auth::user()->isAdmin()) {
-                return redirect()->route('users')
-                ->withSuccess('You have successfully deleted the account!');}
-            else{
-            Auth::logout();
-            session()->invalidate();
-            session()->regenerateToken();
-            return redirect()->route('login')
-                ->withSuccess('You have successfully deleted the account!');}
-        }*/
         if (Auth::user()->isAdmin()) {
                 $data = request()->validate([
                     'name' => 'string|max:250',
