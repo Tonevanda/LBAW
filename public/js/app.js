@@ -227,10 +227,9 @@ function updateMoneyRequest(event){
     const name = add_funds_form.querySelector('input[name=name]').value;
     const address = add_funds_form.querySelector('input[name=address]').value;
     const city = add_funds_form.querySelector('input[name=city]').value;
-    const country = add_funds_form.querySelector('select[name=country]').value;
     const postal_code = add_funds_form.querySelector('input[name=postal_code]').value;
     const phone = add_funds_form.querySelector('input[name=phone]').value;
-    sendAjaxRequest('put', '/users/location/' + user_id, {payment_method: payment_method, name: name, address: address, city: city, country: country, postal_code: postal_code, phone_number: phone}, updateLocationHandler);
+    sendAjaxRequest('put', '/users/location/' + user_id, {payment_method: payment_method, name: name, address: address, city: city, postal_code: postal_code, phone_number: phone}, updateLocationHandler);
   }
 
   sendAjaxRequest('put', '/wallet/' + user_id + '/add', {money: money}, updateMoneyHandler);
@@ -437,7 +436,6 @@ function updateLocationHandler(){
     set_data_info.bind(popup_form, 'input[name=address]', response.address)();
     set_data_info.bind(popup_form, 'input[name=postal_code]', response.postal_code)();
     set_data_info.bind(popup_form, 'input[name=phone]', response.phone_number)();
-    set_data_info.bind(popup_form, 'select[name=country]', response.country)();
     set_data_info.bind(popup_form, 'input[name=city]', response.city)();
     set_data_info.bind(popup_form, 'select[name=payment_type]', response.payment_method)();
   }

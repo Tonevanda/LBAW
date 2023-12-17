@@ -86,10 +86,9 @@
                     <input type="text" name="address" placeholder="Enter Billing address" data-info = "{{$auth->address == NULL ? '' : $auth->address}}">
 
                     <label for="country">Country</label>
-                    <select name="country" data-info = "{{$auth->country == NULL ? '' : $auth->country}}">
-                        <option value="" selected></option>
-                        <option value="Portugal">Portugal</option>
-                        <option value="USA">United States of America</option>
+                    <select name="country" data-info = "{{$user->country}}">
+                        <option value="{{$user->country}}">{{$user->country}}</option>
+                        <option value="Other">Other</option>
                     
                     </select>
                 </div>

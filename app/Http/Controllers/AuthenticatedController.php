@@ -135,7 +135,6 @@ class AuthenticatedController extends Controller
         $auth = Authenticated::findOrFail($user_id);
         $data = $request->validate([
             'name' => 'nullable',
-            'country' => 'nullable',
             'address' => 'nullable',
             'phone_number' => 'nullable',
             'postal_code' => 'nullable',

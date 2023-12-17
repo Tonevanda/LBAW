@@ -39,6 +39,7 @@ CREATE TABLE users(
     name TEXT NOT NULL,
     password TEXT NOT NULL,
     email TEXT NOT NULL CONSTRAINT email_ck UNIQUE,
+    country TEXT DEFAULT 'Portugal' NOT NULL,
     profile_picture TEXT DEFAULT 'default.png' NOT NULL 
 );
 
