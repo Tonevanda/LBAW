@@ -221,9 +221,8 @@ function updateMoneyRequest(event){
   const add_funds_form = document.querySelector('div#fullScreenPopup form');
   let popup2 = document.querySelector('div#fullScreenPopup2');
   hideFullScreenPopup.bind(popup2)();
-  const user_id = add_funds_form.querySelector('input[name=user_id').value;
+  const user_id = add_funds_form.querySelector('input[name=user_id').getAttribute('data-info');
   if(document.querySelector('input[name=remember]').checked){
-    console.log(user_id);
     const payment_method = add_funds_form.querySelector('select[name=payment_type]').value;
     const name = add_funds_form.querySelector('input[name=name]').value;
     const address = add_funds_form.querySelector('input[name=address]').value;
@@ -231,10 +230,8 @@ function updateMoneyRequest(event){
     const country = add_funds_form.querySelector('select[name=country]').value;
     const postal_code = add_funds_form.querySelector('input[name=postal_code]').value;
     const phone = add_funds_form.querySelector('input[name=phone]').value;
-    console.log(payment_method, name, address, city, country, postal_code, phone);
-    //sendAjaxRequest('put', '/review/'+review_id, {review_id: review_id, description: description, title: title}, reviewHandler);
+    sendAjaxRequest('put', '/users/location/' + user_id, {payment_method: payment_method, name: name, address: address, city: city, country: country, postal_code: postal_code, phone: phone}, updateLocationHandler);
   }
-
 
   sendAjaxRequest('put', '/wallet/' + user_id + '/add', {money: money}, updateMoneyHandler);
   event.preventDefault();
@@ -432,6 +429,12 @@ function updateMoneyHandler(){
   }
 }
 
+function updateLocationHandler(){
+  if(this.status===200){
+    console.log("hello");
+  }
+}
+
 function reviewHandler(){
   if(this.status == 201){
     console.log("reported");
@@ -573,9 +576,16 @@ function hideFullScreenPopup() {
 
 function resetInputs(){
   let inputs = this.querySelectorAll('input');
+  let selects = this.querySelectorAll('select');
   [].forEach.call(inputs, function(input){
     if(input.getAttribute('data-info') != null){
       input.value = input.getAttribute('data-info');
+    }
+  });
+
+  [].forEach.call(selects, function(select){
+    if(select.getAttribute('data-info') != null){
+      select.value = select.getAttribute('data-info');
     }
   });
 }

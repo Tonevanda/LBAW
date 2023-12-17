@@ -75,6 +75,7 @@ Route::controller(AuthenticatedController::class)->group(function () {
     Route::delete('/users/{user_id}', 'destroy')->name('user.delete');
     Route::get('/users', 'index')->name('users');
     Route::put('/users/{user_id}', 'update')->name('profile.update');
+    Route::put('/users/location/{user_id}', 'updateLocation')->name('profile.updateLocation');
     Route::get('/purchase-history/{user_id}', 'showPurchases')->name('purchase_history');
     Route::get('/wishlist/test/{user_id}', 'getWishlist')->name('getWishlist');
     Route::get('/account_details/{user_id}', 'showAccountDetails')->name('account_details');

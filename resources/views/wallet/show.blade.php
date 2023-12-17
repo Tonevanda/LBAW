@@ -72,7 +72,7 @@
     <form class = "add_funds_form" method="POST" action="{{ route('purchase.store', ['user_id' => $user->id]) }}">
         {{ csrf_field() }}
 
-        <input type = "text" name = "user_id" value = "{{$user->id}}" hidden>
+        <input type = "text" name = "user_id" data-info = "{{$user->id}}" hidden>
         <!-- Your form content here -->
         <h3 class="title">Payment Information</h3>
         <!-- Separate fields for shipping address -->
@@ -83,10 +83,10 @@
                     <input type="text" name="name" placeholder="Enter name" data-info = "{{$auth->name == NULL ? '' : $auth->name}}">
 
                     <label for="address">Billing address</label>
-                    <input type="text" name="address" placeholder="Enter Billing address" data-info = "{{$auth->name == NULL ? '' : $auth->name}}">
+                    <input type="text" name="address" placeholder="Enter Billing address" data-info = "{{$auth->address == NULL ? '' : $auth->address}}">
 
                     <label for="country">Country</label>
-                    <select name="country" data-info = "{{$auth->name == NULL ? '' : $auth->name}}">
+                    <select name="country" data-info = "{{$auth->country == NULL ? '' : $auth->country}}">
                         <option value="" selected></option>
                         <option value="Portugal">Portugal</option>
                         <option value="USA">United States of America</option>
@@ -95,26 +95,22 @@
                 </div>
                 <div class="column">
                     <label for="city">City</label>
-                    <input type="text" name="city" placeholder="Enter city" data-info = "{{$auth->name == NULL ? '' : $auth->name}}">
+                    <input type="text" name="city" placeholder="Enter city" data-info = "{{$auth->city == NULL ? '' : $auth->city}}">
             
                     <label for="postal_code">Postal Code</label>
-                    <input type="text" name="postal_code" placeholder="Enter Postal Code" data-info = "{{$auth->name == NULL ? '' : $auth->name}}">
+                    <input type="text" name="postal_code" placeholder="Enter Postal Code" data-info = "{{$auth->postalCode == NULL ? '' : $auth->postalCode}}">
 
                     <label for="phone">Phone Number</label>
-                    <input type="text" name="phone" placeholder="Enter Phone Number" data-info = "{{$auth->name == NULL ? '' : $auth->name}}">
+                    <input type="text" name="phone" placeholder="Enter Phone Number" data-info = "{{$auth->phoneNumber == NULL ? '' : $auth->phoneNumber}}">
                 </div>
             </div>
 
         <!-- Payment Method -->
         <h4>Payment Method</h4>
         <label for="payment_type">Choose a payment method:</label>
-        <select name="payment_type">
+        <select name="payment_type" data-info = "{{$auth->paymentMethod == NULL ? '' : $auth->paymentMethod}}">
             @foreach($payments as $payment)
-                @if($auth->paymentMethod == $payment->payment_type)
-                    <option value="{{$payment->payment_type}}" selected>{{$payment->payment_type}}</option>
-                @else
-                    <option value="{{$payment->payment_type}}">{{$payment->payment_type}}</option>
-                @endif
+                <option value="{{$payment->payment_type}}">{{$payment->payment_type}}</option>
             @endforeach
         </select>
 

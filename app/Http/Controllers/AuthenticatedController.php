@@ -131,6 +131,11 @@ class AuthenticatedController extends Controller
         return view('create_user');
     }
 
+    public function updateLocation(Request $request, $user_id){
+        return response()->json([], 200);
+    }
+
+
 
     public function showWishlist($user_id){
         $user = Authenticated::findOrFail($user_id);
