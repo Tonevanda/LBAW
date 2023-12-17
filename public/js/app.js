@@ -156,11 +156,6 @@ function addEventListeners() {
     add_funds_button.addEventListener('click', updateMoneyRequest);
   }
 
-  /*let addFundsForm = document.querySelector('div#fullScreenPopup form.add_funds_form');
-  if(addFundsForm != null){
-    addFundsForm.addEventListener('submit', addFundsRequest);
-  }*/
-
   let checkoutForm = document.querySelector('form.checkout');
   if(checkoutForm != null){
     checkoutForm.addEventListener('submit', createPurchaseRequest);
@@ -574,6 +569,12 @@ function showFullScreenPopup() {
 function hideFullScreenPopup() {
   document.body.classList.remove('popup-open');
   this.style.display = 'none';
+  let inputs = this.querySelectorAll('input');
+  [].forEach.call(inputs, function(input){
+    if(input.getAttribute('data-info') != null){
+      input.value = input.getAttribute('data-info');
+    }
+  });
 }
 
 

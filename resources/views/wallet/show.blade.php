@@ -80,13 +80,13 @@
             <div class="shipping-address">
                 <div class="column">
                     <label for="name">Name</label>
-                    <input type="text" name="name" placeholder="Enter name">
+                    <input type="text" name="name" placeholder="Enter name" data-info = "{{$auth->name == NULL ? '' : $auth->name}}">
 
                     <label for="address">Billing address</label>
-                    <input type="text" name="address" placeholder="Enter Billing address">
+                    <input type="text" name="address" placeholder="Enter Billing address" data-info = "{{$auth->name == NULL ? '' : $auth->name}}">
 
                     <label for="country">Country</label>
-                    <select name="country">
+                    <select name="country" data-info = "{{$auth->name == NULL ? '' : $auth->name}}">
                         <option value="" selected></option>
                         <option value="Portugal">Portugal</option>
                         <option value="USA">United States of America</option>
@@ -95,13 +95,13 @@
                 </div>
                 <div class="column">
                     <label for="city">City</label>
-                    <input type="text" name="city" placeholder="Enter city">
+                    <input type="text" name="city" placeholder="Enter city" data-info = "{{$auth->name == NULL ? '' : $auth->name}}">
             
                     <label for="postal_code">Postal Code</label>
-                    <input type="text" name="postal_code" placeholder="Enter Postal Code">
+                    <input type="text" name="postal_code" placeholder="Enter Postal Code" data-info = "{{$auth->name == NULL ? '' : $auth->name}}">
 
                     <label for="phone">Phone Number</label>
-                    <input type="text" name="phone" placeholder="Enter Phone Number">
+                    <input type="text" name="phone" placeholder="Enter Phone Number" data-info = "{{$auth->name == NULL ? '' : $auth->name}}">
                 </div>
             </div>
 
