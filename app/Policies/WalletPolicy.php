@@ -22,4 +22,15 @@ class WalletPolicy
         }
         return true;
     }
+
+
+    public function update(User $user, Wallet $wallet): bool{
+        if($user->isAdmin()){
+            throw new AuthorizationException("Admins can't add funds to wallet");
+        }
+        if($user->id != $wallet->user_id){
+            throw new AuthorizationException("This isn't your wallet");
+        }
+        return true;
+    }
 }

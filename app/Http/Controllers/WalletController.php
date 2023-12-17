@@ -43,6 +43,12 @@ class WalletController extends Controller
 
         $wallet = Wallet::findOrFail($user_id);
 
+        try{
+            $this->authorize('update', $wallet);
+        }catch(AuthorizationException $e){
+            return response()->json($e->getMessage(), 301);
+        }
+
         $data['money'] = $wallet->money + intval($data['money'])*100;
 
         $wallet->update($data);

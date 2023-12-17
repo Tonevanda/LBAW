@@ -415,7 +415,11 @@ function reviewCreateHandler(){
 }
 
 function updateMoneyHandler(){
-  if(this.status===200){
+  if(this.status === 301){
+    let response = JSON.parse(this.responseText);
+    console.log(response);
+  }
+  else if(this.status===200){
     let response = JSON.parse(this.responseText);
     document.querySelector('div.user_wallet p + h2').textContent = response.money + response.currencySymbol;
     document.querySelector('p.wallet').textContent = response.money + response.currencySymbol;
