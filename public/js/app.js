@@ -78,6 +78,12 @@ function addEventListeners() {
   if(reviewCreate != null){
     reviewCreate.addEventListener('submit', createReviewRequest);
   }
+
+  const phone_input = document.querySelector('div#fullScreenPopup form input[name=phone]');
+  if(phone_input != null){
+    phone_input.addEventListener('input', validatePhoneInput);
+  }
+
   let fullScreenPopup = document.getElementById('fullScreenPopup');
   let fullScreenPopup2 = document.getElementById('fullScreenPopup2');
 
@@ -95,35 +101,37 @@ function addEventListeners() {
   [].forEach.call(popupButtons2, function(button){
     button.addEventListener('click', function(event){
       event.preventDefault();
-      if(money != null){
-        document.querySelector('div#fullScreenPopup2 form div div.column:nth-child(2) p').textContent = money;
-        const payment_method = document.querySelector('div#fullScreenPopup form select[name=payment_type]').value;
-        const name = document.querySelector('div#fullScreenPopup form input[name=name]').value;
-
-        let payment_method_tag = document.querySelector('div#fullScreenPopup2 form div.column p.payment_info');
-        payment_method_tag.textContent = "Payment Method: "+payment_method;
-
-        let name_tag = document.querySelector('div#fullScreenPopup2 form p.payment_info + p');
-        name_tag.textContent = "Name: "+name;
-
-        const address = document.querySelector('div#fullScreenPopup form input[name=address]').value;
-        const city = document.querySelector('div#fullScreenPopup form input[name=city]').value;
-        const postal_code = document.querySelector('div#fullScreenPopup form input[name=postal_code]').value;
-        const country = document.querySelector('div#fullScreenPopup form select[name=country]').value;
-
-        
-
-        let address_tag = document.querySelector('div#fullScreenPopup2 form div.column p + p');
-        address_tag.textContent = "Billing Address: " + address + " " +city + ", "+ postal_code + " " + country;
-
-        const phone = document.querySelector('div#fullScreenPopup form input[name=phone]').value;
-
-        let phone_tag = document.querySelector('div#fullScreenPopup2 form div.column + div.column p.payment_info');
-        phone_tag.textContent = "Phone: " + phone;
-        
+      if(!phone_input.classList.contains('error')){
+        if(money != null){
+          document.querySelector('div#fullScreenPopup2 form div div.column:nth-child(2) p').textContent = money;
+          const payment_method = document.querySelector('div#fullScreenPopup form select[name=payment_type]').value;
+          const name = document.querySelector('div#fullScreenPopup form input[name=name]').value;
+  
+          let payment_method_tag = document.querySelector('div#fullScreenPopup2 form div.column p.payment_info');
+          payment_method_tag.textContent = "Payment Method: "+payment_method;
+  
+          let name_tag = document.querySelector('div#fullScreenPopup2 form p.payment_info + p');
+          name_tag.textContent = "Name: "+name;
+  
+          const address = document.querySelector('div#fullScreenPopup form input[name=address]').value;
+          const city = document.querySelector('div#fullScreenPopup form input[name=city]').value;
+          const postal_code = document.querySelector('div#fullScreenPopup form input[name=postal_code]').value;
+          const country = document.querySelector('div#fullScreenPopup form select[name=country]').value;
+  
+          
+  
+          let address_tag = document.querySelector('div#fullScreenPopup2 form div.column p + p');
+          address_tag.textContent = "Billing Address: " + address + " " +city + ", "+ postal_code + " " + country;
+  
+          const phone = document.querySelector('div#fullScreenPopup form input[name=phone]').value;
+  
+          let phone_tag = document.querySelector('div#fullScreenPopup2 form div.column + div.column p.payment_info');
+          phone_tag.textContent = "Phone: " + phone;
+          
+        }
+        hideFullScreenPopup.bind(fullScreenPopup)();
+        showFullScreenPopup.bind(fullScreenPopup2)();
       }
-      hideFullScreenPopup.bind(fullScreenPopup)();
-      showFullScreenPopup.bind(fullScreenPopup2)();
     });
   });
 
@@ -167,11 +175,6 @@ function addEventListeners() {
     change_language_option.addEventListener('click', function(){
       window.location.href = '/';
     });
-  }
-
-  const phone_input = document.querySelector('div#fullScreenPopup form input[name=phone]');
-  if(phone_input != null){
-    phone_input.addEventListener('input', validatePhoneInput);
   }
 
 }
@@ -605,6 +608,8 @@ function resetInputs(){
   let selects = this.querySelectorAll('select');
   [].forEach.call(inputs, function(input){
     if(input.getAttribute('data-info') != null){
+      if(input.classList.contains('error'))
+        input.classList.remove('error');
       input.value = input.getAttribute('data-info');
     }
   });
@@ -642,10 +647,13 @@ window.onload = function() {
 
 function validatePhoneInput(){
   const value = this.value;
-  if (value == '' || /^\d{9}$/.test(value)) {
-    console.log("valid")
-  } else {
-      console.log("invalid");
+  if (value == '' || /^\d{9}$/.test(value)){
+    if(this.classList.contains('error'))
+      this.classList.remove('error');
+  } 
+  else{
+      if(!this.classList.contains('error'))
+        this.classList.add('error');
   }
 }
 
