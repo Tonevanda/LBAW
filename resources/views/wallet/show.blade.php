@@ -108,7 +108,7 @@
         <!-- Payment Method -->
         <h4>Payment Method</h4>
         <label for="payment_type">Choose a payment method:</label>
-        <select name="payment_type" data-info = "{{$auth->payment_method == NULL ? $payments->first() : $auth->payment_method}}">
+        <select name="payment_type" data-info = "{{$auth->payment_method == NULL ? $payments[0]->payment_type : $auth->payment_method}}">
             @foreach($payments as $payment)
                 <option value="{{$payment->payment_type}}">{{$payment->payment_type}}</option>
             @endforeach
