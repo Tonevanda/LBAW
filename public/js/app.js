@@ -228,6 +228,14 @@ function updateMoneyRequest(event){
   const user_id = add_funds_form.querySelector('input[name=user_id').value;
   if(document.querySelector('input[name=remember]').checked){
     console.log(user_id);
+    const payment_method = add_funds_form.querySelector('select[name=payment_type]').value;
+    const name = add_funds_form.querySelector('input[name=name]').value;
+    const address = add_funds_form.querySelector('input[name=address]').value;
+    const city = add_funds_form.querySelector('input[name=city]').value;
+    const country = add_funds_form.querySelector('select[name=country]').value;
+    const postal_code = add_funds_form.querySelector('input[name=postal_code]').value;
+    const phone = add_funds_form.querySelector('input[name=phone]').value;
+    console.log(payment_method, name, address, city, country, postal_code, phone);
     //sendAjaxRequest('put', '/review/'+review_id, {review_id: review_id, description: description, title: title}, reviewHandler);
   }
 
