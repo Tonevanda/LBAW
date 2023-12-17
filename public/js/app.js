@@ -169,7 +169,14 @@ function addEventListeners() {
     });
   }
 
+  const phone_input = document.querySelector('div#fullScreenPopup form input[name=phone]');
+  if(phone_input != null){
+    phone_input.addEventListener('input', validatePhoneInput);
+  }
+
 }
+
+
   
 function encodeForAjax(data) {
   if (data == null) return null;
@@ -631,6 +638,19 @@ window.onload = function() {
     });
   });
 }
+
+
+function validatePhoneInput(){
+  const value = this.value;
+  if (value == '' || /^\d{9}$/.test(value)) {
+    console.log("valid")
+  } else {
+      console.log("invalid");
+  }
+}
+
+
+
 addEventListeners();
   
   
