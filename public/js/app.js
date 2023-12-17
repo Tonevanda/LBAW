@@ -418,6 +418,8 @@ function updateMoneyHandler(){
   if(this.status===200){
     let response = JSON.parse(this.responseText);
     document.querySelector('div.user_wallet p + h2').textContent = response.money + response.currencySymbol;
+    document.querySelector('p.wallet').textContent = response.money + response.currencySymbol;
+    document.querySelector('div.mini-menu ul li:nth-child(4) a').textContent = "Wallet " + response.money + response.currencySymbol;
 
   }
 }
