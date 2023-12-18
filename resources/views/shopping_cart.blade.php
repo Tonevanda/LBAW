@@ -18,9 +18,9 @@
     <div class="shopping-page">
     @foreach ($products as $product)
     @php
-        $total = $total + $product->price;
+        $total = $total+$product->price;
     @endphp
-    <x-cart-product-card :product="$product" />
+        <x-cart-product-card :product="$product" />
     @endforeach
     <table>
         <tr>
@@ -29,10 +29,10 @@
         </tr>
         <tr>
             <td>Price</td>
-            <td>{{ $total }}</td>
+            <td>{{ number_format($total/100, 2, ',', '.');}}</td>
         </tr>
     </table>
-    <button name="show_popup">
+    <button name="show_popup_checkout">
         Checkout
     </button>
 </div>

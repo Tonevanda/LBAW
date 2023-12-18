@@ -93,6 +93,17 @@ function addEventListeners() {
     });
   });
 
+  let popupButtonsCheckout = document.querySelectorAll('button[name=show_popup_checkout]');
+  [].forEach.call(popupButtons, function(button){
+    button.addEventListener('click', function(event){
+      event.preventDefault();
+      money = document.querySelector('table tr:last-child td:last-child');
+      //if(money.textContent >)
+      resetInputs.bind(fullScreenPopup)();
+      showFullScreenPopup.bind(fullScreenPopup)();
+    });
+  });
+
   let popupButtons2 = document.querySelectorAll('button[name=show_popup2]');
   [].forEach.call(popupButtons2, function(button){
     button.addEventListener('click', function(event){
@@ -519,7 +530,6 @@ function deleteCartProductHandler(){
     let new_total_price = document.querySelector('tr:last-child td:last-child');
     let new_total_quantity = document.querySelector('tr:first-child td:last-child');
 
-    console.log(new_total_price, new_total_quantity);
     new_total_price.textContent= new_total_price.textContent-deletion_price;
     new_total_quantity.textContent = new_total_quantity.textContent-1;
     deletion_target.remove();
