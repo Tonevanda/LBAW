@@ -14,13 +14,16 @@
     </div>
     <div class="product-details">
     <h2> {{ $product->name }} </h2>
-    <p><b>Author: </b>{{ $product->author }} </p>
-    <p><b>Editor: </b>{{ $product->editor }} </p>
-    <p class="synopsis"> {{ $product->synopsis }} </p>
-    <p><b>Language: </b>{{ $product->language }} </p>
-    <p><b>Price: </b>{{ $product->price }} </p>
+    <form class = "update_product" method="post" action="{{route('product.update',['product_id' => $product->id])}}">
+        {{ csrf_field() }}
+        <b>Author: </b><p id="author" class="editable">{{ $product->author }} </p>
+        <b>Editor: </b><p id="editor" class="editable">{{ $product->editor }} </p>
+        <p id="synopsis" class="synopsis editable"> {{ $product->synopsis }} </p>
+        <b>Language: </b><p id="language" class="editable">{{ $product->language }} </p>
+        <b>Price: </b><p id="price" class="editable">{{ $product->price }} </p>
     @if (auth()->check())
         @if (!Auth::user()->isAdmin())
+        </form>
         <div class="button-container">
             <form class = "add_cart" method="" action="{{ route('shopping-cart.store', ['user_id' => Auth::user()->id]) }}" enctype="multipart/form-data">
                 {{ csrf_field() }}
@@ -45,24 +48,16 @@
             <ul>
                 @foreach ($statistics as $statistic)
                     <li>
-                        {{ $statistic->statistic_type }}
+                        <b>{{ $statistic->statistic_type }}</b>
+                        {{ $statistic->stat }}
                     </li>
                 @endforeach
             </ul>
             <p>Product Revenue: ${{ $productRevenue }}</p>
-            <button onclick="showFullScreenPopup()">
+            <button type="button" class="edit_product">
                 Edit
             </button>
-            <div id="fullScreenPopup" class="popup-form" style="display: none;">
-                <form method="POST" action="{{ route('product.update', ['product_id' => $product->id]) }}">
-                    {{ csrf_field() }}
-                    
-                    <div class="navigation-buttons">
-                        <button class="cancel" onclick="hideFullScreenPopup()">Cancel</button>
-                        <button type="submit">Confirm Purchase</button>
-                    </div>
-                </form>
-            </div>
+        </form>
         @endif
     @endif
     </div>

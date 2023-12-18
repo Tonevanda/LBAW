@@ -10,6 +10,7 @@ use App\Http\Controllers\AuthenticatedController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\WalletController;
+use App\Http\Controllers\PostController;
 use Carbon\Carbon;
 use App\Models\User;
 use GuzzleHttp\Middleware;
@@ -98,3 +99,4 @@ Route::get('/contact_us', function () {
     return view('contact_us');
 })->name('contact_us');
 
+Route::post('/post/change', [PostController::class, 'change'])->name('post.change');

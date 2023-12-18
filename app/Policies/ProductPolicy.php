@@ -110,4 +110,12 @@ class ProductPolicy
 
         return true;
     }
+
+    public function update(User $user){
+        if(!$user->isAdmin()){
+            throw new AuthorizationException("Non admins can't update products");
+        }
+
+        return true;
+    }
 }

@@ -37,9 +37,13 @@ function addEventListeners() {
 
   let profile_pic_form = document.querySelector('form.profile_pic');
 
+  let product_edit = document.querySelector('button.edit_product');
 
+  let product_save = document.querySelector('button.save_product');
 
-
+  if(product_edit != null){
+    product_edit.addEventListener('click', handleEditButtonClick);
+  }
 
   if(profile_pic_form != null){
     profile_pic_form.addEventListener('submit', updateProfilePictureRequest);
@@ -78,6 +82,64 @@ function addEventListeners() {
   }
 }
   
+const pusher = new Pusher(pusherAppKey, {
+  cluster: pusherCluster,
+  encrypted: true
+});
+
+const channel = pusher.subscribe('lbaw');
+channel.bind('notification-pricechange', function(data) {
+  console.log(`New notification: ${data.message}`);
+})
+
+
+function handleEditButtonClick(event) {
+  let product_edit = event.target;
+  let elements = document.querySelectorAll('p.editable');
+  console.log(elements);
+  elements.forEach(function(element) {
+    newElem = document.createElement('textarea');
+    newElem.textContent = element.textContent;
+    newElem.name = element.getAttribute('id');
+    element.replaceWith(newElem);
+  });
+  cancelButton = document.createElement('button');
+  cancelButton.textContent = "Cancel";
+  cancelButton.classList.add("cancel_edit_product");
+  cancelButton.type = "button";
+  submitButton = document.createElement('button');
+  submitButton.textContent = "Save";
+  submitButton.classList.add("save_product");
+  if(cancelButton.nextSibling) {
+    product_edit.parentNode.insertBefore(submitButton, cancelButton.nextSibling);
+  } else {
+    product_edit.parentNode.appendChild(submitButton);
+  }
+  product_edit.replaceWith(cancelButton);
+  cancelButton.addEventListener('click', handleCancelButtonClick);
+}
+
+function handleCancelButtonClick() {
+  let elements = document.querySelectorAll('textarea');
+  let cancelButton = document.querySelector('button.cancel_edit_product');
+  let submitButton = document.querySelector('button.save_product');
+  console.log(elements);
+  product_edit = document.createElement('button');
+  product_edit.textContent = "Edit";
+  product_edit.type = "button";
+  product_edit.classList.add("edit_product");
+  elements.forEach(function(element) {
+    newElem = document.createElement('p');
+    newElem.classList.add("editable");
+    newElem.textContent = element.textContent;
+    newElem.id = element.getAttribute('name');
+    element.replaceWith(newElem);
+  });
+  submitButton.remove();
+  cancelButton.replaceWith(product_edit);
+  product_edit.addEventListener('click', handleEditButtonClick);
+}
+
 function encodeForAjax(data) {
   if (data == null) return null;
   return Object.keys(data).map(function(k){

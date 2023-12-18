@@ -33,6 +33,7 @@ if($user != NULL && !$user->isAdmin()){
         </script>
         <script type="text/javascript" src={{ url('js/app.js') }} defer>
         </script>
+        <script src="https://js.pusher.com/7.0/pusher.min.js" defer></script>
 
     </head>
     <body>

@@ -70,5 +70,27 @@ class ProductController extends Controller
         return redirect()->route('add_products');
     }
 
+    public function updateProduct(Request $request, $product_id){
+        $data = $request->validate([
+            'synopsis' => 'required|string|max:250',
+            'price' => 'required|numeric|min:0',
+            #'stock' => 'required|numeric|min:0',
+            'author' => 'required|string|max:250',
+            'editor' => 'required|string|max:250',
+            'language' => 'required|string|max:250',
+            #'image' => 'required|string|min:0',
+            #'category' => 'required|string|max:250',
+        ]);
+        try{
+            $this->authorize('update', Product::class);
+        }catch(AuthorizationException $e){
+            return redirect()->route('all-products');
+        }
+        $product=Product::findOrFail($product_id);
+        $product->update($data);
+        request('post',route('post.change'));
+        return redirect()->route('all-products');
+    }
+
 }
 
