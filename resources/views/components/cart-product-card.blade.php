@@ -8,7 +8,7 @@
         <div class="product-details">
         <h3> {{ $product->name }} </h3>
         <p> {{ $product->synopsis }} </p>
-        <p> {{ $product->price }} </p>
+        <p> {{ number_format(($product->price-($product->discount*$product->price/100))/100, 2, ',', '.');}} </p>
     </a>
     @if (auth()->check())
     <form class = "remove_cart" method="" action="{{ route('shopping-cart.destroy', ['user_id' => Auth::user()->id]) }}">
