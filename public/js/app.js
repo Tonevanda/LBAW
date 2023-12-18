@@ -106,7 +106,9 @@ function addEventListeners() {
         }
         if(input.getAttribute('name') == 'phone'){
           if(!validatePhoneInput.bind(input)()) error_check = true;
-          console.log(error_check);
+        }
+        if(input.getAttribute('name') == 'postal_code'){
+          if(!validatePostalCodeInput.bind(input)()) error_check = true;
         }
       });
       if(!error_check){
@@ -656,6 +658,20 @@ window.onload = function() {
 function validatePhoneInput(){
   const value = this.value;
   if (value == "" || /^\d{9}$/.test(value)){
+    if(this.classList.contains('error'))
+      this.classList.remove('error');
+    return true;
+  } 
+  else{
+      if(!this.classList.contains('error'))
+        this.classList.add('error');
+      return false;
+  }
+}
+
+function validatePostalCodeInput(){
+  const value = this.value;
+  if (/^\d+(-\d+)$/.test(value)){
     if(this.classList.contains('error'))
       this.classList.remove('error');
     return true;
