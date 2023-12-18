@@ -513,12 +513,13 @@ function createCartProductHandler(){
 
 function deleteCartProductHandler(){
   if(this.status == 200){
-    console.log("removed from shopping cart");
     let response = JSON.parse(this.responseText);
     let deletion_target = document.querySelector('div[data-id="' + response + '"]');
     let deletion_price = deletion_target.querySelector('a p:last-child').textContent;
-    let new_total_price = document.querySelector('tr:last-child td:first-child');
-    let new_total_quantity = document.querySelector('tr:last-child td:last-child');
+    let new_total_price = document.querySelector('tr:last-child td:last-child');
+    let new_total_quantity = document.querySelector('tr:first-child td:last-child');
+
+    console.log(new_total_price, new_total_quantity);
     new_total_price.textContent= new_total_price.textContent-deletion_price;
     new_total_quantity.textContent = new_total_quantity.textContent-1;
     deletion_target.remove();
