@@ -283,14 +283,14 @@ function updateMoneyRequest(event){
   hideFullScreenPopup.bind(popup2)();
   const user_id = add_funds_form.querySelector('input[name=user_id').getAttribute('data-info');
   if(document.querySelector('input[name=remember]').checked){
-    updateLocation.bind(add_funds_form)();
+    updateLocation.bind(add_funds_form, user_id)();
   }
 
   sendAjaxRequest('put', '/wallet/' + user_id + '/add', {money: money}, updateMoneyHandler);
   event.preventDefault();
 }
 
-function updateLocation(){
+function updateLocation(user_id){
   const payment_method = this.querySelector('select[name=payment_type]').value;
   const name = this.querySelector('input[name=name]').value;
   const address = this.querySelector('input[name=address]').value;

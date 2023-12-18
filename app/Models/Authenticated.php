@@ -48,6 +48,14 @@ class Authenticated extends Model
                     ->withPivot('id');
     }
 
+    public function shoppingCartSameProduct()
+    {
+        return $this->belongsToMany(Product::class, 'shopping_cart', 'user_id', 'product_id')
+                    ->withPivot('id')
+                    ->get()
+                    ->groupBy('product_id');
+    }
+
     public function wishlist()
     {
         return $this->belongsToMany(Product::class, 'wishlist', 'user_id', 'product_id')

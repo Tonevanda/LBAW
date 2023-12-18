@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use App\Models\Purchase;
 use Illuminate\Http\Request;
 use Illuminate\Auth\Access\AuthorizationException;
+use App\Models\Authenticated;
 
 class PurchaseController extends Controller
 {
@@ -21,12 +22,20 @@ class PurchaseController extends Controller
             'destination' => 'required',
             'istracked' => 'required'
         ]);
-        /*$auth = Authenticated::findOrFail($user_id);
-
-        $cart_products = $auth->shoppingCart()->get();
-        foreach($cart_products as $cart_product){
-
-        }*/
+        $auth = Authenticated::findOrFail($user_id);
+        $cart_products = $auth->shoppingCartSameProduct();
+        foreach ($cart_products as $cart_product) {
+            $stock = 0;
+            foreach ($cart_product as $product) {
+                $stock = $stock+1;
+                try{
+                    $this->authorize('hasStock', [$product, $stock]);
+                }catch(AuthorizationException $e){
+                    return response()->json($e->getMessage(), 301);
+                }
+            }
+            
+        }
 
         $daysToAdd = 3; 
         $data['orderarrivedat'] = now()->addDays($daysToAdd)->toDateTimeString();
@@ -37,7 +46,7 @@ class PurchaseController extends Controller
         try {
             $this->authorize('create', Purchase::class);
         } catch (AuthorizationException $e) {
-            return redirect()->route('all-products');
+            return response()->json($e->getMessage(), 301);
         }
 
         Purchase::create($data);
