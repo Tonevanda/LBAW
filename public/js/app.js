@@ -358,22 +358,31 @@ function updateProfilePictureRequest(event){
   event.preventDefault();
 }
 
-    document.addEventListener('DOMContentLoaded', function () {
-        const popForm = document.querySelector('.pop-form');
-        const overlay = document.querySelector('.overlay');
-        const openButton = document.querySelector('.open-pop-form');
-        const closeButton = document.querySelector('.close-pop-form');
+function initializePopup(openButtonSelector, closeButtonSelector, popFormSelector, overlaySelector) {
+  const popForm = document.querySelector(popFormSelector);
+  const overlay = document.querySelector(overlaySelector);
+  const openButton = document.querySelector(openButtonSelector);
+  const closeButton = document.querySelector(closeButtonSelector);
 
-        openButton.addEventListener('click', function () {
-            popForm.style.display = 'block';
-            overlay.style.display = 'block';
-        });
+  openButton.addEventListener('click', function () {
+      popForm.style.display = 'block';
+      overlay.style.display = 'block';
+  });
 
-        closeButton.addEventListener('click', function () {
-            popForm.style.display = 'none';
-            overlay.style.display = 'none';
-        });
-    });
+  closeButton.addEventListener('click', function () {
+      popForm.style.display = 'none';
+      overlay.style.display = 'none';
+  });
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  // Example of initialization for a specific pop-up form
+  initializePopup('.open-pop-form', '.close-pop-form', '.pop-form', '.overlay');
+
+  // You can initialize other pop-up forms similarly
+  // initializePopup('.open-pop-form-2', '.close-pop-form-2', '.pop-form-2', '.overlay-2');
+  // initializePopup('.open-pop-form-3', '.close-pop-form-3', '.pop-form-3', '.overlay-3');
+});
 
 function deleteReviewHandler(){
   if(this.status == 301){
@@ -674,6 +683,19 @@ window.onload = function() {
     });
   });
 }
+
+document.addEventListener("DOMContentLoaded", function() {
+  document.getElementById("statsButton").addEventListener("click", function() {
+      // Show the statistics popup
+      document.getElementById("statsPopup").style.display = "block";
+  });
+
+  document.getElementById("closeButton").addEventListener("click", function() {
+      // Close the statistics popup
+      document.getElementById("statsPopup").style.display = "none";
+  });
+});
+
 
 
 function validatePhoneInput(){

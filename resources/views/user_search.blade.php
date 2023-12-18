@@ -1,16 +1,15 @@
 @extends('layouts.app')
 
 @section('content')
-
-@include('partials._search-users')
-
 <div class="user-container">
+<div class="users-sidebar">
+@include('partials._search-users')
+</div>
+<div class="users-grid">
     @foreach($users as $user)
-        <div class="user-box">
             <x-user-card :user="$user" />
-        </div>
     @endforeach
 </div>
-
+</div>
 
 @endsection

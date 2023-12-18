@@ -42,14 +42,20 @@
             </form>
         </div>
             @else
-            <ul>
-                @foreach ($statistics as $statistic)
-                    <li>
-                        {{ $statistic->statistic_type }}
-                    </li>
-                @endforeach
-            </ul>
-            <p>Product Revenue: ${{ $productRevenue }}</p>
+            <button id="statsButton">
+                <i class="fas fa-chart-bar"></i>
+              </button>
+              <div id="statsPopup" class="popup-button">
+                <ul>
+                    @foreach ($statistics as $statistic)
+                        <li>
+                            {{ $statistic->statistic_type }}
+                        </li>
+                    @endforeach
+                </ul>
+                <p>Product Revenue: ${{ $productRevenue }}</p>
+                <button id="closeButton">Close</button>
+              </div>
         @endif
     @endif
     </div>
