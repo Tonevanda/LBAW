@@ -32,4 +32,12 @@ class AuthenticatedPolicy
         return true;
     }
 
+    public function updateLocation(User $user, Authenticated $auth): bool
+    {
+        if($user->id != $auth->user_id && !$user->isAdmin()){
+            throw new AuthorizationException("you can't update the location of an account that isn't yours, unless you are an admin");
+        }
+        return true;
+    }
+
 }

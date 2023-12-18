@@ -456,7 +456,11 @@ function updateMoneyHandler(){
 }
 
 function updateLocationHandler(){
-  if(this.status===200){
+  if(this.status ===301){
+    let response = JSON.parse(this.responseText);
+    console.log(response);
+  }
+  else if(this.status===200){
     let response = JSON.parse(this.responseText);
     const popup_form = document.querySelector('div#fullScreenPopup form');
     set_data_info.bind(popup_form, 'input[name=name]', response.name)();
