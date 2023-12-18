@@ -100,20 +100,24 @@ function addEventListeners() {
       money = document.querySelector('table tr:last-child td:last-child').textContent;
       const currency_symbol = money.charAt(money.length - 1);
       let user_money = document.querySelector('p.wallet');
-      deformatted_money_cart = deformat_money(money, currency_symbol);
+      const deformatted_money_cart = deformat_money(money, currency_symbol);
+      const deformatted_user_money = deformat_money(user_money.textContent, currency_symbol);
       let low_money_tag = document.querySelector('div#fullScreenPopup form div.low_money');
       low_money_tag.style.display = 'none';
       let payment_method_select = document.querySelector('div#fullScreenPopup form select[name=payment_type]');
       let store_money_option = payment_method_select.querySelector('option:first-child');
       store_money_option.hidden = true;
 
-      if(deformatted_money_cart <= deformat_money(user_money.textContent, currency_symbol) && deformatted_money_cart != 0){
+      if(deformatted_money_cart <= deformatted_user_money && deformatted_money_cart != 0){
         store_money_option.hidden = false;
         resetInputs.bind(fullScreenPopup)();
         showFullScreenPopup.bind(fullScreenPopup)();
       }
       else if(deformatted_money_cart != 0){
         low_money_tag.style.display = 'block';
+        const remaining_money = format_money(deformatted_money_cart - deformatted_user_money, currency_symbol);
+
+        low_money_tag.querySelector('p').textContent = 'Please select a payment method for the remaining ' + remaining_money;
         
         resetInputs.bind(fullScreenPopup)();
         payment_method_select.value = payment_method_select.querySelector('option + option').value;

@@ -1,5 +1,13 @@
 @props(['user', 'auth', 'payments'])
 
+@php
+    $payment_value = $payments[0]->payment_type;
+
+    if($auth->payment_method != null && $payments.contains($auth->payment_method)){
+        $payment_value = $auth->payment_method;
+    }
+@endphp
+
 
 <div id="fullScreenPopup" class="popup-form" style="display: none;">
     <form class = "add_funds_form" method="" action="">
@@ -8,10 +16,6 @@
         <input type = "text" name = "user_id" data-info = "{{$user->id}}" hidden>
         <!-- Your form content here -->
         <h3 class="title">Payment Information</h3>
-        <div class = "low_money" style="display: none;">
-            <i class="fas fa-exclamation-triangle">Your Bibliophile Bliss Wallet balance is too low to cover this transaction!</i>
-            <p></p>
-        </div>
         <h4>Billing information</h4>
             <div class="shipping-address">
                 <div class="column">
@@ -42,8 +46,12 @@
 
         <!-- Payment Method -->
         <h4>Payment Method</h4>
+        <div class = "low_money" style="display: none;">
+            <i class="fas fa-exclamation-triangle">Your Bibliophile Bliss Wallet balance is too low to cover this transaction!</i>
+            <p></p>
+        </div>
         <label for="payment_type">Choose a payment method:</label>
-        <select name="payment_type" data-info = "{{$auth->payment_method == NULL ? $payments[0]->payment_type : $auth->payment_method}}">
+        <select name="payment_type" data-info = "{{$payment_value}}">
             @foreach($payments as $payment)
                 <option value="{{$payment->payment_type}}">{{$payment->payment_type}}</option>
             @endforeach
