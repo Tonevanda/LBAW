@@ -530,6 +530,8 @@ function deleteCartProductHandler(){
     let new_total_price = document.querySelector('tr:last-child td:last-child');
     let new_total_quantity = document.querySelector('tr:first-child td:last-child');
 
+    new_total_price.textContent = modifiedString = parseInt(new_total_price.textContent.replace(/[^\d]/g, ''));
+
     new_total_price.textContent= new_total_price.textContent-deletion_price;
     new_total_quantity.textContent = new_total_quantity.textContent-1;
     deletion_target.remove();

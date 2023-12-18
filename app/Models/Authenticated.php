@@ -57,7 +57,6 @@ class Authenticated extends Model
     public function wallet()
     {
         $wallet = $this->hasOne(Wallet::class, 'user_id')->first();
-        $wallet->money = $wallet->money /100;
         $currencySymbols = [
             'euro' => '€',
             'pound' => '£',

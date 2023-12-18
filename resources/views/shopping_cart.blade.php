@@ -7,6 +7,7 @@
     $user = Auth::user();
     if(!$user->isAdmin()){
         $auth = $user->authenticated()->first();
+        $wallet = $auth->wallet();
     }
     $total = 0;
     $productCount = count($products);
@@ -20,7 +21,7 @@
     @php
         $total = $total+($product->price-($product->discount*$product->price/100));
     @endphp
-        <x-cart-product-card :product="$product" />
+        <x-cart-product-card :product="$product" :user="$user"/>
     @endforeach
     <table>
         <tr>
@@ -29,7 +30,7 @@
         </tr>
         <tr>
             <td>Price</td>
-            <td>{{ number_format($total/100, 2, ',', '.');}}</td>
+            <td>{{ number_format($total/100, 2, ',', '.');}}{{$user->isAdmin() ? '€' : $wallet->currencySymbol}}</td>
         </tr>
     </table>
     <button name="show_popup_checkout">
