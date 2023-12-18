@@ -81,16 +81,6 @@ function addEventListeners() {
     reviewCreate.addEventListener('submit', createReviewRequest);
   }
 }
-  
-const pusher = new Pusher(pusherAppKey, {
-  cluster: pusherCluster,
-  encrypted: true
-});
-
-const channel = pusher.subscribe('lbaw');
-channel.bind('notification-pricechange', function(data) {
-  console.log(`New notification: ${data.message}`);
-})
 
 
 function handleEditButtonClick(event) {

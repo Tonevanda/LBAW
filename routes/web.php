@@ -33,6 +33,7 @@ Route::controller(ProductController::class)->group(function () {
     Route::get('/product/create', 'showCreateProductForm')->name('add_products');
     Route::post('/product/create', 'createProduct')->name('product.create');
     Route::post('/product/update/{product_id}', 'updateProduct')->name('product.update');
+    Route::post('/post/change', 'change')->name('post.change');
 });
 
 #->middleware('admin')
@@ -99,4 +100,4 @@ Route::get('/contact_us', function () {
     return view('contact_us');
 })->name('contact_us');
 
-Route::post('/post/change', [PostController::class, 'change'])->name('post.change');
+

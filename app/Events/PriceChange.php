@@ -10,7 +10,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class PriceChange
+class PriceChange implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -23,6 +23,7 @@ class PriceChange
      */
     public function __construct($post_id)
     {
+        error_log($post_id);
         $this->post_id = $post_id;
         $this->message = 'price has changed ' . $post_id;
 

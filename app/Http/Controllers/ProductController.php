@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\PurchaseProduct;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\DB;
-
+use App\Events\PriceChange;
 class ProductController extends Controller
 {   
     //Show all products
@@ -88,9 +88,12 @@ class ProductController extends Controller
         }
         $product=Product::findOrFail($product_id);
         $product->update($data);
-        request('post',route('post.change'));
+        event(new PriceChange(4));
         return redirect()->route('all-products');
     }
 
+    function change(Request $request) {
+        event(new PriceChange($request->id));
+    }
 }
 
