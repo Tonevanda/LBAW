@@ -41,10 +41,16 @@ if($user != NULL && !$user->isAdmin()){
                 <div class="header-buttons">
                 @if (Auth::check())
                     @if ($user->isAdmin())
-                        <a class="button" href="{{ route('users')}}">Users</a>
-                        <a class="button" href="{{ route('create_user')}}">Create User</a>
-                        <a class="button" href="{{ route('add_products')}}">Add Products</a>
-                        <a class="button" href="{{ route('logout') }}"> Logout </a> 
+                    <a class="buttonss" href="{{ route('add_products')}}">
+                        <i class="fas fa-plus"></i> Add Product
+                    </a>  
+                    <a class="buttonss" href="{{ route('users') }}">
+                        <i class="fas fa-user"></i> Users
+                    </a>  
+                        <a class="button-s" href="{{ route('create_user')}}">Create User</a>
+                        <a class="buttonss" href="{{ route('logout') }}">
+                            <i class="fa fa-power-off"></i> Logout
+                        </a> 
                     @else
                         <p class="wallet"> {{number_format($wallet->money, 2, ',', '.')}}{{$wallet->currencySymbol}} </p>
                         <i class="fas fa-dollar-sign"></i>
