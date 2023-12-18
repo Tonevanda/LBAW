@@ -12,50 +12,54 @@
     }
 @endphp
 
+<div class="wallet-page">
 
-<h2> Add funds to your wallet </h2>
+<div class="details_box">
 
-<h4> Add funds to {{$user->name}}'s wallet</h4>
+<h3> Add funds to your wallet</h3>
 
+<div class="ad_box">
 
 <p> Funds in your wallet can be used to purchase any book on Bibliophile Bliss.
 
     You will have the opportunity to review your request before it is processed. </p>
 
+<p> Choose the value you want to add. </p>
+</div>
 <div class = "money_fund_option">
-    <h3> Add 10{{$wallet->currencySymbol}} </h3>
-    <button name = "show_popup" data-money = {{"10" . $wallet->currencySymbol}}>
-        Add funds
+
+    <button class="button-fund" name = "show_popup" data-money = {{"5" . $wallet->currencySymbol}}>
+        Add 5{{$wallet->currencySymbol}}
+    </button>
+
+    <button class="button-fund" name = "show_popup" data-money = {{"10" . $wallet->currencySymbol}}>
+        Add 10{{$wallet->currencySymbol}}
+    </button>
+
+    <button class="button-fund" name = "show_popup" data-money = {{"25" . $wallet->currencySymbol}}>
+        Add 25{{$wallet->currencySymbol}}
+    </button>
+
+    <button class="button-fund" name = "show_popup" data-money = {{"50" . $wallet->currencySymbol}}>
+        Add 50{{$wallet->currencySymbol}}
+    </button>
+    <button class="button-fund" name = "show_popup" data-money = {{"100" . $wallet->currencySymbol}}>
+        Add 100{{$wallet->currencySymbol}}
     </button>
 </div>
-
-<div class = "money_fund_option">
-    <h3> Add 25{{$wallet->currencySymbol}} </h3>
-    <button name = "show_popup" data-money = {{"25" . $wallet->currencySymbol}}>
-        Add funds
-    </button>
 </div>
 
-<div class = "money_fund_option">
-    <h3> Add 50{{$wallet->currencySymbol}} </h3>
-    <button name = "show_popup" data-money = {{"50" . $wallet->currencySymbol}}>
-        Add funds
-    </button>
+
+<div class = "details_box">
+    <h3> Your Bibliophile Bliss Account </h3>
+    <div class="ad_box">
+        <div class="ad_wallet"> 
+    <h4> Current Wallet Balance: {{ number_format($wallet->money, 2, ',', '.') }}{{$wallet->currencySymbol}} </h4>
+</div>
+</div>
+    <a class="ad_button2" href="{{ route('account_details',$user->id) }}">See Account Details</a>
 </div>
 
-<div class = "money_fund_option">
-    <h3> Add 100{{$wallet->currencySymbol}} </h3>
-    <button name = "show_popup" data-money = {{"100" . $wallet->currencySymbol}}>
-        Add funds
-    </button>
-</div>
-
-<div class = "user_wallet">
-    <h2> Your Bibliophile Bliss Account </h2>
-    <p> Current Wallet Balance </p>
-    <h2> {{ number_format($wallet->money, 2, ',', '.') }}{{$wallet->currencySymbol}} </h2>
-    <a class="button" href="{{ route('account_details',$user->id) }}">See Account Details</a>
-</div>
 
 
 
@@ -115,5 +119,5 @@
         </div>
     </form>
 </div>
-
+</div>
 @endsection

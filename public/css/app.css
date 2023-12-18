@@ -254,17 +254,22 @@ input[type=password]:focus {
 }
 
 .money_fund_option {
-  padding: 4em;
+  padding: 1.5em 3em;
   text-align: center;
 }
+
 .button-fund {
-  padding:2.5em;
   background-color: #d2d2d2;
   color: white;
   border-radius: 6px;
   margin-right: 2em;
   font-weight: 300;
   font-size: large;
+  text-transform: none;
+  border: #ccc;
+  align-items: center;
+  justify-content: center;
+  height: 7em;
 }
 
 .button-fund:hover {
