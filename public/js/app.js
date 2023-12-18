@@ -320,7 +320,7 @@ function createPurchaseRequest(event){
   else{
     is_tracked = false;
   }
-  sendAjaxRequest('post', '/checkout/'+user_id, {price: price, quantity: quantity, destination: destination, payment_type: payment_type, isTracked: is_tracked}, createPurchaseHandler);
+  sendAjaxRequest('post', '/checkout/'+user_id, {price: price, quantity: quantity, destination: destination, payment_type: payment_type, istracked: is_tracked}, createPurchaseHandler);
   event.preventDefault();
 }
 

@@ -14,7 +14,7 @@ class PurchaseController extends Controller
     public function store(Request $request, $user_id)
     {
         
-        /*$data = $request->validate([
+        $data = $request->validate([
             'price' => 'required',
             'quantity' => 'required',
             'payment_type' => 'required',
@@ -22,14 +22,13 @@ class PurchaseController extends Controller
             'istracked' => 'required'
         ]);
 
-        // Add additional fields or modify as needed
-        $daysToAdd = 3; // Change this to the number of days you want to add
+        
+
+        $daysToAdd = 3; 
         $data['orderarrivedat'] = now()->addDays($daysToAdd)->toDateTimeString();
         $data['user_id'] = $user_id;
         $data['stage_state'] = "payment";
 
-
-        // Create the Purchase record
 
         try {
             $this->authorize('create', Purchase::class);
@@ -37,7 +36,7 @@ class PurchaseController extends Controller
             return redirect()->route('all-products');
         }
 
-        Purchase::create($data);*/
+        Purchase::create($data);
         return response()->json([], 200);
 
 
