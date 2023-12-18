@@ -8,7 +8,6 @@ use Carbon\Carbon;
     <div class="purchases-container">
         @foreach ($purchases as $purchase)
             <div class="purchase">
-            
                 <div class="product-grid">
                     @foreach($purchase->products()->get() as $product)
                         <x-history-product-card :product="$product" />

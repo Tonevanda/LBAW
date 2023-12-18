@@ -65,12 +65,17 @@
                 empty($userReview) ? $flag = false : $flag = true;
             @endphp
             @if ($flag===false)
+            <div class="user-details-container">
+                <div class = "user-image">
+                    <img src ="{{asset('images/user_images/' . $user->profile_picture)}}" alt="" />
+                </div>
+                <p class = "user_name"> {{$user->name}} </p>
+            </div>
+            <button class="open-pop-form">Add Review</button>
+            <div class="overlay"></div>
+            <div class="pop-form">
                 <form class = "add_review" method="POST" action="{{ route('review.store', ['user_id' => $user->id]) }}">
                     {{ csrf_field() }}
-                    <div class = "user_image">
-                        <img src ="{{asset('images/user_images/' . $user->profile_picture)}}" alt="" />
-                    </div>
-                    <p class = "user_name"> {{$user->name}} </p>
                     <input type="hidden" name="product_id" value="{{ $product->id }}" required>
                     <input type="hidden" name="user_id" value="{{ Auth::user()->id }}" required>
                     <label for="title">Title</label>
@@ -94,25 +99,27 @@
                             {{ $errors->first('rating') }}
                         </span>
                     @endif
-                    <button type="submit" name="add-review" class="button button-outline">
+                    <div class="navigation-buttons">
+                        <button type="button" class="close-pop-form">Cancel</button>
+                    <button type="submit" name="add-review">
                         Add Review
                     </button>
+                </div>
                 </form>
+            </div>
             @else
                 <li class="my-review" data-id="{{$userReview->id}}">
-                    <form class = "edit_review" method="" action="">
-                        {{ csrf_field() }}
-                        <input type="hidden" name="review_id" value="{{ $userReview->id }}" required>
-                        <strong>
-                            {{--add pfp later--}}
-                            {{ \Carbon\Carbon::parse($userReview->date)->format('Y-m-d')}}
-                            {{ $user_info->name}}
-                            {{ $userReview->title}}
-                        </strong>
-                        <div class = "user_image">
+                    <div class="user-details-container">
+                        <div class = "user-image">
                             <img src ="{{asset('images/user_images/' . $user->profile_picture)}}" alt="" />
                         </div>
                         <p class = "user_name"> {{$user->name}} </p>
+                        <p>{{ \Carbon\Carbon::parse($userReview->date)->format('Y-m-d')}}</p>
+                        <p class="edit-review"><i class="fas fa-edit"></i> Edit Review</p>
+                    </div>
+                    <form class = "edit_review" method="" action="">
+                        {{ csrf_field() }}
+                        <input type="hidden" name="review_id" value="{{ $userReview->id }}" required>
                         <label>Title</label>
                         <textarea type="text" name="title" required readonly>{{ $userReview->title }}</textarea>
                         <label>Description</label>
@@ -121,14 +128,13 @@
                         <button type="submit" name="update-review">
                             Save
                         </button>
-                        <i class="fas fa-edit"></i>
                     </form>
                     <form class = "delete_review" method="" action="{{ route('review.destroy', ['review_id' => $userReview->id]) }}">
                         {{ csrf_field() }}
                         <input type="hidden" name="product_id" value="{{ $product->id }}" required>
                         <input type="hidden" name="review_id" value="{{ $userReview->id }}" required>
-                        <button type="submit" name="delete-review" class="button button-outline">
-                            Delete Review
+                        <button type="submit" name="delete-review" class="delete-review">
+                            <i class="fas fa-trash-alt"></i> Delete Review
                         </button>
                     </form>
                 </li>

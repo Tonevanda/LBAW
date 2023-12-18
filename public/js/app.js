@@ -358,6 +358,23 @@ function updateProfilePictureRequest(event){
   event.preventDefault();
 }
 
+    document.addEventListener('DOMContentLoaded', function () {
+        const popForm = document.querySelector('.pop-form');
+        const overlay = document.querySelector('.overlay');
+        const openButton = document.querySelector('.open-pop-form');
+        const closeButton = document.querySelector('.close-pop-form');
+
+        openButton.addEventListener('click', function () {
+            popForm.style.display = 'block';
+            overlay.style.display = 'block';
+        });
+
+        closeButton.addEventListener('click', function () {
+            popForm.style.display = 'none';
+            overlay.style.display = 'none';
+        });
+    });
+
 function deleteReviewHandler(){
   if(this.status == 301){
     let response = JSON.parse(this.responseText);

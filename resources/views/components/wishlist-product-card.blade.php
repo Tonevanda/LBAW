@@ -1,19 +1,25 @@
 @props(['product', 'user'])
-<div class="product" data-id="{{$product->id}}">
+<div data-id="{{$product->id}}">
     <a href="{{ route('single-product', $product) }}">
-        <h2> {{ $product->name }} </h2>
+        <div class="product-info">
+            <div class = "product_img">
+            <img src= "{{asset('images/product_images/' . $product->image)}}" alt="" />
+        </div>
+        <div class="product-details">
+        <h3> {{ $product->name }} </h3>
         <p> {{ $product->synopsis }} </p>
         <p> {{ $product->price }} </p>
     </a>
     @if (auth()->check() && !Auth::user()->isAdmin())
     <form class = "remove_wishlist" method="" action="{{ route('wishlist.destroy', ['user_id' => $user->user_id]) }}">
         {{ csrf_field() }}
-        {{ $product->pivot->id }}
         <input type="hidden" name="product_id" value="{{ $product->id }}" required>
         <input type="hidden" name="user_id" value="{{ Auth::user()->id }}" required>
-        <button type="submit" name="remove-from-wishlist" class="button button-outline">
+        <button type="submit" name="remove-from-wishlist" class="cancel">
             Remove
         </button>
     </form>
     @endif
+</div>
+</div>
 </div>

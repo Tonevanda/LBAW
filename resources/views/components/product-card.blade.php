@@ -8,7 +8,11 @@
     <h2> {{ $product->name }} </h2>
         <p> {{ $product->price }} </p>
         <p> {{ $product->discount }} </p>
-        <p> {{ $product->stock }} </p>
+    @if ($product->stock > 0 && $product->stock < 10)
+        <p class="low-stock">Only {{$product->stock}} left in stock</p>
+    @elseif ($product->stock === 0)
+        <p class="low-stock">Out of stock</p>
+    @endif
     </a>
     @if (auth()->check())
         @if (!Auth::user()->isAdmin())

@@ -13,7 +13,6 @@
     @if (auth()->check())
     <form class = "remove_cart" method="" action="{{ route('shopping-cart.destroy', ['user_id' => Auth::user()->id]) }}">
         {{ csrf_field() }}
-        {{ $product->pivot->id }}
         <input type="hidden" name="cart_id" value="{{ $product->pivot->id }}" required>
         <input type="hidden" name="user_id" value="{{ Auth::user()->id }}" required>
         <button class="cancel" type="submit" name="remove-from-cart">

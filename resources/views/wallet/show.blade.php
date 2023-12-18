@@ -22,15 +22,6 @@
 
     You will have the opportunity to review your request before it is processed. </p>
 
-
-
-<div class = "money_fund_option">
-    <h3> Add 5{{$wallet->currencySymbol}} </h3>
-    <button name = "show_popup" data-money = {{"5" . $wallet->currencySymbol}}>
-        Add funds
-    </button>
-</div>
-
 <div class = "money_fund_option">
     <h3> Add 10{{$wallet->currencySymbol}} </h3>
     <button name = "show_popup" data-money = {{"10" . $wallet->currencySymbol}}>
@@ -121,46 +112,6 @@
         <div class="navigation-buttons">
             <button name="cancel">Cancel</button>
             <button name="show_popup2">Continue</button>
-        </div>
-    </form>
-</div>
-
-
-
-
-<div id="fullScreenPopup2" class="popup-form" style="display: none;">
-    <form class = "add_funds_form" method="" action="">
-        {{ csrf_field() }}
-        <div class="shipping-address">
-            <div class="column">
-                <p>Being added to your Bibliophile Bliss Wallet</p>
-
-            </div>
-            <div class="column">
-                <p></p>
-            </div>
-        </div>
-
-        <p class = "payment_info">Bibliophile Bliss Account: {{$user->name}}</p>
-        <p class = "payment_info"></p>
-
-        <div class="shipping-address">
-            <div class="column">
-                <p class = "payment_info"></p>
-                <p class = "payment_info"></p>
-
-            </div>
-            <div class="column">
-                <button name="back"> Change </button>
-                <p class = "payment_info"></p>
-            </div>
-        </div>
-
-
-
-        <div class="navigation-buttons">
-            <button name="cancel2">Cancel</button>
-            <button>Confirm Payment</button>
         </div>
     </form>
 </div>

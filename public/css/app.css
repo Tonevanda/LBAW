@@ -245,6 +245,173 @@ input[type=password]:focus {
   font-weight: 300;
 }
 
+.wallet-page {
+  background-color: #e5e5e5c7;
+  padding: 1.5em 3em 3em 3em;
+  margin: 8px 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.money_fund_option {
+  padding: 4em;
+  text-align: center;
+}
+.button-fund {
+  padding:2.5em;
+  background-color: #d2d2d2;
+  color: white;
+  border-radius: 6px;
+  margin-right: 2em;
+  font-weight: 300;
+  font-size: large;
+}
+
+.button-fund:hover {
+  background-color: #003740;
+  color: white;
+  font-weight: 500;
+}
+
+
+.account-page {
+  background-color: #e5e5e5c7;
+  padding: 1.5em 3em 3em 3em;
+  margin: 8px 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.user_review_option {
+  background-color: white;
+  padding: 2em 14em;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+  margin-top: 0.5em;
+}
+
+
+.user_review_option .user-image img {
+  width: 50px;
+  height: 50px;
+}
+
+.user_name {
+  font-weight: bold;
+  margin-right: 1em;
+}
+
+.user-details-container {
+  display: flex;
+  gap: 2em;
+  margin-bottom: 1.1em;
+  align-items: center;
+}
+
+.details_box {
+  background-color: white;
+  padding: 3em;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1em;
+}
+
+.edit {
+  font-size: smaller;
+  color: #003740;
+}
+
+.edit-review i {
+  padding-left: 3em;
+  padding-right: 1em;
+}
+
+.delete-review {
+  padding-left: 0;
+    color: red;
+    font-size: medium;
+    text-transform: none;
+    letter-spacing: normal;
+    background: none; /* Set background to none */
+    border: none; /* Remove border if any */
+    /* Add any other styles you want to reset */
+}
+
+.delete-review i {
+  padding-right: 1em;
+}
+
+.delete-review:hover {
+  background: none;
+  color: #003740;
+}
+
+.edit i {
+  padding-right: 1em;
+}
+
+.details_box form {
+  margin-bottom: 0;
+}
+
+.ad_wallet {
+  background-color: rgba(144, 203, 222, 0.73);
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+  padding: 2em;
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 1.2em;
+}
+
+.ad_wallet > div {
+  width: 50%;
+  box-sizing: border-box;
+  padding: 10px;
+}
+
+.ad_box {
+  padding-top: 1em ;
+  padding-left: 4em;
+  padding-bottom: 1.5em;
+  padding-right: 4em;
+}
+
+.ad_button2 {
+  font-weight: bold;
+}
+
+.details_box h4 {
+  margin-bottom: 0;
+}
+.ad_button i {
+  background-color:  #003740; /* Set border properties for the circle */
+  border-radius: 50%; /* Make the icon container circular */
+  color: rgb(144, 203, 222); /* Set the border and text color */
+  padding: 4px; /* Adjust the padding to control the size of the circle */
+  box-sizing: border-box;
+  margin-right: 8px;
+  margin-left: 5em;
+}
+
+h3 i {
+  padding-right: 1em;
+}
+
+h4 i {
+  padding-right: 1em;
+}
+
+.wishlist-page {
+  background-color: #e5e5e5c7;
+  padding: 1.5em 3em 3em 3em;
+  margin: 8px 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.wishlist-page .product-info{
+  margin: 1em 0;
+  padding: 2em 3em 2em 5em;
+}
+
 .shopping-cart-page {
   background-color: #e5e5e5c7;
   padding: 1.5em 3em 3em 3em;
@@ -277,8 +444,9 @@ table {
 }
 
 .purchases-container {
+  padding: 8px 0;
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 20px; /* Adjust the gap between purchases */
 }
 
@@ -298,9 +466,9 @@ table {
 
 .purchase p {
   color: #003740;
-  font-weight: bold;
   margin-bottom: 10px;
 }
+
 
 .x-history-product-card {
   box-sizing: border-box;
@@ -314,18 +482,18 @@ table {
 
 .product-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(800px, 1fr));
   gap: 20px;
   padding: 20px;
   width: 100%; /* Set to a specific value or percentage */
 }
 
 
-@media (min-width: 1200px) {
+@media (min-width: 900px) {
   .product-grid {
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(5, 2fr);
   }
 }
+
 .home-grid {
   display: grid;
   gap: 20px;
@@ -344,17 +512,50 @@ table {
   font-size: small;
 }
 
-.user-container {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr); /* Three columns */
-  gap: 20px; /* Adjust the gap between user cards */
+.users-sidebar {
+  padding: 1.2em 2em;
 }
 
-.user-box {
-  background-color: #f2f2f2;
+.user-search input{
+  background-color: white;
+  color: #003740;
+  border: none;
+}
+
+.user-search select{
+  background-color: white;
+  color: #003740;
+  border: none;
+}
+
+.users-grid  {
+  display: grid;
+  gap: 20px;
   padding: 20px;
-  border: 1px solid #00374052;
-  border-radius: 8px;
+  width: 100%; /* Set to a specific value or percentage */
+}
+
+
+@media (min-width: 900px) {
+  .users-grid {
+    grid-template-columns: repeat(4, 2fr);
+  }
+}
+
+.user  {
+  background-color: white;
+  padding: 2em;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+}
+
+.user-container {
+  display: grid;
+  grid-template-columns:0.7fr 4fr; /* Adjust the width of the sidebar as needed */
+  gap: 20px;
+  padding: 20px;
+  margin-bottom: 1em;
+  background-color: #e5e5e5c7;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
 }
 
 .products_search {
@@ -519,6 +720,35 @@ ul.contact-list i {
   border-color: rgb(255, 255, 255); /* Reset font-weight for <p> inside .contact_us if needed */
 }
 
+#statsButton {
+  width: 70px;
+}
+
+ul {
+  list-style: none;
+}
+
+li {
+  list-style: none;
+}
+
+.popup-button {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+#closeButton {
+  margin-top: 10px;
+  cursor: pointer;
+}
+
 #popup {
   font-weight: bold;
   display: none;
@@ -539,6 +769,17 @@ ul.contact-list i {
   to {
     top: 0;
   }
+}
+
+.overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* Adjust the transparency by changing the last value */
+  z-index: 999; /* Place the overlay behind the pop-form but above other content */
 }
 
 #overlay {
@@ -685,6 +926,24 @@ footer p a {
   color: white;
 }
 
+/* Styles for the modal */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.button-s {
+  padding-left: 3em;
+  display: flex;
+  align-items: center;
+  color: white;
+}
+
 .buttonss i {
   margin-right: 0.7em; /* Adjust the spacing between the icon and text */
 }
@@ -766,6 +1025,35 @@ form.profile_pic input[name="update_pic"]{
   z-index: 1000;
 }
 
+.pop-form {
+  /* Add your existing styles for the pop-form class here */
+  display: none; /* Start with the form hidden */
+  position: fixed;
+  min-width: 30%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 2em;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+.pop-form form {
+  /* Add your existing styles for the pop-form class here */
+  margin-bottom: 0;
+}
+
+/* Add any additional styles for the trigger buttons */
+.open-pop-form,
+.close-pop-form {
+  cursor: pointer;
+}
+
+.close-pop-form {
+  background-color: #d2d2d2;
+  border: #d2d2d2;
+}
 
 .popup-form {
   font-size: medium;
@@ -781,6 +1069,9 @@ span {
   font-size: smaller;
 }
 
+.small {
+  font-size: small;
+}
 .popup-form p.title {
   font-size: x-large;
 }
@@ -795,6 +1086,10 @@ span {
   padding: 2em 3em;
   width: 800px;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+}
+
+.low-stock {
+  color: brown;
 }
 
 .navigation-buttons {
