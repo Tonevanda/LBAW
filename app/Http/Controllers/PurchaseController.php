@@ -13,6 +13,7 @@ class PurchaseController extends Controller
     
     public function store(Request $request, $user_id)
     {
+        
         /*$data = $request->validate([
             'price' => 'required',
             'quantity' => 'required',

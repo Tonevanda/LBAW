@@ -313,7 +313,14 @@ function createPurchaseRequest(event){
   const postal_code = checkout_form.querySelector('input[name=postal_code]').value;
   const country = checkout_form.querySelector('select[name=country]').value;
   const destination = address + " " + city + ", " + postal_code + " " + country;
-  sendAjaxRequest('post', '/checkout/'+user_id, {price: price, quantity: quantity, destination: destination, payment_type: payment_type}, createPurchaseHandler);
+  let is_tracked = this.querySelector('input[name=tracked]');
+  if(is_tracked.checked){
+    is_tracked = true;
+  }
+  else{
+    is_tracked = false;
+  }
+  sendAjaxRequest('post', '/checkout/'+user_id, {price: price, quantity: quantity, destination: destination, payment_type: payment_type, isTracked: is_tracked}, createPurchaseHandler);
   event.preventDefault();
 }
 

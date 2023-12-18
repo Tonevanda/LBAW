@@ -84,6 +84,9 @@
             </div>
         </div>
 
+        <input type="checkbox" name="tracked">
+        <p>Track the purchase to know more about it before it reaches you</p>
+
 
 
         <div class="navigation-buttons">
