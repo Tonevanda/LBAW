@@ -20,8 +20,6 @@ class WalletController extends Controller
             return redirect()->route('all-products');
         }
 
-        $wallet->money = $wallet->money/100;
-
         $currencySymbols = [
             'euro' => '€',
             'pound' => '£',

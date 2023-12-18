@@ -97,14 +97,26 @@ function addEventListeners() {
   [].forEach.call(popupButtonsCheckout, function(button){
     button.addEventListener('click', function(event){
       event.preventDefault();
-      money = document.querySelector('table tr:last-child td:last-child');
-      const currency_symbol = money.textContent.charAt(money.textContent.length - 1);
+      money = document.querySelector('table tr:last-child td:last-child').textContent;
+      const currency_symbol = money.charAt(money.length - 1);
       let user_money = document.querySelector('p.wallet');
-      deformatted_money_cart = deformat_money(money.textContent, currency_symbol);
+      deformatted_money_cart = deformat_money(money, currency_symbol);
+      let low_money_tag = document.querySelector('div#fullScreenPopup form div.low_money');
+      low_money_tag.style.display = 'none';
+      let payment_method_select = document.querySelector('div#fullScreenPopup form select[name=payment_type]');
+      let store_money_option = payment_method_select.querySelector('option:first-child');
+      store_money_option.hidden = true;
 
       if(deformatted_money_cart <= deformat_money(user_money.textContent, currency_symbol) && deformatted_money_cart != 0){
-        console.log("hello");
+        store_money_option.hidden = false;
         resetInputs.bind(fullScreenPopup)();
+        showFullScreenPopup.bind(fullScreenPopup)();
+      }
+      else if(deformatted_money_cart != 0){
+        low_money_tag.style.display = 'block';
+        
+        resetInputs.bind(fullScreenPopup)();
+        payment_method_select.value = payment_method_select.querySelector('option + option').value;
         showFullScreenPopup.bind(fullScreenPopup)();
       }
     });
