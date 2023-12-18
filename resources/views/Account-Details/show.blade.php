@@ -18,7 +18,7 @@ $wallet = $auth->wallet();
 
     <a class = "button" href="{{ route('wallet',$user->id) }}"> + Add funds to your Bibliophile Bliss Wallet</a>
     <p> Wallet Balance </p>
-    <p> {{number_format($wallet->money, 2, ',', '.')}}{{$wallet->currencySymbol}}</p>
+    <p> {{number_format($wallet->money/100, 2, ',', '.')}}{{$wallet->currencySymbol}}</p>
     <p> {{$auth->paymentMethod == NULL ? 'You have no payment methods associated with this account.' : ''}}</p>
     <a class = "button" href="#"> Add a payment method to this account</a>
     <a class = "button" href="{{route('purchase_history',$user->id)}}"> View Purchase History</a>

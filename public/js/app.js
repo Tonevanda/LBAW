@@ -94,13 +94,19 @@ function addEventListeners() {
   });
 
   let popupButtonsCheckout = document.querySelectorAll('button[name=show_popup_checkout]');
-  [].forEach.call(popupButtons, function(button){
+  [].forEach.call(popupButtonsCheckout, function(button){
     button.addEventListener('click', function(event){
       event.preventDefault();
       money = document.querySelector('table tr:last-child td:last-child');
-      //if(money.textContent >)
-      resetInputs.bind(fullScreenPopup)();
-      showFullScreenPopup.bind(fullScreenPopup)();
+      const currency_symbol = money.textContent.charAt(money.textContent.length - 1);
+      let user_money = document.querySelector('p.wallet');
+      deformatted_money_cart = deformat_money(money.textContent, currency_symbol);
+
+      if(deformatted_money_cart <= deformat_money(user_money.textContent, currency_symbol) && deformatted_money_cart != 0){
+        console.log("hello");
+        resetInputs.bind(fullScreenPopup)();
+        showFullScreenPopup.bind(fullScreenPopup)();
+      }
     });
   });
 
