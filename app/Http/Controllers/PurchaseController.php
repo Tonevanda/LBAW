@@ -21,8 +21,12 @@ class PurchaseController extends Controller
             'destination' => 'required',
             'istracked' => 'required'
         ]);
+        /*$auth = Authenticated::findOrFail($user_id);
 
-        
+        $cart_products = $auth->shoppingCart()->get();
+        foreach($cart_products as $cart_product){
+
+        }*/
 
         $daysToAdd = 3; 
         $data['orderarrivedat'] = now()->addDays($daysToAdd)->toDateTimeString();
