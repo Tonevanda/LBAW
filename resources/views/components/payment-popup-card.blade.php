@@ -3,8 +3,9 @@
 @php
     $payment_value = $payments[0]->payment_type;
 
-    if($auth->payment_method != null && $payments.contains($auth->payment_method)){
-        $payment_value = $auth->payment_method;
+    if($auth->payment_method != null){
+        if(!($payment_value != 'store money' && $auth->payment_method == 'store money'))
+            $payment_value = $auth->payment_method;
     }
 @endphp
 

@@ -57,7 +57,7 @@
 
 
 <div id="fullScreenPopup2" class="popup-form" style="display: none;">
-    <form class = "add_funds_form" method="" action="">
+    <form class = "checkout_form" method="" action="">
         {{ csrf_field() }}
         <div class="shipping-address">
             <div class="column">
@@ -88,7 +88,7 @@
 
         <div class="navigation-buttons">
             <button name="cancel2">Cancel</button>
-            <button>Confirm Payment</button>
+            <button type = "submit">Confirm Payment</button>
         </div>
     </form>
 </div>

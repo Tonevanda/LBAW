@@ -203,12 +203,12 @@ function addEventListeners() {
     });
   });
 
-  let add_funds_button = document.querySelector('div#fullScreenPopup2 form div.navigation-buttons button + button');
-  if(add_funds_button != null){
-    add_funds_button.addEventListener('click', updateMoneyRequest);
+  let add_funds_form = document.querySelector('div#fullScreenPopup2 form.add_funds_form');
+  if(add_funds_form != null){
+    add_funds_form.addEventListener('submit', updateMoneyRequest);
   }
 
-  let checkoutForm = document.querySelector('form.checkout');
+  let checkoutForm = document.querySelector('form.checkout_form');
   if(checkoutForm != null){
     checkoutForm.addEventListener('submit', createPurchaseRequest);
   }
@@ -304,7 +304,7 @@ function createPurchaseRequest(event){
   let title = this.querySelector('textarea[name=title]').value;
   console.log(review_id, description);
   sendAjaxRequest('put', '/review/'+review_id, {review_id: review_id, description: description, title: title}, reviewHandler);*/
-  //event.preventDefault();
+  event.preventDefault();
 }
 
 
