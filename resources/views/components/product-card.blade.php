@@ -39,6 +39,14 @@
                 </button>
             </form>
         </div>
+        @else
+        <i class="fas fa-box-open icon-box-open" onclick="togglePopup()"></i>
+
+<!-- Pop-up content -->
+<div class="popup" id="stockPopup">
+    <p><b>In stock: </b>{{ $product->stock }}</p>
+    <button class="cancel" onclick="togglePopup()">Close</button>
+</div>
         @endif
     @endif
 </div>

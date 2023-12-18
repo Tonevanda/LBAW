@@ -384,6 +384,11 @@ document.addEventListener('DOMContentLoaded', function () {
   // initializePopup('.open-pop-form-3', '.close-pop-form-3', '.pop-form-3', '.overlay-3');
 });
 
+function togglePopup() {
+  const popup = document.getElementById('stockPopup');
+  popup.style.display = (popup.style.display === 'none' || popup.style.display === '') ? 'block' : 'none';
+}
+
 function deleteReviewHandler(){
   if(this.status == 301){
     let response = JSON.parse(this.responseText);
