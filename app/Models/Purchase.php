@@ -23,7 +23,7 @@ class Purchase extends Model
         'payment_type',
         'destination',
         'stage_state',
-        'isTracked',
+        'istracked',
         'orderedat',
         'orderarrivedat',
     ];

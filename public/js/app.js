@@ -283,27 +283,37 @@ function updateMoneyRequest(event){
   hideFullScreenPopup.bind(popup2)();
   const user_id = add_funds_form.querySelector('input[name=user_id').getAttribute('data-info');
   if(document.querySelector('input[name=remember]').checked){
-    const payment_method = add_funds_form.querySelector('select[name=payment_type]').value;
-    const name = add_funds_form.querySelector('input[name=name]').value;
-    const address = add_funds_form.querySelector('input[name=address]').value;
-    const city = add_funds_form.querySelector('input[name=city]').value;
-    const postal_code = add_funds_form.querySelector('input[name=postal_code]').value;
-    const phone = add_funds_form.querySelector('input[name=phone]').value;
-    sendAjaxRequest('put', '/users/location/' + user_id, {payment_method: payment_method, name: name, address: address, city: city, postal_code: postal_code, phone_number: phone}, updateLocationHandler);
+    updateLocation.bind(add_funds_form)();
   }
 
   sendAjaxRequest('put', '/wallet/' + user_id + '/add', {money: money}, updateMoneyHandler);
   event.preventDefault();
 }
 
+function updateLocation(){
+  const payment_method = this.querySelector('select[name=payment_type]').value;
+  const name = this.querySelector('input[name=name]').value;
+  const address = this.querySelector('input[name=address]').value;
+  const city = this.querySelector('input[name=city]').value;
+  const postal_code = this.querySelector('input[name=postal_code]').value;
+  const phone = this.querySelector('input[name=phone]').value;
+  sendAjaxRequest('put', '/users/location/' + user_id, {payment_method: payment_method, name: name, address: address, city: city, postal_code: postal_code, phone_number: phone}, updateLocationHandler);
+}
+
 
 function createPurchaseRequest(event){
-  console.log(this);
-  /*let review_id = this.querySelector('input[name=review_id]').value;
-  let description = this.querySelector('textarea[name=description]').value;
-  let title = this.querySelector('textarea[name=title]').value;
-  console.log(review_id, description);
-  sendAjaxRequest('put', '/review/'+review_id, {review_id: review_id, description: description, title: title}, reviewHandler);*/
+  const checkout_form = document.querySelector('div#fullScreenPopup form');
+  const user_id = checkout_form.querySelector('input[name=user_id]').value;
+  const currency_symbol = money.charAt(money.length-1);
+  const price = deformat_money(money, currency_symbol);
+  const quantity = document.querySelector('table tr:first-child td:last-child').textContent;
+  const payment_type = checkout_form.querySelector('select[name=payment_type]').value;
+  const address = checkout_form.querySelector('input[name=address]').value;
+  const city = checkout_form.querySelector('input[name=city]').value;
+  const postal_code = checkout_form.querySelector('input[name=postal_code]').value;
+  const country = checkout_form.querySelector('select[name=country]').value;
+  const destination = address + " " + city + ", " + postal_code + " " + country;
+  sendAjaxRequest('post', '/checkout/'+user_id, {price: price, quantity: quantity, destination: destination, payment_type: payment_type}, createPurchaseHandler);
   event.preventDefault();
 }
 
@@ -501,6 +511,18 @@ function updateLocationHandler(){
     set_data_info.bind(popup_form, 'input[name=phone]', response.phone_number)();
     set_data_info.bind(popup_form, 'input[name=city]', response.city)();
     set_data_info.bind(popup_form, 'select[name=payment_type]', response.payment_method)();
+  }
+}
+
+function createPurchaseHandler(){
+  if(this.status === 301){
+    let response = JSON.parse(this.responseText);
+    console.log(response);
+  }
+  else if(this.status===200){
+    console.log("hello");
+    
+
   }
 }
 
