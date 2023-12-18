@@ -18,7 +18,7 @@
     <div class="shopping-page">
     @foreach ($products as $product)
     @php
-        $total = $total+$product->price;
+        $total = $total+($product->price-($product->discount*$product->price/100));
     @endphp
         <x-cart-product-card :product="$product" />
     @endforeach
