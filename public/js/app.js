@@ -528,12 +528,13 @@ function deleteCartProductHandler(){
     let deletion_price = deletion_target.querySelector('a p:last-child').textContent;
     let new_total_price = document.querySelector('tr:last-child td:last-child');
     let new_total_quantity = document.querySelector('tr:first-child td:last-child');
+    const currency_symbol = new_total_price.textContent.charAt(new_total_price.textContent.length - 1);
 
-    new_total_price.textContent = deformat_money(new_total_price.textContent);
-    deletion_price = deformat_money(deletion_price);
+    new_total_price.textContent = deformat_money(new_total_price.textContent, currency_symbol);
+    deletion_price = deformat_money(deletion_price, currency_symbol);
     console.log(deletion_price);
 
-    new_total_price.textContent= new_total_price.textContent-deletion_price;
+    new_total_price.textContent= format_money(new_total_price.textContent-deletion_price, currency_symbol);
     new_total_quantity.textContent = new_total_quantity.textContent-1;
     deletion_target.remove();
   }
@@ -543,15 +544,20 @@ function deleteCartProductHandler(){
   }
 }
 
-function deformat_money(target){
+function deformat_money(target, currency_symbol){
   target = target.trim();
-  const currency_symbol = target.charAt(target.length - 1);
   if(currency_symbol == '€'){
-    return parseFloat(target.replace(/[^\d]/g, ''));res;
+    return parseFloat(target.replace(/[^\d]/g, ''));
   }
-  else{
-    return null;
+  return null;
+}
+
+function format_money(target, currency_symbol){
+  if(currency_symbol == '€'){
+    const formatted_target = (target / 100).toFixed(2);
+    return `${formatted_target}${currency_symbol}`;
   }
+  return null;
 }
 
 function deleteHomeWishlistProductHandler(){
