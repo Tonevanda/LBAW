@@ -347,7 +347,6 @@ function deleteWishlistProductRequest(event){
 function deleteCartProductRequest(event){
   let user_id = this.querySelector('input[name=user_id]').value;
   let cart_id = this.querySelector('input[name=cart_id]').value;
-  console.log(user_id, cart_id);
   sendAjaxRequest('delete', '/api/shopping-cart/'+user_id, {cart_id: cart_id}, deleteCartProductHandler);
   event.preventDefault();
 }
@@ -530,7 +529,9 @@ function deleteCartProductHandler(){
     let new_total_price = document.querySelector('tr:last-child td:last-child');
     let new_total_quantity = document.querySelector('tr:first-child td:last-child');
 
-    new_total_price.textContent = modifiedString = parseInt(new_total_price.textContent.replace(/[^\d]/g, ''));
+    new_total_price.textContent = deformat_money(new_total_price.textContent);
+    deletion_price = deformat_money(deletion_price);
+    console.log(deletion_price);
 
     new_total_price.textContent= new_total_price.textContent-deletion_price;
     new_total_quantity.textContent = new_total_quantity.textContent-1;
@@ -539,6 +540,17 @@ function deleteCartProductHandler(){
   if(this.status == 301){
     let response = JSON.parse(this.responseText);
     console.log(response);
+  }
+}
+
+function deformat_money(target){
+  target = target.trim();
+  const currency_symbol = target.charAt(target.length - 1);
+  if(currency_symbol == '€'){
+    return parseFloat(target.replace(/[^\d]/g, ''));res;
+  }
+  else{
+    return null;
   }
 }
 
