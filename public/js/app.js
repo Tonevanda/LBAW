@@ -409,6 +409,8 @@ function editReview(){
     document.querySelector('li form').addEventListener('submit', updateReviewRequest);
   }
   else{
+    title.value = title.getAttribute('data-info');
+    description.value = description.getAttribute('data-info');
     this.classList.remove("fa-times");
     this.classList.add("fa-edit");
   }
@@ -630,9 +632,9 @@ function reviewCreateHandler(){
                                 <form class = "edit_review" method="" action="">
                                     <input type="hidden" name="review_id" value="${response.review_id}" required>
                                     <label>Title</label>
-                                    <textarea type="text" name="title" required readonly>${response.title}</textarea>
+                                    <textarea type="text" name="title" data-info = "${response.title}" value = "${response.title}" required readonly>${response.title}</textarea>
                                     <label>Description</label>
-                                    <textarea type="text" name="description" required readonly>${response.description}</textarea>
+                                    <textarea type="text" name="description" data-info = "${response.description}" value = "${response.description}" required readonly>${response.description}</textarea>
                                     <p>${response.rating}</p>
                                     <button type="submit" name="update-review">
                                         Save
@@ -727,6 +729,10 @@ function reviewHandler(){
   else if(this.status == 200){
     console.log("updated review");
     let reviewEditIcon1= document.querySelector('li i');
+    let title = document.querySelector('li textarea[name=title]');
+    let description = document.querySelector('li textarea[name=description]');
+    title.setAttribute('data-info', title.value);
+    description.setAttribute('data-info', description.value);
     reviewEditIcon1.editReview = editReview.bind(reviewEditIcon1);
     reviewEditIcon1.editReview();
     

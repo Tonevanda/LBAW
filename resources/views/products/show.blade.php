@@ -130,9 +130,9 @@
                         {{ csrf_field() }}
                         <input type="hidden" name="review_id" value="{{ $userReview->id }}" required>
                         <label>Title</label>
-                        <textarea type="text" name="title" required readonly>{{ $userReview->title }}</textarea>
+                        <textarea type="text" name="title" data-info = "{{$userReview->title}}" value = "{{$userReview->title}}" required readonly>{{ $userReview->title }}</textarea>
                         <label>Description</label>
-                        <textarea type="text" name="description" required readonly>{{ $userReview->description }}</textarea>
+                        <textarea type="text" name="description" data-info = "{{$userReview->description}}" value = "{{$userReview->description}}" required readonly>{{ $userReview->description }}</textarea>
                         {{ $userReview->rating }}
                         <button type="submit" name="update-review">
                             Save
