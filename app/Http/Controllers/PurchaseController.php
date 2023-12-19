@@ -24,10 +24,14 @@ class PurchaseController extends Controller
         ]);
         $auth = Authenticated::findOrFail($user_id);
         $cart_products = $auth->shoppingCartSameProduct();
+        $longest_days = 0;
         foreach ($cart_products as $cart_product) {
             $stock = 0;
             foreach ($cart_product as $product) {
                 $stock = $stock+1;
+                if($product->orderStatus > $longest_days){
+                    $longest_days = $product->orderStatus;
+                }
                 try{
                     $this->authorize('hasStock', [$product, $stock]);
                 }catch(AuthorizationException $e){
@@ -37,8 +41,10 @@ class PurchaseController extends Controller
             
         }
 
-        $daysToAdd = 3; 
-        $data['orderarrivedat'] = now()->addDays($daysToAdd)->toDateTimeString();
+        $date = now()->addDays($longest_days);
+        $date->addHours(random_int(0, 48));
+        $date->addMinutes(random_int(0, 59));
+        $data['orderarrivedat'] = $date->toDateTimeString();
         $data['user_id'] = $user_id;
         $data['stage_state'] = "payment";
 
