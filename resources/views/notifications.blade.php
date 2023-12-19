@@ -1,5 +1,7 @@
+@php
+use Carbon\Carbon;
+@endphp
 @extends('layouts.app')
-
 
 @section('content')
 <div class="notifications-page">
@@ -8,8 +10,18 @@
             <div class="notifications">
                 <div class="n-title">
                 <p class=circle> {{$notification->id}} </p>
-                <p class="left"><b> Notification Type: {{$notification->notification_type}}</b> </p>
-                <p class="right"> {{$notification->date}} </p>
+                <div class="left"><b> 
+                    @if ($notification->notification_type == 'payment_notification')
+                        <p>Payment Notification</p>
+                    @elseif ($notification->notification_type == 'instock_notification')
+                        <p>In Stock Notification</p>
+                    @elseif ($notification->notification_type == 'purchaseinfo_notification')
+                         <p>Purchase Information Notification</p>
+                    @elseif ($notification->notification_type == 'pricechange_notification')
+                        <p>Price Change Notification</p>
+                @endif
+                </b> </div>
+                <p class="right">{{ Carbon::parse($notification->date)->format('d/m/Y H:i:s') }} </p>
             </div>
                 <p class="padding-left"> {{$notification->notificationType()->get()->first()->description}} </p>
                 @if($notification->isnew == 1)
