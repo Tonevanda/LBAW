@@ -51,7 +51,6 @@ CREATE TABLE authenticated(
     user_id INTEGER PRIMARY KEY REFERENCES users (id) ON UPDATE CASCADE ON DELETE CASCADE,
     name TEXT,
     city TEXT,
-    country TEXT,
     phone_number INT,
     postal_code TEXT,
     address TEXT,

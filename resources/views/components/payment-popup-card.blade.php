@@ -50,6 +50,8 @@
         <div class = "low_money" style="display: none;">
             <i class="fas fa-exclamation-triangle">Your Bibliophile Bliss Wallet balance is too low to cover this transaction!</i>
             <p></p>
+            <input type="checkbox" name="all">
+            <p></p>
         </div>
         <label for="payment_type">Choose a payment method:</label>
         <select name="payment_type" data-info = "{{$payment_value}}">
