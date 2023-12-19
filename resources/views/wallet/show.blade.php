@@ -9,6 +9,7 @@
     if(!$user->isAdmin()){
         $auth = $user->authenticated()->first();
         $payments = Payment::filter("store money")->get();
+        $currency = $wallet->currency()->first();
     }
 @endphp
 
@@ -25,36 +26,36 @@
 
 
 <div class = "money_fund_option">
-    <h3> Add 5{{$wallet->currencySymbol}} </h3>
-    <button name = "show_popup" data-money = {{"5" . $wallet->currencySymbol}}>
+    <h3> Add 5{{$currency->currency_symbol}} </h3>
+    <button name = "show_popup" data-money = {{"5" . $currency->currency_symbol}}>
         Add funds
     </button>
 </div>
 
 <div class = "money_fund_option">
-    <h3> Add 10{{$wallet->currencySymbol}} </h3>
-    <button name = "show_popup" data-money = {{"10" . $wallet->currencySymbol}}>
+    <h3> Add 10{{$currency->currency_symbol}} </h3>
+    <button name = "show_popup" data-money = {{"10" . $currency->currency_symbol}}>
         Add funds
     </button>
 </div>
 
 <div class = "money_fund_option">
-    <h3> Add 25{{$wallet->currencySymbol}} </h3>
-    <button name = "show_popup" data-money = {{"25" . $wallet->currencySymbol}}>
+    <h3> Add 25{{$currency->currency_symbol}} </h3>
+    <button name = "show_popup" data-money = {{"25" . $currency->currency_symbol}}>
         Add funds
     </button>
 </div>
 
 <div class = "money_fund_option">
-    <h3> Add 50{{$wallet->currencySymbol}} </h3>
-    <button name = "show_popup" data-money = {{"50" . $wallet->currencySymbol}}>
+    <h3> Add 50{{$currency->currency_symbol}} </h3>
+    <button name = "show_popup" data-money = {{"50" . $currency->currency_symbol}}>
         Add funds
     </button>
 </div>
 
 <div class = "money_fund_option">
-    <h3> Add 100{{$wallet->currencySymbol}} </h3>
-    <button name = "show_popup" data-money = {{"100" . $wallet->currencySymbol}}>
+    <h3> Add 100{{$currency->currency_symbol}} </h3>
+    <button name = "show_popup" data-money = {{"100" . $currency->currency_symbol}}>
         Add funds
     </button>
 </div>
@@ -62,7 +63,7 @@
 <div class = "user_wallet">
     <h2> Your Bibliophile Bliss Account </h2>
     <p> Current Wallet Balance </p>
-    <h2> {{ number_format($wallet->money/100, 2, ',', '.') }}{{$wallet->currencySymbol}} </h2>
+    <h2> {{ number_format($wallet->money/100, 2, ',', '.') }}{{$currency->currency_symbol}} </h2>
     <a class="button" href="{{ route('account_details',$user->id) }}">See Account Details</a>
 </div>
 

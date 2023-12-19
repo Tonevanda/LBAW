@@ -13,9 +13,16 @@ class Currency extends Model
 
     protected $primaryKey = 'currency_type';
 
+    public $timestamps = false;
+
     protected $fillable = [
-        'currency_type'
+        'currency_type',
+        'currency_symbol'
     ];
 
 
+    public function wallet()
+    {
+        return $this->hasMany(Wallet::class, 'currency_type');
+    }
 }

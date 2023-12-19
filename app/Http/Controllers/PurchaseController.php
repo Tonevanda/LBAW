@@ -22,7 +22,27 @@ class PurchaseController extends Controller
             'destination' => 'required',
             'istracked' => 'required'
         ]);
+
+        try {
+            $this->authorize('create', [Purchase::class, $user_id]);
+        } catch (AuthorizationException $e) {
+            return response()->json($e->getMessage(), 301);
+        }
+
+
         $auth = Authenticated::findOrFail($user_id);
+        $wallet = $auth->wallet()->first();
+        if($wallet->money < intval($data['price'])){
+            $wallet->money = 0;
+        }
+        else{
+            $wallet->money = $wallet->money - intval($data['price']);
+        }
+        $wallet_data = [
+            'money' => $wallet->money,
+            'currency_type' => $wallet->currency_type
+        ];
+        $wallet->update($wallet_data);
         $cart_products = $auth->shoppingCartSameProduct();
         $longest_days = 0;
         foreach ($cart_products as $cart_product) {
@@ -47,14 +67,8 @@ class PurchaseController extends Controller
         $data['orderarrivedat'] = $date->toDateTimeString();
         $data['user_id'] = $user_id;
 
-
-        try {
-            $this->authorize('create', Purchase::class);
-        } catch (AuthorizationException $e) {
-            return response()->json($e->getMessage(), 301);
-        }
-
         Purchase::create($data);
+
         return response()->json([], 200);
 
 

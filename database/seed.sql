@@ -15,7 +15,8 @@ CREATE TABLE notification(
 );
 
 CREATE TABLE currency(
-    currency_type TEXT PRIMARY KEY
+    currency_type TEXT PRIMARY KEY,
+    currency_symbol TEXT NOT NULL DEFAULT '€'
 );
 
 CREATE TABLE payment(

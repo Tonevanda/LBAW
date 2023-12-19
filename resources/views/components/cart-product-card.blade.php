@@ -2,7 +2,8 @@
 @php 
     if(!$user->isAdmin()){
         $auth = $user->authenticated()->first();
-        $wallet = $auth->wallet();
+        $wallet = $auth->wallet()->first();
+        $currency = $wallet->currency()->first();
     }
 @endphp
 <div data-id="{{$product->pivot->id}}">
@@ -14,7 +15,7 @@
         <div class="product-details">
         <h3> {{ $product->name }} </h3>
         <p> {{ $product->synopsis }} </p>
-        <p> {{ number_format(($product->price-($product->discount*$product->price/100))/100, 2, ',', '.')}}{{$user->isAdmin() ? '€' : $wallet->currencySymbol}} </p>
+        <p> {{ number_format(($product->price-($product->discount*$product->price/100))/100, 2, ',', '.')}}{{$user->isAdmin() ? '€' : $wallet->currency_symbol}} </p>
     </a>
     @if (auth()->check())
     <form class = "remove_cart" method="" action="{{ route('shopping-cart.destroy', ['user_id' => Auth::user()->id]) }}">

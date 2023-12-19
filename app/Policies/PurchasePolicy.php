@@ -25,11 +25,15 @@ class PurchasePolicy
     }
 
 
-    public function create(User $user): bool
+    public function create(User $user, $user_id): bool
     {
         
         if($user->isAdmin()){
             throw new AuthorizationException("Admins can't make purchases");
+        }
+
+        if($user->id != $user_id){
+            throw new AuthorizationException("You can't make a purchase if it's not your account");
         }
         return true;
     }

@@ -19,15 +19,6 @@ class WalletController extends Controller
         }catch(AuthorizationException $e){
             return redirect()->route('all-products');
         }
-
-        $currencySymbols = [
-            'euro' => '€',
-            'pound' => '£',
-            'dollar' => '$',
-            'rupee' => '₹',
-            'yen' => '¥',
-        ];
-        $wallet->currencySymbol = $currencySymbols[$wallet->currency_type] ?? '';
         return view('wallet.show', [
             'wallet' => $wallet
         ]);
@@ -40,6 +31,7 @@ class WalletController extends Controller
         ]);
 
         $wallet = Wallet::findOrFail($user_id);
+        $currency = $wallet->currency()->first();
 
         try{
             $this->authorize('update', $wallet);
@@ -51,16 +43,9 @@ class WalletController extends Controller
 
         $wallet->update($data);
 
-        $currencySymbols = [
-            'euro' => '€',
-            'pound' => '£',
-            'dollar' => '$',
-            'rupee' => '₹',
-            'yen' => '¥',
-        ];
         $data['money'] = $data['money']/100;
         $data['money'] = number_format($data['money'], 2, ',', '.');
-        $data['currencySymbol'] = $currencySymbols[$wallet->currency_type] ?? '';
+        $data['currencySymbol'] = $currency->currency_symbol;
         
         return response()->json($data, 200);
     }

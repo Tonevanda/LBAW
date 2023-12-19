@@ -8,7 +8,8 @@
     $user = Auth::user();
     if(!$user->isAdmin()){
         $auth = $user->authenticated()->first();
-        $wallet = $auth->wallet();
+        $wallet = $auth->wallet()->first();
+        $currency = $wallet->currency()->first();
         $payments = Payment::all();
     }
     $total = 0;
@@ -32,10 +33,10 @@
         </tr>
         <tr>
             <td>Price</td>
-            <td>{{ number_format($total/100, 2, ',', '.');}}{{$user->isAdmin() ? '€' : $wallet->currencySymbol}}</td>
+            <td>{{ number_format($total/100, 2, ',', '.');}}{{$user->isAdmin() ? '€' : $currency->currency_symbol}}</td>
         </tr>
     </table>
-    <button name="show_popup_checkout" data-money = {{ number_format($total/100, 2, ',', '.');}}{{$user->isAdmin() ? '€' : $wallet->currencySymbol}}>
+    <button name="show_popup_checkout" data-money = {{ number_format($total/100, 2, ',', '.');}}{{$user->isAdmin() ? '€' : $currency->currency_symbol}}>
         Checkout
     </button>
 </div>
