@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AuthenticatedController;
 use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\RecoverPasswordController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\WalletController;
 use Carbon\Carbon;
@@ -59,6 +60,13 @@ Route::controller(RegisterController::class)->group(function () {
     Route::post('/register', 'register');
 });
 
+Route::controller(RecoverPasswordController::class)->group(function () {
+    Route::get('/forgot-password', 'showForgotPasswordForm')->middleware('guest')->name('password.request');
+    Route::post('/forgot-password', 'recoverPassword')->middleware('guest')->name('password.email');
+    Route::get('/reset-password/{token}', 'showResetPasswordForm')->middleware('guest')->name('password.reset');
+    Route::post('/reset-password', 'resetPassword')->middleware('guest')->name('password.update');
+});
+
 Route::controller(ReviewController::class)->group(function () {
     Route::post('/review/create/{user_id}', 'store')->name('review.store');
     Route::delete('/review/{review_id}', 'destroy')->name('review.destroy');
@@ -97,4 +105,3 @@ Route::get('/about_us', function () {
 Route::get('/contact_us', function () {
     return view('contact_us');
 })->name('contact_us');
-
