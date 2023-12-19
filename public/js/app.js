@@ -232,7 +232,7 @@ function addEventListeners() {
             const currency_symbol = user_money.charAt(user_money.length-1);
             const deformatted_money = deformat_money(money, currency_symbol);
             let deformatted_user_money = deformat_money(user_money, currency_symbol);
-            payment_method_tag.textContent = "Payment Method: "+ payment_method + ": (" + format_money(deformatted_money-deformatted_user_money, currency_symbol) + ") Wallet: ("+money+")";
+            payment_method_tag.textContent = "Payment Method: "+ payment_method + ": (" + format_money(deformatted_money-deformatted_user_money, currency_symbol) + ") Wallet: ("+user_money+")";
           }
           else {
             document.querySelector('div#fullScreenPopup2 form div div.column:nth-child(2) p').textContent = money;
