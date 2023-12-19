@@ -615,30 +615,35 @@ function reviewCreateHandler(){
   if(this.status == 201){
     let user_review_option = document.querySelector('div.user_review_option');
     let response = JSON.parse(this.responseText);
+    console.log(response);
     let image_path = assetBaseUrl + '/' + response.profile_picture;
     user_review_option.innerHTML = `
-                            <li class="my-review" data-id="${response.review_id}">
-                            <form class="edit_review" method="" action="">
-                              <input type="hidden" name="review_id" value="${response.review_id}" required>
-                              <strong>${response.date} ${response.title}</strong>
-                              <div class = "user_image">
-                                <img src ="${image_path}" alt="" />
-                              </div>
-                              <p class = "user_name"> ${response.name} </p>
-                              <label for="title">Title</label>
-                              <textarea type="text" name="title" required readonly>${response.title}</textarea>
-                              <label for="description">Description</label>
-                              <textarea type="text" name="description" required readonly>${response.description}</textarea>
-                              ${response.rating}
-                              <button type="submit" name="update-review">Save</button>
-                              <i class="fas fa-edit"></i>
-                            </form>
-                            <form class="delete_review" method="" action="">
-                              <input type="hidden" name="product_id" value="${response.product_id}" required>
-                              <input type="hidden" name="review_id" value="${response.review_id}" required>
-                              <button type="submit" name="delete-review" class="button button-outline">Delete Review</button>
-                            </form>
-                          </li>
+                            <li class="my-review" data-id="${response.review_id}}">
+                                <div class="user-details-container">
+                                    <div class = "user-image">
+                                        <img src ="${image_path}" alt="" />
+                                    </div>
+                                    <p class = "user_name"> ${response.name} </p>
+                                    <p>${response.date}</p>
+                                    <p class="edit-review"><i class="fas fa-edit"></i> Edit Review</p>
+                                </div>
+                                <form class = "edit_review" method="" action="">
+                                    <input type="hidden" name="review_id" value="${response.review_id}" required>
+                                    <label>Title</label>
+                                    <textarea type="text" name="title" required readonly>${response.title}</textarea>
+                                    <label>Description</label>
+                                    <textarea type="text" name="description" required readonly>${response.description}</textarea>
+                                    <p>${response.rating}</p>
+                                    </button>
+                                </form>
+                                <form class = "delete_review" method="" action="">
+                                    <input type="hidden" name="product_id" value="${response.product_id}" required>
+                                    <input type="hidden" name="review_id" value="${response.review_id}" required>
+                                    <button type="submit" name="delete-review" class="delete-review">
+                                        <i class="fas fa-trash-alt"></i> Delete Review
+                                    </button>
+                                </form>
+                            </li>
                                   `;
 
     let deleteRev = document.querySelector('form.delete_review');

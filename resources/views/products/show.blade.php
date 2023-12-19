@@ -138,7 +138,7 @@
                             Save
                         </button>
                     </form>
-                    <form class = "delete_review" method="" action="{{ route('review.destroy', ['review_id' => $userReview->id]) }}">
+                    <form class = "delete_review" method="" action="">
                         {{ csrf_field() }}
                         <input type="hidden" name="product_id" value="{{ $product->id }}" required>
                         <input type="hidden" name="review_id" value="{{ $userReview->id }}" required>
