@@ -41,7 +41,7 @@ $user_info = $user->user()->first();
   @method('PUT')
 
     <label for="name">Name</label>
-    <input id="name" type="text" name="name" autofocus value="{{ old('name', $user_info->name) }}">
+    <input id="name" type="text" placeholder="Enter your name" name="name" autofocus value="{{ old('name', $user_info->name) }}">
     @if ($errors->has('name'))
       <span class="error">
           {{ $errors->first('name') }}
@@ -49,7 +49,7 @@ $user_info = $user->user()->first();
     @endif
 
     <label for="email">E-Mail</label>
-    <input id="email" type="email" name="email" value="{{ old('email',$user_info->email)}}">
+    <input id="email" type="email" placeholder="Enter your e-mail" name="email" value="{{ old('email',$user_info->email)}}">
     @if ($errors->has('email'))
       <span class="error">
           {{ $errors->first('email') }}
@@ -57,7 +57,7 @@ $user_info = $user->user()->first();
     @endif
       
     <label for="address">Address</label>
-    <input id="address" type="text" name="address" value="{{ old('address',$user->address)}}">
+    <input id="address" type="text" placeholder="Enter your address" name="address" value="{{ old('address',$user->address)}}">
     @if ($errors->has('address'))
       <span class="error">
           {{ $errors->first('address') }}
@@ -65,7 +65,7 @@ $user_info = $user->user()->first();
     @endif
     @if (!Auth::user()->isAdmin()) 
     <label for="password">Old Password</label>
-    <input id="old_password" type="password" name="old_password" required>
+    <input id="old_password" type="password" placeholder="Enter your old password" name="old_password" required>
       @if ($errors->has('old_password'))
         <span class="error">
           This password does not match our records.
@@ -74,7 +74,7 @@ $user_info = $user->user()->first();
     @endif
 
     <label for="password">New Password</label>
-    <input id="password" type="password" name="password">
+    <input id="password" placeholder="Enter your new password" type="password" name="password">
     @if ($errors->has('password'))
       <span class="error">
           {{ $errors->first('password') }}
@@ -82,7 +82,7 @@ $user_info = $user->user()->first();
     @endif
 
     <label for="password-confirm">Confirm Password</label>
-    <input id="password-confirm" type="password" name="password_confirmation">
+    <input id="password-confirm" type="password" placeholder="Re-enter your new password" name="password_confirmation">
     <button type="submit" name="update" value="{{ true }}">
       update
     </button>

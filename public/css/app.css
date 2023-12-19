@@ -35,7 +35,12 @@ main > header a.button {
   text-decoration: none;
 }
 
-.navigation-buttons a.button.button-outline {
+.form-page .blue {
+  font-size: small;
+  margin-top: 0;
+}
+
+.form-page a.button.button-outline {
   background-color: #d2d2d2;
 }
 
@@ -79,6 +84,56 @@ main > header span {
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
   margin-bottom: 1em;
   min-width: 25em;
+}
+
+.notifications-page {
+  background-color: #e5e5e5c7;
+  padding: 1em;
+  margin: 8px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.circle {
+  width: 2em; /* Adjust the size of the circle as needed */
+  height: 2em; /* Adjust the size of the circle as needed */
+  border-radius: 50%; /* Creates a circular shape */
+  background-color: rgba(144, 203, 222, 0.73); /* Replace with your desired background color */
+  color: #ffffff; /* White text color */
+  text-align: center;
+  font-weight: bold;
+  line-height: 2em; /* Should be equal to the height for vertical centering */
+  font-size: 16px; 
+  margin-right: 1.5em;
+}
+
+.padding-left {
+  padding-left: 3.5em;
+}
+
+.n-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.left {
+  flex: 1;
+}
+
+.right {
+  margin-left: 20px; /* Adjust the margin as needed */
+}
+
+.notifications-container {
+  width: 100%;
+}
+.notifications {
+  background-color: white;
+  padding: 1.5em 3em;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+  margin-bottom: 0.5em;
 }
 
 #cards {
@@ -283,7 +338,7 @@ input[type=password]:focus {
 }
 
 .money_fund_option {
-  padding: 1.5em 3em;
+  padding: 0em 3em;
   text-align: center;
 }
 

@@ -53,8 +53,12 @@ if($user != NULL && !$user->isAdmin()){
                             <i class="fa fa-power-off"></i> Logout
                         </a> 
                     @else
-                        <a class="button" href="{{ route('notifications',$user->id)}}">Notifications</a>
-                        <p class="wallet">{{number_format($wallet->money/100, 2, ',', '.')}}{{$currency->currency_symbol}}</p>
+                    <a class="buttonss" href="{{ route('wallet',$user->id)}}">
+                        <i class="fas fa-wallet"></i> {{number_format($wallet->money/100, 2, ',', '.')}}{{$currency->currency_symbol}}
+                    </a> 
+                    <a class="buttonss" href="{{ route('notifications',$user->id) }}">
+                        <i class="fas fa-bell"></i> Notifications
+                    </a>   
                         <a class="buttonss" href="{{ route('shopping-cart',$user->id) }}">
                             <i class="fas fa-shopping-cart"></i> Shopping Cart
                         </a>  
@@ -69,7 +73,6 @@ if($user != NULL && !$user->isAdmin()){
                             <li><a class="menu-button" href="{{ route('profile',$user->id)}}">Profile</a></li>
                             <li><a class="menu-button" href="{{ route('purchase_history',$user->id) }}"> Purchase History </a></li>
                             <li><a class="menu-button" href="{{ route('account_details',$user->id) }}"> Account Details </a></li>
-                            <li><a class="menu-button" href="{{ route('wallet',$user->id) }}"> Wallet {{number_format($wallet->money/100, 2, ',', '.')}}{{$currency->currency_symbol}}</a></li>
                             <li><a class="menu-button" href="{{ route('logout') }}"> Logout </a></li>
                             </ul>
                         </div>                        

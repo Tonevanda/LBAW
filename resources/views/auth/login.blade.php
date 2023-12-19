@@ -9,7 +9,7 @@
     {{ csrf_field() }}
 
     <label for="email">E-mail</label>
-    <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus>
+    <input id="email" type="email" name="email" placeholder="Enter e-mail" values="{{ old('email') }}" required autofocus>
     @if ($errors->has('email'))
         <span class="error">
           {{ $errors->first('email') }}
@@ -17,13 +17,13 @@
     @endif
 
     <label for="password" >Password</label>
-    <input id="password" type="password" name="password" required>
+    <input id="password" type="password" placeholder="Enter password" name="password" required>
     @if ($errors->has('password'))
         <span class="error">
             {{ $errors->first('password') }}
         </span>
     @endif
-
+    <a class="blue" href="{{ route('password.request') }}">Forgot Password</a>
     <label>
         <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}> Remember Me
     </label>
@@ -38,7 +38,6 @@
             {{ session('success') }}
         </p>
     @endif
-    <a class="button button-outline" href="{{ route('password.request') }}">Forgot Password</a>
 </form>
 </div>
 </div>
