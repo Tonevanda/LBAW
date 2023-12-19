@@ -564,37 +564,15 @@ function deleteReviewHandler(){
     console.log(response);
   }
   else if(this.status == 200){
-    console.log("deleted review");
     let response = JSON.parse(this.responseText);
-    let deletion_target = document.querySelector('li[data-id="' + response.review_id + '"]');
-    deletion_target.remove();
-    console.log(response);
-    let user_review_option = document.querySelector('div.user_review_option');
+    let user_review_option = document.querySelector('div.modified_review li');
+    if(user_review_option == null){
+      user_review_option = document.querySelector('li.my-review');
+    }
+    user_review_option.remove();
 
-    let image_path = assetBaseUrl + '/' + response.profile_picture;
-
-
-    user_review_option.innerHTML = `
-                    <form class="add_review" method="" action="">
-                        <div class = "user_image">
-                          <img src ="${image_path}" alt="" />
-                        </div>
-                        <input type="hidden" name="product_id" value="${response.product_id}" required>
-                        <input type="hidden" name="user_id" value="${response.user_id}" required>
-                        <label for="title">Title</label>
-                        <input id="title" type="text" name="title" required>
-                        <label for="description">Description</label>
-                        <textarea id="description" type="text" name="description" required> </textarea>
-                        <label for="rating">Rating</label>
-                        <input id="rating" type="number" name="rating" min="1" max="5" required>
-                        <button type="submit" name="add-review" class="button button-outline">
-                            Add Review
-                        </button>
-                    </form>
-                              `;
-
-    let reviewCreate1 = document.querySelector('form.add_review');
-    reviewCreate1.addEventListener('submit', createReviewRequest);
+    let show_popup_button = document.querySelector('button[name=show_popup_review]').style.display = 'block';
+    let user_detail_container = document.querySelector('div.user-details-container').style.display = 'block';
 
   }
 }
@@ -603,7 +581,9 @@ function reviewCreateHandler(){
   if(this.status == 201){
     let user_review_option = document.querySelector('div.modified_review');
     let open_popup_button = document.querySelector('button[name=show_popup_review]').style.display = 'none';
-    let review_popup = document.querySelector('div.pop-form').style.display = 'none';
+    let user_detail_container = document.querySelector('div.user-details-container').style.display = 'none';
+    let review_popup = document.querySelector('div.pop-form');
+    hideFullScreenPopup.bind(review_popup)();
     let response = JSON.parse(this.responseText);
     let image_path = assetBaseUrl + '/' + response.profile_picture;
     user_review_option.innerHTML = `
