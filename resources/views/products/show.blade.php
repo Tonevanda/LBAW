@@ -14,7 +14,7 @@
     </div>
     <div class="product-details">
     <h2> {{ $product->name }} </h2>
-    <form class = "update_product" method="post" action="{{route('post.change')}}">
+    <form class = "update_product" method="post" action="{{route('product.update',['product_id' => $product->id])}}">
         {{ csrf_field() }}
         <b>Author: </b><p id="author" class="editable">{{ $product->author }} </p>
         <b>Editor: </b><p id="editor" class="editable">{{ $product->editor }} </p>

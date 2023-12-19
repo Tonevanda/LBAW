@@ -25,7 +25,7 @@ class PriceChange implements ShouldBroadcast
     {
         error_log($post_id);
         $this->post_id = $post_id;
-        $this->message = 'price has changed ' . $post_id;
+        $this->message = 'item info changed ' . $post_id;
 
     }
 
@@ -35,8 +35,8 @@ class PriceChange implements ShouldBroadcast
      * @return array<int, \Illuminate\Broadcasting\Channel>
      */
     // You should specify the name of the channel created in Pusher.
-    public function broadcastOn() {
-        return 'lbaw';
+    public function broadcastOn(): array {
+        return ['lbaw'];
     }
 
     // You should specify the name of the generated notification.

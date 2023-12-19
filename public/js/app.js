@@ -1,3 +1,15 @@
+
+const pusher = new Pusher("d9bbd171e0110783c3ad", {
+  cluster: "eu",
+  encrypted: true
+  });
+
+  const channel = pusher.subscribe('lbaw');
+  console.log(channel);
+  channel.bind('notification-pricechange', function(data) {
+  console.log(`New notification: ${data.message}`);
+  })
+  //Pusher.logToConsole = true;
 function addEventListeners() {
   let cartDeleter = document.querySelectorAll('form.remove_cart');
   [].forEach.call(cartDeleter, function(deleter){
