@@ -173,7 +173,6 @@ function addEventListeners() {
             payment_method_tag.textContent = "Payment Method: "+ payment_method + ": (" + format_money(deformatted_money-deformatted_user_money, currency_symbol) + ") Wallet: ("+money+")";
           }
           else {
-            console.log("hello");
             document.querySelector('div#fullScreenPopup2 form div div.column:nth-child(2) p').textContent = money;
             payment_method_tag.textContent = "Payment Method: "+payment_method;
           }
