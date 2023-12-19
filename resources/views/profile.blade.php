@@ -8,7 +8,9 @@ $user_info = $user->user()->first();
 <script>
   var assetBaseUrl = "{{ asset('images/user_images') }}";
 </script>
-
+<div class="form-page">
+  <div class="form-container">
+      <h3>Profile</h3>
 <form class="profile_pic" method="POST" action="{{route('profileImage.update', ['user_id' => $user->user_id])}}" enctype="multipart/form-data">
   {{ csrf_field() }}
   @method('PUT')
@@ -89,5 +91,6 @@ $user_info = $user->user()->first();
       delete
     </button>
 </form>
-<a class="button" href="{{ route('wishlist',$user->user_id)}}">Wishlist</a>
+  </div>
+</div>
 @endsection

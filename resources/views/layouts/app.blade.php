@@ -52,8 +52,9 @@ if($user != NULL && !$user->isAdmin()){
                             <i class="fa fa-power-off"></i> Logout
                         </a> 
                     @else
-                        <p class="wallet"> {{number_format($wallet->money, 2, ',', '.')}}{{$wallet->currencySymbol}} </p>
-                        <i class="fas fa-dollar-sign"></i>
+                    <a class="buttonss" href="{{ route('wallet',$user->id) }}">
+                        <i class="fas fa-wallet"></i> {{number_format($wallet->money, 2, ',', '.')}}{{$wallet->currencySymbol}}
+                    </a>  
                         <a class="buttonss" href="{{ route('shopping-cart',$user->id) }}">
                             <i class="fas fa-shopping-cart"></i> Shopping Cart
                         </a>  
@@ -68,7 +69,6 @@ if($user != NULL && !$user->isAdmin()){
                             <li><a class="menu-button" href="{{ route('profile',$user->id)}}">Profile</a></li>
                             <li><a class="menu-button" href="{{ route('purchase_history',$user->id) }}"> Purchase History </a></li>
                             <li><a class="menu-button" href="{{ route('account_details',$user->id) }}"> Account Details </a></li>
-                            <li><a class="menu-button" href="{{ route('wallet',$user->id) }}"> Wallet {{number_format($wallet->money, 2, ',', '.')}}{{$wallet->currencySymbol}}</a></li>
                             <li><a class="menu-button" href="{{ route('logout') }}"> Logout </a></li>
                             </ul>
                         </div>                        

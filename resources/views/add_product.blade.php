@@ -4,7 +4,9 @@
 
 
 
-
+<div class="form-page">
+  <div class="form-container">
+      <h3>New Product</h3>
 <form method="POST" action="{{ route('product.create') }}">
   {{ csrf_field() }}
 
@@ -77,7 +79,9 @@
 
 
   <button type="submit">
-    Submit new product
+    Submit
   </button>
 </form>
+  </div>
+</div>
 @endsection

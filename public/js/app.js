@@ -357,7 +357,7 @@ function updateProfilePictureRequest(event){
 
   event.preventDefault();
 }
-
+/*
 function initializePopup(openButtonSelector, closeButtonSelector, popFormSelector, overlaySelector) {
   const popForm = document.querySelector(popFormSelector);
   const overlay = document.querySelector(overlaySelector);
@@ -374,7 +374,6 @@ function initializePopup(openButtonSelector, closeButtonSelector, popFormSelecto
       overlay.style.display = 'none';
   });
 }
-
 document.addEventListener('DOMContentLoaded', function () {
   // Example of initialization for a specific pop-up form
   initializePopup('.open-pop-form', '.close-pop-form', '.pop-form', '.overlay');
@@ -383,6 +382,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // initializePopup('.open-pop-form-2', '.close-pop-form-2', '.pop-form-2', '.overlay-2');
   // initializePopup('.open-pop-form-3', '.close-pop-form-3', '.pop-form-3', '.overlay-3');
 });
+*/
 
 function togglePopup() {
   const popup = document.getElementById('stockPopup');
@@ -700,7 +700,6 @@ document.addEventListener("DOMContentLoaded", function() {
       document.getElementById("statsPopup").style.display = "none";
   });
 });
-
 
 
 function validatePhoneInput(){
