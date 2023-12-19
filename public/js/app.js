@@ -443,9 +443,6 @@ function updateLocation(user_id){
 function createPurchaseRequest(event){
   const checkout_form = document.querySelector('div#fullScreenPopup form');
   const user_id = checkout_form.querySelector('input[name=user_id]').value;
-  const currency_symbol = money.charAt(money.length-1);
-  const price = deformat_money(money, currency_symbol);
-  const quantity = document.querySelector('table tr:first-child td:last-child').textContent;
   const payment_type = checkout_form.querySelector('select[name=payment_type]').value;
   const address = checkout_form.querySelector('input[name=address]').value;
   const city = checkout_form.querySelector('input[name=city]').value;
@@ -468,7 +465,7 @@ function createPurchaseRequest(event){
   else{
     is_tracked = false;
   }
-  sendAjaxRequest('post', '/checkout/'+user_id, {price: price, quantity: quantity, destination: destination, payment_type: payment_type, istracked: is_tracked, pay_all: pay_all}, createPurchaseHandler);
+  sendAjaxRequest('post', '/checkout/'+user_id, {destination: destination, payment_type: payment_type, istracked: is_tracked, pay_all: pay_all}, createPurchaseHandler);
   event.preventDefault();
 }
 

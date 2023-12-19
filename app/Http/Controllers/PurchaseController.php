@@ -16,13 +16,14 @@ class PurchaseController extends Controller
     {
         
         $data = $request->validate([
-            'price' => 'required',
-            'quantity' => 'required',
             'payment_type' => 'required',
             'destination' => 'required',
             'istracked' => 'required'
         ]);
 
+
+
+        $auth = Authenticated::findOrFail($user_id);
         try {
             $this->authorize('create', [Purchase::class, $user_id]);
         } catch (AuthorizationException $e) {
@@ -30,27 +31,16 @@ class PurchaseController extends Controller
         }
 
 
-        $auth = Authenticated::findOrFail($user_id);
-        $wallet = $auth->wallet()->first();
-        if($request->pay_all == "false"){
-            if($wallet->money < intval($data['price'])){
-                $wallet->money = 0;
-            }
-            else{
-                $wallet->money = $wallet->money - intval($data['price']);
-            }
-            $wallet_data = [
-                'money' => $wallet->money,
-                'currency_type' => $wallet->currency_type
-            ];
-            $wallet->update($wallet_data);
-        }
         $cart_products = $auth->shoppingCartSameProduct();
         $longest_days = 0;
+        $total_quantity = 0;
+        $total_price = 0;
         foreach ($cart_products as $cart_product) {
             $stock = 0;
             foreach ($cart_product as $product) {
                 $stock = $stock+1;
+                $total_quantity = $total_quantity + 1;
+                $total_price = $total_price+$product->price;
                 if($product->orderStatus > $longest_days){
                     $longest_days = $product->orderStatus;
                 }
@@ -63,6 +53,24 @@ class PurchaseController extends Controller
             
         }
 
+
+        $wallet = $auth->wallet()->first();
+        if($request->pay_all == "false"){
+            if($wallet->money < $total_price){
+                $wallet->money = 0;
+            }
+            else{
+                $wallet->money = $wallet->money - $total_price;
+            }
+            $wallet_data = [
+                'money' => $wallet->money,
+                'currency_type' => $wallet->currency_type
+            ];
+            $wallet->update($wallet_data);
+        }
+
+        $data['price'] = $total_price;
+        $data['quantity'] = $total_quantity;
         $date = now()->addDays($longest_days);
         $date->addHours(random_int(0, 48));
         $date->addMinutes(random_int(0, 59));
