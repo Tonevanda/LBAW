@@ -546,7 +546,7 @@ function updateProfilePictureRequest(event){
   event.preventDefault();
 }
 
-function initializePopup(openButtonSelector, closeButtonSelector, popFormSelector, overlaySelector) {
+/*function initializePopup(openButtonSelector, closeButtonSelector, popFormSelector, overlaySelector) {
   const popForm = document.querySelector(popFormSelector);
   const overlay = document.querySelector(overlaySelector);
   const openButton = document.querySelector(openButtonSelector);
@@ -565,12 +565,12 @@ function initializePopup(openButtonSelector, closeButtonSelector, popFormSelecto
 
 document.addEventListener('DOMContentLoaded', function () {
   // Example of initialization for a specific pop-up form
-  initializePopup('.open-pop-form', '.close-pop-form', '.pop-form', '.overlay');
+  //initializePopup('.open-pop-form', '.close-pop-form', '.pop-form', '.overlay');
 
   // You can initialize other pop-up forms similarly
   // initializePopup('.open-pop-form-2', '.close-pop-form-2', '.pop-form-2', '.overlay-2');
   // initializePopup('.open-pop-form-3', '.close-pop-form-3', '.pop-form-3', '.overlay-3');
-});
+});*/
 
 function togglePopup() {
   const popup = document.getElementById('stockPopup');
@@ -911,15 +911,20 @@ window.onload = function() {
 }
 
 document.addEventListener("DOMContentLoaded", function() {
-  document.getElementById("statsButton").addEventListener("click", function() {
+  let stats_button = document.getElementById("statsButton");
+  if(stats_button != null){
+      stats_button.addEventListener("click", function() {
       // Show the statistics popup
       document.getElementById("statsPopup").style.display = "block";
   });
-
-  document.getElementById("closeButton").addEventListener("click", function() {
+  }
+  let close_button = document.getElementById("closeButton");
+  if(close_button != null){
+      close_button.addEventListener("click", function() {
       // Close the statistics popup
       document.getElementById("statsPopup").style.display = "none";
   });
+  }
 });
 
 
