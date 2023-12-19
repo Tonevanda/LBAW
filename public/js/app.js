@@ -546,31 +546,6 @@ function updateProfilePictureRequest(event){
   event.preventDefault();
 }
 
-/*function initializePopup(openButtonSelector, closeButtonSelector, popFormSelector, overlaySelector) {
-  const popForm = document.querySelector(popFormSelector);
-  const overlay = document.querySelector(overlaySelector);
-  const openButton = document.querySelector(openButtonSelector);
-  const closeButton = document.querySelector(closeButtonSelector);
-
-  openButton.addEventListener('click', function () {
-      popForm.style.display = 'block';
-      overlay.style.display = 'block';
-  });
-
-  closeButton.addEventListener('click', function () {
-      popForm.style.display = 'none';
-      overlay.style.display = 'none';
-  });
-}
-
-document.addEventListener('DOMContentLoaded', function () {
-  // Example of initialization for a specific pop-up form
-  //initializePopup('.open-pop-form', '.close-pop-form', '.pop-form', '.overlay');
-
-  // You can initialize other pop-up forms similarly
-  // initializePopup('.open-pop-form-2', '.close-pop-form-2', '.pop-form-2', '.overlay-2');
-  // initializePopup('.open-pop-form-3', '.close-pop-form-3', '.pop-form-3', '.overlay-3');
-});*/
 
 function togglePopup() {
   const popup = document.getElementById('stockPopup');
@@ -697,7 +672,12 @@ function createPurchaseHandler(){
     console.log(response);
   }
   else if(this.status===200){
-    console.log("hello");
+    document.querySelector('section.product_listing').remove();
+    document.querySelector('table tr:first-child td:last-child').textContent = 0;
+    let total_price = document.querySelector('table tr:last-child td:last-child');
+    const currency_symbol = total_price.textContent.charAt(total_price.textContent.length-1);
+    console.log(currency_symbol);
+    total_price.textContent = "0,00"+currency_symbol;
     
 
   }
