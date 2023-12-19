@@ -12,7 +12,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        $schedule->command('auth:clear-resets')->everySixtyMinutes();
+        $schedule->command('auth:clear-resets')->everyFifteenMinutes();
     }
 
     /**
