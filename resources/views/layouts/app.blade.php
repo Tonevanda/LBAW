@@ -46,7 +46,7 @@ if($user != NULL && !$user->isAdmin()){
                         <a class="button" href="{{ route('add_products')}}">Add Products</a>
                         <a class="button" href="{{ route('logout') }}"> Logout </a> 
                     @else
-                        <p class="wallet"> {{number_format($wallet->money/100, 2, ',', '.')}}{{$wallet->currencySymbol}} </p>
+                        <p class="wallet">{{number_format($wallet->money/100, 2, ',', '.')}}{{$wallet->currencySymbol}}</p>
                         <a class="buttonss" href="{{ route('shopping-cart',$user->id) }}">
                             <i class="fas fa-shopping-cart"></i> Shopping Cart
                         </a>  

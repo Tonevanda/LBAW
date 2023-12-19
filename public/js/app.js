@@ -126,6 +126,7 @@ function addEventListeners() {
         checkbox_pay_all.addEventListener('click', function(){
             if(checkbox_pay_all.checked){
               warning_tag.style.display = 'none';
+
             }
             else{
               warning_tag.style.display = 'block';
@@ -160,12 +161,23 @@ function addEventListeners() {
       });
       if(!error_check){
         if(money != null){
-          document.querySelector('div#fullScreenPopup2 form div div.column:nth-child(2) p').textContent = money;
-          const payment_method = document.querySelector('div#fullScreenPopup form select[name=payment_type]').value;
-          const name = document.querySelector('div#fullScreenPopup form input[name=name]').value;
-  
+          let low_money_tag = document.querySelector('div#fullScreenPopup form div.low_money');
           let payment_method_tag = document.querySelector('div#fullScreenPopup2 form div.column p.payment_info');
-          payment_method_tag.textContent = "Payment Method: "+payment_method;
+          const payment_method = document.querySelector('div#fullScreenPopup form select[name=payment_type]').value;
+          const pay_all_checkbox = low_money_tag.querySelector('input');
+          if(low_money_tag.style.display == 'block' && !pay_all_checkbox.checked){
+            const user_money = document.querySelector('p.wallet').textContent;
+            const currency_symbol = user_money.charAt(user_money.length-1);
+            const deformatted_money = deformat_money(money, currency_symbol);
+            let deformatted_user_money = deformat_money(user_money, currency_symbol);
+            payment_method_tag.textContent = "Payment Method: "+ payment_method + ": (" + format_money(deformatted_money-deformatted_user_money, currency_symbol) + ") Wallet: ("+money+")";
+          }
+          else {
+            console.log("hello");
+            document.querySelector('div#fullScreenPopup2 form div div.column:nth-child(2) p').textContent = money;
+            payment_method_tag.textContent = "Payment Method: "+payment_method;
+          }
+          const name = document.querySelector('div#fullScreenPopup form input[name=name]').value;
   
           let name_tag = document.querySelector('div#fullScreenPopup2 form p.payment_info + p');
           name_tag.textContent = "Name: "+name;

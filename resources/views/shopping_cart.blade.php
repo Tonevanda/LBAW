@@ -61,7 +61,7 @@
         {{ csrf_field() }}
         <div class="shipping-address">
             <div class="column">
-                <p>Being retracted from your Bibliophile Bliss Wallet</p>
+                <p>Total cost of shopping cart</p>
 
             </div>
             <div class="column">
