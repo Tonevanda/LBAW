@@ -79,7 +79,7 @@
                 </div>
                 <p class = "user_name"> {{$user->name}} </p>
             </div>
-            <button class="open-pop-form">Add Review</button>
+            <button class="open-pop-form" name = "show_popup_review">Add Review</button>
             <div class="overlay"></div>
             <div class="pop-form">
                 <form class = "add_review" method="POST" action="{{ route('review.store', ['user_id' => $user->id]) }}">

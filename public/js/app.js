@@ -307,6 +307,12 @@ function addEventListeners() {
     });
   }
 
+  let add_review_button = document.querySelector('button[name=show_popup_review]');
+  if(add_review_button!=null){
+    let review_popup = document.querySelector('div.pop-form');
+    add_review_button.addEventListener('click', showFullScreenPopup.bind(review_popup));
+  }
+
 }
 
 
