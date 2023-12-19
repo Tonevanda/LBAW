@@ -109,7 +109,7 @@
                         </span>
                     @endif
                     <div class="navigation-buttons">
-                        <button type="button" class="close-pop-form">Cancel</button>
+                        <button type="button" class="close-pop-form" name = "cancel_review_popup">Cancel</button>
                     <button type="submit" name="add-review">
                         Add Review
                     </button>

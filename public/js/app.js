@@ -306,11 +306,16 @@ function addEventListeners() {
       window.location.href = '/';
     });
   }
-
+  let review_popup = document.querySelector('div.pop-form');
   let add_review_button = document.querySelector('button[name=show_popup_review]');
   if(add_review_button!=null){
-    let review_popup = document.querySelector('div.pop-form');
     add_review_button.addEventListener('click', showFullScreenPopup.bind(review_popup));
+  }
+
+  const cancel_review_popup_button = document.querySelector('button[name=cancel_review_popup]');
+  console.log(cancel_review_popup_button);
+  if(cancel_review_popup_button != null){
+    cancel_review_popup_button.addEventListener('click', hideFullScreenPopup.bind(review_popup));
   }
 
 }
@@ -588,7 +593,7 @@ function deleteReviewHandler(){
                                         <label for="rating">Rating</label>
                                         <input id="rating" type="number" name="rating" min="1" max="5" required>
                                         <div class="navigation-buttons">
-                                            <button type="button" class="close-pop-form">Cancel</button>
+                                            <button type="button" class="close-pop-form" name = "cancel_review_popup">Cancel</button>
                                         <button type="submit" name="add-review">
                                             Add Review
                                         </button>
@@ -600,6 +605,8 @@ function deleteReviewHandler(){
     user_review_option.querySelector('form').addEventListener('submit', createReviewRequest);
     let review_popup = user_review_option.querySelector('div.pop-form');
     user_review_option.querySelector('button[name=show_popup_review]').addEventListener('click', showFullScreenPopup.bind(review_popup));
+    user_review_option.querySelector('button[name=cancel_review_popup]').addEventListener('click', hideFullScreenPopup.bind(review_popup));
+    
 
   }
 }
