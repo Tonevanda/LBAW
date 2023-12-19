@@ -683,12 +683,18 @@ function createPurchaseHandler(){
     console.log(response);
   }
   else if(this.status===200){
+    let response = JSON.parse(this.responseText);
     document.querySelector('section.product_listing').remove();
     document.querySelector('table tr:first-child td:last-child').textContent = 0;
     let total_price = document.querySelector('table tr:last-child td:last-child');
     const currency_symbol = total_price.textContent.charAt(total_price.textContent.length-1);
     console.log(currency_symbol);
     total_price.textContent = "0,00"+currency_symbol;
+    let user_money = document.querySelector('p.wallet').textContent = format_money(response, currency_symbol);
+    let purchase_popup = document.querySelector('div#fullScreenPopup2');
+    console.log(purchase_popup);
+    hideFullScreenPopup.bind(purchase_popup)();
+
     
 
   }
