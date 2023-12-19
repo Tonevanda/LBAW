@@ -72,6 +72,7 @@
                 $user_info = $user->first();
                 empty($userReview) ? $flag = false : $flag = true;
             @endphp
+            
             @if ($flag===false)
             <div class="user-details-container">
                 <div class = "user-image">
@@ -147,8 +148,6 @@
                     </form>
                 </li>
             @endif
-            <div class = "modified_review">
-            </div>
         @endif
     @endif
             </div>

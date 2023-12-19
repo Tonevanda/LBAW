@@ -455,6 +455,9 @@ function createPurchaseRequest(event){
   let is_tracked = this.querySelector('input[name=tracked]');
   const low_money_tag = document.querySelector('div#fullScreenPopup form div.low_money');
   const pay_all_checkbox = low_money_tag.querySelector('input');
+  if(document.querySelector('input[name=remember]').checked){
+    updateLocation.bind(checkout_form, user_id)();
+  }
   let pay_all = false;
   if(pay_all_checkbox.checked && low_money_tag.style.display == 'block'){
     pay_all = true;
@@ -565,25 +568,48 @@ function deleteReviewHandler(){
   }
   else if(this.status == 200){
     let response = JSON.parse(this.responseText);
-    let user_review_option = document.querySelector('div.modified_review li');
-    if(user_review_option == null){
-      user_review_option = document.querySelector('li.my-review');
-    }
-    user_review_option.remove();
-
-    let show_popup_button = document.querySelector('button[name=show_popup_review]').style.display = 'block';
-    let user_detail_container = document.querySelector('div.user-details-container').style.display = 'block';
+    let user_review_option = document.querySelector('div.user_review_option');
+    console.log(response);
+    let image_path = assetBaseUrl + '/' + response.profile_picture;
+    user_review_option.innerHTML= `
+                                <div class="user-details-container">
+                                <div class = "user-image">
+                                    <img src ="${image_path}" alt="" />
+                                </div>
+                                <p class = "user_name"> ${response.name} </p>
+                                </div>
+                                <button class="open-pop-form" name = "show_popup_review">Add Review</button>
+                                <div class="overlay"></div>
+                                <div class="pop-form">
+                                    <form class = "add_review" method="" action="">
+                                        <input type="hidden" name="product_id" value="${response.product_id}" required>
+                                        <input type="hidden" name="user_id" value="${response.user_id}" required>
+                                        <label for="title">Title</label>
+                                        <input id="title" type="text" name="title" required>
+                                        <label for="description">Description</label>
+                                        <textarea id="description" type="text" name="description" required> </textarea>
+                                        <label for="rating">Rating</label>
+                                        <input id="rating" type="number" name="rating" min="1" max="5" required>
+                                        <div class="navigation-buttons">
+                                            <button type="button" class="close-pop-form">Cancel</button>
+                                        <button type="submit" name="add-review">
+                                            Add Review
+                                        </button>
+                                    </div>
+                                    </form>
+                                </div>
+    
+                                  `
+    user_review_option.querySelector('form').addEventListener('submit', createReviewRequest);
+    let review_popup = user_review_option.querySelector('div.pop-form');
+    user_review_option.querySelector('button[name=show_popup_review]').addEventListener('click', showFullScreenPopup.bind(review_popup));
 
   }
 }
 
 function reviewCreateHandler(){
   if(this.status == 201){
-    let user_review_option = document.querySelector('div.modified_review');
-    let open_popup_button = document.querySelector('button[name=show_popup_review]').style.display = 'none';
-    let user_detail_container = document.querySelector('div.user-details-container').style.display = 'none';
-    let review_popup = document.querySelector('div.pop-form');
-    hideFullScreenPopup.bind(review_popup)();
+    let user_review_option = document.querySelector('div.user_review_option');
     let response = JSON.parse(this.responseText);
     let image_path = assetBaseUrl + '/' + response.profile_picture;
     user_review_option.innerHTML = `
