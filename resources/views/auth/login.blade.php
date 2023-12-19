@@ -38,6 +38,7 @@
             {{ session('success') }}
         </p>
     @endif
+    <a class="button button-outline" href="{{ route('password.request') }}">Forgot Password</a>
 </form>
 </div>
 </div>

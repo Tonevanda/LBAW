@@ -8,8 +8,10 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AuthenticatedController;
 use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\RecoverPasswordController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\WalletController;
+use App\Http\Controllers\PostController;
 use Carbon\Carbon;
 use App\Models\User;
 use GuzzleHttp\Middleware;
@@ -31,6 +33,8 @@ Route::controller(ProductController::class)->group(function () {
     Route::get('/products/{product_id}', 'show')->name('single-product');
     Route::get('/product/create', 'showCreateProductForm')->name('add_products');
     Route::post('/product/create', 'createProduct')->name('product.create');
+    Route::post('/product/update/{product_id}', 'updateProduct')->name('product.update');
+    Route::post('/post/change', 'change')->name('post.change');
 });
 
 #->middleware('admin')
@@ -59,6 +63,13 @@ Route::controller(RegisterController::class)->group(function () {
     Route::post('/register', 'register');
 });
 
+Route::controller(RecoverPasswordController::class)->group(function () {
+    Route::get('/forgot-password', 'showForgotPasswordForm')->middleware('guest')->name('password.request');
+    Route::post('/forgot-password', 'recoverPassword')->middleware('guest')->name('password.email');
+    Route::get('/reset-password/{token}', 'showResetPasswordForm')->middleware('guest')->name('password.reset');
+    Route::post('/reset-password', 'resetPassword')->middleware('guest')->name('password.update');
+});
+
 Route::controller(ReviewController::class)->group(function () {
     Route::post('/review/create/{user_id}', 'store')->name('review.store');
     Route::delete('/review/{review_id}', 'destroy')->name('review.destroy');
@@ -79,6 +90,7 @@ Route::controller(AuthenticatedController::class)->group(function () {
     Route::get('/purchase-history/{user_id}', 'showPurchases')->name('purchase_history');
     Route::get('/wishlist/test/{user_id}', 'getWishlist')->name('getWishlist');
     Route::get('/account_details/{user_id}', 'showAccountDetails')->name('account_details');
+    Route::get('/notifications/{user_id}', 'showNotifications')->name('notifications');
 });
 
 Route::controller(PurchaseController::class)->group(function () {
@@ -97,4 +109,3 @@ Route::get('/about_us', function () {
 Route::get('/contact_us', function () {
     return view('contact_us');
 })->name('contact_us');
-

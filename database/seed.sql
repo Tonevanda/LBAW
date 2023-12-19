@@ -15,7 +15,8 @@ CREATE TABLE notification(
 );
 
 CREATE TABLE currency(
-    currency_type TEXT PRIMARY KEY
+    currency_type TEXT PRIMARY KEY,
+    currency_symbol TEXT NOT NULL DEFAULT '€'
 );
 
 CREATE TABLE payment(
@@ -51,7 +52,6 @@ CREATE TABLE authenticated(
     user_id INTEGER PRIMARY KEY REFERENCES users (id) ON UPDATE CASCADE ON DELETE CASCADE,
     name TEXT,
     city TEXT,
-    country TEXT,
     phone_number INT,
     postal_code TEXT,
     address TEXT,
@@ -118,7 +118,7 @@ CREATE TABLE purchase(
     quantity INTEGER NOT NULL CONSTRAINT quantity_ck CHECK (quantity > 0),
     payment_type TEXT NOT NULL REFERENCES payment (payment_type) ON UPDATE CASCADE ON DELETE CASCADE,
     destination TEXT NOT NULL,
-    stage_state TEXT NOT NULL REFERENCES stage (stage_state) ON UPDATE CASCADE ON DELETE CASCADE,
+    stage_state TEXT NOT NULL DEFAULT 'payment' REFERENCES stage (stage_state) ON UPDATE CASCADE ON DELETE CASCADE,
     isTracked BOOLEAN DEFAULT FALSE NOT NULL,
     orderedAt TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL,
     orderArrivedAt TIMESTAMP WITH TIME ZONE NOT NULL CONSTRAINT order_ck CHECK (orderArrivedAt > orderedAt) 
@@ -352,6 +352,12 @@ BEGIN
                 EXECUTE 'INSERT INTO authenticated_notification (user_id, notification_type, date, isNew) VALUES ($1, $2, DEFAULT, DEFAULT)' USING user_id, 'instock_notification';
             END LOOP;
         END IF;
+        IF OLD.stock != NEW.stock AND NEW.stock = 0 THEN
+            FOR user_id IN EXECUTE 'SELECT user_id FROM shopping_cart WHERE product_id = $1 GROUP BY user_id' USING NEW.id
+            LOOP
+                EXECUTE 'INSERT INTO authenticated_notification (user_id, notification_type, date, isNew) VALUES ($1, $2, DEFAULT, DEFAULT)' USING user_id, 'ofstock_notification';
+            END LOOP;
+        END IF;
     EXCEPTION
         WHEN others THEN
             RAISE EXCEPTION 'Something wrong when sending in stock notification';
@@ -490,6 +496,7 @@ CREATE TRIGGER insert_wallet_trigger
 
 INSERT INTO notification VALUES('payment_notification','Your payment has been successful');
 INSERT INTO notification VALUES('instock_notification','An item on your wishlist is currently in stock');
+INSERT INTO notification VALUES('ofstock_notification','An item on your shopping cart is currently out of stock');
 INSERT INTO notification VALUES('purchaseinfo_notification','Thank you for purchasing at our store, this is your purchase information:');
 INSERT INTO notification VALUES('pricechange_notification','An item on your wishlist has had its price changed');
 

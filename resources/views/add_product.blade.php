@@ -9,8 +9,6 @@
       <h3>New Product</h3>
 <form method="POST" action="{{ route('product.create') }}">
   {{ csrf_field() }}
-
-
   <label for="name">Name</label>
   <input id="name" type="text" name="name" value="{{ old('name') }}" required autofocus>
   @if ($errors->has('name'))

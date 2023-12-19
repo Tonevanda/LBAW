@@ -5,7 +5,8 @@
 @php
 $user = Auth::user();
 $auth = $user->authenticated()->first();
-$wallet = $auth->wallet();
+$wallet = $auth->wallet()->first();
+$currency = $wallet->currency()->first();
 @endphp
 
 <div class="account-page">
@@ -17,7 +18,7 @@ $wallet = $auth->wallet();
     <h3><i class="fas fa-shopping-cart"></i>History - Store and Purchases</h3>
     <div class="ad_box">
     <div class="ad_wallet">  
-    <h4> Wallet Balance: {{number_format($wallet->money, 2, ',', '.')}}{{$wallet->currencySymbol}}</h4>
+    <h4> Wallet Balance: {{number_format($wallet->money, 2, ',', '.')}}{{$currency->currency_symbol}}</h4>
     <a class = "ad_button" href="{{ route('wallet',$user->id) }}">
         <i class="fas fa-plus"></i> Add funds to your Bibliophile Bliss Wallet</a>
     </div>

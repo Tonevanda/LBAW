@@ -110,4 +110,18 @@ class ProductPolicy
 
         return true;
     }
+
+    public function update(User $user){
+        if(!$user->isAdmin()){
+            throw new AuthorizationException("Non admins can't update products");
+        }
+        return true;
+    }
+
+    public function hasStock(User $user, Product $product, $stock){
+        if($product->stock < $stock){
+            throw new AuthorizationException("You have products that are out of stock");
+        }
+        return true;
+    }
 }

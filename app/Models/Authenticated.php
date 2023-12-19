@@ -48,25 +48,28 @@ class Authenticated extends Model
                     ->withPivot('id');
     }
 
+    public function shoppingCartSameProduct()
+    {
+        return $this->belongsToMany(Product::class, 'shopping_cart', 'user_id', 'product_id')
+                    ->withPivot('id')
+                    ->get()
+                    ->groupBy('product_id');
+    }
+
     public function wishlist()
     {
         return $this->belongsToMany(Product::class, 'wishlist', 'user_id', 'product_id')
                     ->withPivot('id');
     }
     
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class, 'user_id');
+    }
+    
     public function wallet()
     {
-        $wallet = $this->hasOne(Wallet::class, 'user_id')->first();
-        $wallet->money = $wallet->money /100;
-        $currencySymbols = [
-            'euro' => '€',
-            'pound' => '£',
-            'dollar' => '$',
-            'rupee' => '₹',
-            'yen' => '¥',
-        ];
-        $wallet->currencySymbol = $currencySymbols[$wallet->currency_type] ?? '';
-        return $wallet;
+        return $this->hasOne(Wallet::class, 'user_id');
     }
 
     public function scopeFilter($query, array $filters)

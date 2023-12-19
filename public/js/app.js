@@ -1,5 +1,17 @@
 let money;
 
+
+const pusher = new Pusher("d9bbd171e0110783c3ad", {
+  cluster: "eu",
+  encrypted: true
+  });
+
+  const channel = pusher.subscribe('lbaw');
+  console.log(channel);
+  channel.bind('notification-pricechange', function(data) {
+  console.log(`New notification: ${data.message}`);
+  })
+  //Pusher.logToConsole = true;
 function addEventListeners() {
   let cartDeleter = document.querySelectorAll('form.remove_cart');
   [].forEach.call(cartDeleter, function(deleter){
@@ -39,9 +51,13 @@ function addEventListeners() {
 
   let profile_pic_form = document.querySelector('form.profile_pic');
 
+  let product_edit = document.querySelector('button.edit_product');
 
+  let product_save = document.querySelector('button.save_product');
 
-
+  if(product_edit != null){
+    product_edit.addEventListener('click', handleEditButtonClick);
+  }
 
   if(profile_pic_form != null){
     profile_pic_form.addEventListener('submit', updateProfilePictureRequest);
@@ -79,7 +95,53 @@ function addEventListeners() {
     reviewCreate.addEventListener('submit', createReviewRequest);
   }
 
-
+  function handleEditButtonClick(event) {
+    let product_edit = event.target;
+    let elements = document.querySelectorAll('p.editable');
+    console.log(elements);
+    elements.forEach(function(element) {
+      newElem = document.createElement('textarea');
+      newElem.textContent = element.textContent;
+      newElem.name = element.getAttribute('id');
+      element.replaceWith(newElem);
+    });
+    cancelButton = document.createElement('button');
+    cancelButton.textContent = "Cancel";
+    cancelButton.classList.add("cancel_edit_product");
+    cancelButton.type = "button";
+    submitButton = document.createElement('button');
+    submitButton.textContent = "Save";
+    submitButton.classList.add("save_product");
+    if(cancelButton.nextSibling) {
+      product_edit.parentNode.insertBefore(submitButton, cancelButton.nextSibling);
+    } else {
+      product_edit.parentNode.appendChild(submitButton);
+    }
+    product_edit.replaceWith(cancelButton);
+    cancelButton.addEventListener('click', handleCancelButtonClick);
+  }
+  
+  function handleCancelButtonClick() {
+    let elements = document.querySelectorAll('textarea');
+    let cancelButton = document.querySelector('button.cancel_edit_product');
+    let submitButton = document.querySelector('button.save_product');
+    console.log(elements);
+    product_edit = document.createElement('button');
+    product_edit.textContent = "Edit";
+    product_edit.type = "button";
+    product_edit.classList.add("edit_product");
+    elements.forEach(function(element) {
+      newElem = document.createElement('p');
+      newElem.classList.add("editable");
+      newElem.textContent = element.textContent;
+      newElem.id = element.getAttribute('name');
+      element.replaceWith(newElem);
+    });
+    submitButton.remove();
+    cancelButton.replaceWith(product_edit);
+    product_edit.addEventListener('click', handleEditButtonClick);
+  }
+  
   let fullScreenPopup = document.getElementById('fullScreenPopup');
   let fullScreenPopup2 = document.getElementById('fullScreenPopup2');
 
@@ -92,6 +154,54 @@ function addEventListeners() {
       showFullScreenPopup.bind(fullScreenPopup)();
     });
   });
+
+  let popupButtonsCheckout = document.querySelectorAll('button[name=show_popup_checkout]');
+  [].forEach.call(popupButtonsCheckout, function(button){
+    button.addEventListener('click', function(event){
+      event.preventDefault();
+      money = document.querySelector('table tr:last-child td:last-child').textContent;
+      const currency_symbol = money.charAt(money.length - 1);
+      let user_money = document.querySelector('p.wallet');
+      const deformatted_money_cart = deformat_money(money, currency_symbol);
+      const deformatted_user_money = deformat_money(user_money.textContent, currency_symbol);
+      let low_money_tag = document.querySelector('div#fullScreenPopup form div.low_money');
+      low_money_tag.style.display = 'none';
+      let payment_method_select = document.querySelector('div#fullScreenPopup form select[name=payment_type]');
+      let store_money_option = payment_method_select.querySelector('option:first-child');
+      store_money_option.hidden = true;
+
+      if(deformatted_money_cart <= deformatted_user_money && deformatted_money_cart != 0){
+        store_money_option.hidden = false;
+        resetInputs.bind(fullScreenPopup)();
+        showFullScreenPopup.bind(fullScreenPopup)();
+      }
+      else if(deformatted_money_cart != 0){
+        low_money_tag.style.display = 'block';
+        const remaining_money = format_money(deformatted_money_cart - deformatted_user_money, currency_symbol);
+
+        let warning_tag = low_money_tag.querySelector('p');
+        warning_tag.textContent = 'Please select a payment method for the remaining ' + remaining_money;
+        low_money_tag.querySelector('p:last-child').textContent = 'Pay for all the ' + money;
+        let checkbox_pay_all = low_money_tag.querySelector('input');
+        checkbox_pay_all.checked = false;
+        warning_tag.style.display = 'block';
+        checkbox_pay_all.addEventListener('click', function(){
+            if(checkbox_pay_all.checked){
+              warning_tag.style.display = 'none';
+
+            }
+            else{
+              warning_tag.style.display = 'block';
+            }
+        });
+        
+        resetInputs.bind(fullScreenPopup)();
+        payment_method_select.value = payment_method_select.querySelector('option + option').value;
+        showFullScreenPopup.bind(fullScreenPopup)();
+      }
+    });
+  });
+
 
   let popupButtons2 = document.querySelectorAll('button[name=show_popup2]');
   [].forEach.call(popupButtons2, function(button){
@@ -113,12 +223,22 @@ function addEventListeners() {
       });
       if(!error_check){
         if(money != null){
-          document.querySelector('div#fullScreenPopup2 form div div.column:nth-child(2) p').textContent = money;
-          const payment_method = document.querySelector('div#fullScreenPopup form select[name=payment_type]').value;
-          const name = document.querySelector('div#fullScreenPopup form input[name=name]').value;
-  
+          let low_money_tag = document.querySelector('div#fullScreenPopup form div.low_money');
           let payment_method_tag = document.querySelector('div#fullScreenPopup2 form div.column p.payment_info');
-          payment_method_tag.textContent = "Payment Method: "+payment_method;
+          const payment_method = document.querySelector('div#fullScreenPopup form select[name=payment_type]').value;
+          const pay_all_checkbox = low_money_tag.querySelector('input');
+          if(low_money_tag.style.display == 'block' && !pay_all_checkbox.checked){
+            const user_money = document.querySelector('p.wallet').textContent;
+            const currency_symbol = user_money.charAt(user_money.length-1);
+            const deformatted_money = deformat_money(money, currency_symbol);
+            let deformatted_user_money = deformat_money(user_money, currency_symbol);
+            payment_method_tag.textContent = "Payment Method: "+ payment_method + ": (" + format_money(deformatted_money-deformatted_user_money, currency_symbol) + ") Wallet: ("+money+")";
+          }
+          else {
+            document.querySelector('div#fullScreenPopup2 form div div.column:nth-child(2) p').textContent = money;
+            payment_method_tag.textContent = "Payment Method: "+payment_method;
+          }
+          const name = document.querySelector('div#fullScreenPopup form input[name=name]').value;
   
           let name_tag = document.querySelector('div#fullScreenPopup2 form p.payment_info + p');
           name_tag.textContent = "Name: "+name;
@@ -170,12 +290,12 @@ function addEventListeners() {
     });
   });
 
-  let add_funds_button = document.querySelector('div#fullScreenPopup2 form div.navigation-buttons button + button');
-  if(add_funds_button != null){
-    add_funds_button.addEventListener('click', updateMoneyRequest);
+  let add_funds_form = document.querySelector('div#fullScreenPopup2 form.add_funds_form');
+  if(add_funds_form != null){
+    add_funds_form.addEventListener('submit', updateMoneyRequest);
   }
 
-  let checkoutForm = document.querySelector('form.checkout');
+  let checkoutForm = document.querySelector('form.checkout_form');
   if(checkoutForm != null){
     checkoutForm.addEventListener('submit', createPurchaseRequest);
   }
@@ -190,7 +310,53 @@ function addEventListeners() {
 }
 
 
-  
+function handleEditButtonClick(event) {
+  let product_edit = event.target;
+  let elements = document.querySelectorAll('p.editable');
+  console.log(elements);
+  elements.forEach(function(element) {
+    newElem = document.createElement('textarea');
+    newElem.textContent = element.textContent;
+    newElem.name = element.getAttribute('id');
+    element.replaceWith(newElem);
+  });
+  cancelButton = document.createElement('button');
+  cancelButton.textContent = "Cancel";
+  cancelButton.classList.add("cancel_edit_product");
+  cancelButton.type = "button";
+  submitButton = document.createElement('button');
+  submitButton.textContent = "Save";
+  submitButton.classList.add("save_product");
+  if(cancelButton.nextSibling) {
+    product_edit.parentNode.insertBefore(submitButton, cancelButton.nextSibling);
+  } else {
+    product_edit.parentNode.appendChild(submitButton);
+  }
+  product_edit.replaceWith(cancelButton);
+  cancelButton.addEventListener('click', handleCancelButtonClick);
+}
+
+function handleCancelButtonClick() {
+  let elements = document.querySelectorAll('textarea');
+  let cancelButton = document.querySelector('button.cancel_edit_product');
+  let submitButton = document.querySelector('button.save_product');
+  console.log(elements);
+  product_edit = document.createElement('button');
+  product_edit.textContent = "Edit";
+  product_edit.type = "button";
+  product_edit.classList.add("edit_product");
+  elements.forEach(function(element) {
+    newElem = document.createElement('p');
+    newElem.classList.add("editable");
+    newElem.textContent = element.textContent;
+    newElem.id = element.getAttribute('name');
+    element.replaceWith(newElem);
+  });
+  submitButton.remove();
+  cancelButton.replaceWith(product_edit);
+  product_edit.addEventListener('click', handleEditButtonClick);
+}
+
 function encodeForAjax(data) {
   if (data == null) return null;
   return Object.keys(data).map(function(k){
@@ -250,28 +416,51 @@ function updateMoneyRequest(event){
   hideFullScreenPopup.bind(popup2)();
   const user_id = add_funds_form.querySelector('input[name=user_id').getAttribute('data-info');
   if(document.querySelector('input[name=remember]').checked){
-    const payment_method = add_funds_form.querySelector('select[name=payment_type]').value;
-    const name = add_funds_form.querySelector('input[name=name]').value;
-    const address = add_funds_form.querySelector('input[name=address]').value;
-    const city = add_funds_form.querySelector('input[name=city]').value;
-    const postal_code = add_funds_form.querySelector('input[name=postal_code]').value;
-    const phone = add_funds_form.querySelector('input[name=phone]').value;
-    sendAjaxRequest('put', '/users/location/' + user_id, {payment_method: payment_method, name: name, address: address, city: city, postal_code: postal_code, phone_number: phone}, updateLocationHandler);
+    updateLocation.bind(add_funds_form, user_id)();
   }
 
   sendAjaxRequest('put', '/wallet/' + user_id + '/add', {money: money}, updateMoneyHandler);
   event.preventDefault();
 }
 
+function updateLocation(user_id){
+  const payment_method = this.querySelector('select[name=payment_type]').value;
+  const name = this.querySelector('input[name=name]').value;
+  const address = this.querySelector('input[name=address]').value;
+  const city = this.querySelector('input[name=city]').value;
+  const postal_code = this.querySelector('input[name=postal_code]').value;
+  const phone = this.querySelector('input[name=phone]').value;
+  sendAjaxRequest('put', '/users/location/' + user_id, {payment_method: payment_method, name: name, address: address, city: city, postal_code: postal_code, phone_number: phone}, updateLocationHandler);
+}
+
 
 function createPurchaseRequest(event){
-  console.log(this);
-  /*let review_id = this.querySelector('input[name=review_id]').value;
-  let description = this.querySelector('textarea[name=description]').value;
-  let title = this.querySelector('textarea[name=title]').value;
-  console.log(review_id, description);
-  sendAjaxRequest('put', '/review/'+review_id, {review_id: review_id, description: description, title: title}, reviewHandler);*/
-  //event.preventDefault();
+  const checkout_form = document.querySelector('div#fullScreenPopup form');
+  const user_id = checkout_form.querySelector('input[name=user_id]').value;
+  const currency_symbol = money.charAt(money.length-1);
+  const price = deformat_money(money, currency_symbol);
+  const quantity = document.querySelector('table tr:first-child td:last-child').textContent;
+  const payment_type = checkout_form.querySelector('select[name=payment_type]').value;
+  const address = checkout_form.querySelector('input[name=address]').value;
+  const city = checkout_form.querySelector('input[name=city]').value;
+  const postal_code = checkout_form.querySelector('input[name=postal_code]').value;
+  const country = checkout_form.querySelector('select[name=country]').value;
+  const destination = address + " " + city + ", " + postal_code + " " + country;
+  let is_tracked = this.querySelector('input[name=tracked]');
+  const low_money_tag = document.querySelector('div#fullScreenPopup form div.low_money');
+  const pay_all_checkbox = low_money_tag.querySelector('input');
+  let pay_all = false;
+  if(pay_all_checkbox.checked && low_money_tag.style.display == 'block'){
+    pay_all = true;
+  }
+  if(is_tracked.checked){
+    is_tracked = true;
+  }
+  else{
+    is_tracked = false;
+  }
+  sendAjaxRequest('post', '/checkout/'+user_id, {price: price, quantity: quantity, destination: destination, payment_type: payment_type, istracked: is_tracked, pay_all: pay_all}, createPurchaseHandler);
+  event.preventDefault();
 }
 
 
@@ -336,7 +525,6 @@ function deleteWishlistProductRequest(event){
 function deleteCartProductRequest(event){
   let user_id = this.querySelector('input[name=user_id]').value;
   let cart_id = this.querySelector('input[name=cart_id]').value;
-  console.log(user_id, cart_id);
   sendAjaxRequest('delete', '/api/shopping-cart/'+user_id, {cart_id: cart_id}, deleteCartProductHandler);
   event.preventDefault();
 }
@@ -357,8 +545,8 @@ function updateProfilePictureRequest(event){
 
   event.preventDefault();
 }
-/*
-function initializePopup(openButtonSelector, closeButtonSelector, popFormSelector, overlaySelector) {
+
+/*function initializePopup(openButtonSelector, closeButtonSelector, popFormSelector, overlaySelector) {
   const popForm = document.querySelector(popFormSelector);
   const overlay = document.querySelector(overlaySelector);
   const openButton = document.querySelector(openButtonSelector);
@@ -376,13 +564,12 @@ function initializePopup(openButtonSelector, closeButtonSelector, popFormSelecto
 }
 document.addEventListener('DOMContentLoaded', function () {
   // Example of initialization for a specific pop-up form
-  initializePopup('.open-pop-form', '.close-pop-form', '.pop-form', '.overlay');
+  //initializePopup('.open-pop-form', '.close-pop-form', '.pop-form', '.overlay');
 
   // You can initialize other pop-up forms similarly
   // initializePopup('.open-pop-form-2', '.close-pop-form-2', '.pop-form-2', '.overlay-2');
   // initializePopup('.open-pop-form-3', '.close-pop-form-3', '.pop-form-3', '.overlay-3');
-});
-*/
+});*/
 
 function togglePopup() {
   const popup = document.getElementById('stockPopup');
@@ -503,6 +690,18 @@ function updateLocationHandler(){
   }
 }
 
+function createPurchaseHandler(){
+  if(this.status === 301){
+    let response = JSON.parse(this.responseText);
+    console.log(response);
+  }
+  else if(this.status===200){
+    console.log("hello");
+    
+
+  }
+}
+
 
 function reviewHandler(){
   if(this.status == 201){
@@ -544,13 +743,18 @@ function createCartProductHandler(){
 
 function deleteCartProductHandler(){
   if(this.status == 200){
-    console.log("removed from shopping cart");
     let response = JSON.parse(this.responseText);
     let deletion_target = document.querySelector('div[data-id="' + response + '"]');
     let deletion_price = deletion_target.querySelector('a p:last-child').textContent;
-    let new_total_price = document.querySelector('tr:last-child td:first-child');
-    let new_total_quantity = document.querySelector('tr:last-child td:last-child');
-    new_total_price.textContent= new_total_price.textContent-deletion_price;
+    let new_total_price = document.querySelector('tr:last-child td:last-child');
+    let new_total_quantity = document.querySelector('tr:first-child td:last-child');
+    const currency_symbol = new_total_price.textContent.charAt(new_total_price.textContent.length - 1);
+
+    new_total_price.textContent = deformat_money(new_total_price.textContent, currency_symbol);
+    deletion_price = deformat_money(deletion_price, currency_symbol);
+    console.log(deletion_price);
+
+    new_total_price.textContent= format_money(new_total_price.textContent-deletion_price, currency_symbol);
     new_total_quantity.textContent = new_total_quantity.textContent-1;
     deletion_target.remove();
   }
@@ -558,6 +762,22 @@ function deleteCartProductHandler(){
     let response = JSON.parse(this.responseText);
     console.log(response);
   }
+}
+
+function deformat_money(target, currency_symbol){
+  target = target.trim();
+  if(currency_symbol == '€'){
+    return parseFloat(target.replace(/[^\d]/g, ''));
+  }
+  return null;
+}
+
+function format_money(target, currency_symbol){
+  if(currency_symbol == '€'){
+    const formatted_target = (target / 100).toFixed(2);
+    return `${formatted_target}${currency_symbol}`;
+  }
+  return null;
 }
 
 function deleteHomeWishlistProductHandler(){
@@ -690,15 +910,20 @@ window.onload = function() {
 }
 
 document.addEventListener("DOMContentLoaded", function() {
-  document.getElementById("statsButton").addEventListener("click", function() {
+  let stats_button = document.getElementById("statsButton");
+  if(stats_button != null){
+      stats_button.addEventListener("click", function() {
       // Show the statistics popup
       document.getElementById("statsPopup").style.display = "block";
   });
-
-  document.getElementById("closeButton").addEventListener("click", function() {
+  }
+  let close_button = document.getElementById("closeButton");
+  if(close_button != null){
+      close_button.addEventListener("click", function() {
       // Close the statistics popup
       document.getElementById("statsPopup").style.display = "none";
   });
+  }
 });
 
 
@@ -746,6 +971,24 @@ function validateRequired(){
 
 
 
+/*
+var express = require('express');
+var bodyParser = require('body-parser');
+
+var app = express();
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
+app.post('/pusher/auth', function(req, res) {
+  var socketId = req.body.socket_id;
+  var channel = req.body.channel_name;
+  var auth = pusher.authenticate(socketId, channel);
+  res.send(auth);
+});
+
+var port = process.env.PORT || 5000;
+app.listen(port);
+*/
 addEventListeners();
   
   
