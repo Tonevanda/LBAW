@@ -54,6 +54,11 @@ class Authenticated extends Model
                     ->withPivot('id');
     }
     
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class, 'user_id');
+    }
+    
     public function wallet()
     {
         $wallet = $this->hasOne(Wallet::class, 'user_id')->first();

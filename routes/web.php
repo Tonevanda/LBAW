@@ -10,6 +10,7 @@ use App\Http\Controllers\AuthenticatedController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\WalletController;
+use App\Http\Controllers\PostController;
 use Carbon\Carbon;
 use App\Models\User;
 use GuzzleHttp\Middleware;
@@ -31,6 +32,8 @@ Route::controller(ProductController::class)->group(function () {
     Route::get('/products/{product_id}', 'show')->name('single-product');
     Route::get('/product/create', 'showCreateProductForm')->name('add_products');
     Route::post('/product/create', 'createProduct')->name('product.create');
+    Route::post('/product/update/{product_id}', 'updateProduct')->name('product.update');
+    Route::post('/post/change', 'change')->name('post.change');
 });
 
 #->middleware('admin')
@@ -79,6 +82,7 @@ Route::controller(AuthenticatedController::class)->group(function () {
     Route::get('/purchase-history/{user_id}', 'showPurchases')->name('purchase_history');
     Route::get('/wishlist/test/{user_id}', 'getWishlist')->name('getWishlist');
     Route::get('/account_details/{user_id}', 'showAccountDetails')->name('account_details');
+    Route::get('/notifications/{user_id}', 'showNotifications')->name('notifications');
 });
 
 Route::controller(PurchaseController::class)->group(function () {
@@ -97,4 +101,5 @@ Route::get('/about_us', function () {
 Route::get('/contact_us', function () {
     return view('contact_us');
 })->name('contact_us');
+
 

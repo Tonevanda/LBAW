@@ -4,8 +4,9 @@ $user = Auth::user();
 
 if($user != NULL && !$user->isAdmin()){
     $auth = $user->authenticated()->first();
-
-    $wallet = $auth->wallet();
+    if (!$user->isAdmin()) {
+        $wallet = $auth->wallet();
+    }
 }
 
 @endphp
@@ -30,6 +31,7 @@ if($user != NULL && !$user->isAdmin()){
             // Fix for Firefox autofocus CSS bug
             // See: http://stackoverflow.com/questions/18943276/html-5-autofocus-messes-up-css-loading/18945951#18945951
         </script>
+        <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
         <script type="text/javascript" src={{ url('js/app.js') }} defer>
         </script>
 
@@ -52,6 +54,7 @@ if($user != NULL && !$user->isAdmin()){
                             <i class="fa fa-power-off"></i> Logout
                         </a> 
                     @else
+                        <a class="button" href="{{ route('notifications',$user->id)}}">Notifications</a>
                         <p class="wallet"> {{number_format($wallet->money, 2, ',', '.')}}{{$wallet->currencySymbol}} </p>
                         <i class="fas fa-dollar-sign"></i>
                         <a class="buttonss" href="{{ route('shopping-cart',$user->id) }}">
