@@ -634,6 +634,8 @@ function reviewCreateHandler(){
                                     <label>Description</label>
                                     <textarea type="text" name="description" required readonly>${response.description}</textarea>
                                     <p>${response.rating}</p>
+                                    <button type="submit" name="update-review">
+                                        Save
                                     </button>
                                 </form>
                                 <form class = "delete_review" method="" action="">
@@ -650,6 +652,7 @@ function reviewCreateHandler(){
     deleteRev.addEventListener('submit', deleteReviewRequest);
     let reviewEditIcon2= document.querySelector('li i');
     reviewEditIcon2.addEventListener('click', editReview);
+    
   }
   if(this.status == 301){
     let response = JSON.parse(this.responseText);
