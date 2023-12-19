@@ -55,7 +55,7 @@ class PurchaseController extends Controller
 
 
         $wallet = $auth->wallet()->first();
-        if($request->pay_all == "false"){
+        if($request->pay_all == "false" && $wallet->money < $total_price){
             if($wallet->money < $total_price){
                 $wallet->money = 0;
             }
@@ -68,6 +68,16 @@ class PurchaseController extends Controller
             ];
             $wallet->update($wallet_data);
         }
+
+        if($data['payment_type'] == 'store money'){
+            $wallet->money = $wallet->money - $total_price;
+            $wallet_data = [
+                'money' => $wallet->money,
+                'currency_type' => $wallet->currency_type
+            ];
+            $wallet->update($wallet_data);
+        }
+
 
         $data['price'] = $total_price;
         $data['quantity'] = $total_quantity;
