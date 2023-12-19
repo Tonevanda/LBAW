@@ -49,8 +49,8 @@
         <h4>Payment Method</h4>
         <div class = "low_money" style="display: none;">
             <i class="fas fa-exclamation-triangle">Your Bibliophile Bliss Wallet balance is too low to cover this transaction!</i>
-            <p></p>
-            <input type="checkbox" name="all">
+            <p style="display: block;" ></p>
+            <input type="checkbox">
             <p></p>
         </div>
         <label for="payment_type">Choose a payment method:</label>

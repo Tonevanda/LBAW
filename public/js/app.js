@@ -117,7 +117,20 @@ function addEventListeners() {
         low_money_tag.style.display = 'block';
         const remaining_money = format_money(deformatted_money_cart - deformatted_user_money, currency_symbol);
 
-        low_money_tag.querySelector('p').textContent = 'Please select a payment method for the remaining ' + remaining_money;
+        let warning_tag = low_money_tag.querySelector('p');
+        warning_tag.textContent = 'Please select a payment method for the remaining ' + remaining_money;
+        low_money_tag.querySelector('p:last-child').textContent = 'Pay for all the ' + money;
+        let checkbox_pay_all = low_money_tag.querySelector('input');
+        checkbox_pay_all.checked = false;
+        warning_tag.style.display = 'block';
+        checkbox_pay_all.addEventListener('click', function(){
+            if(checkbox_pay_all.checked){
+              warning_tag.style.display = 'none';
+            }
+            else{
+              warning_tag.style.display = 'block';
+            }
+        });
         
         resetInputs.bind(fullScreenPopup)();
         payment_method_select.value = payment_method_select.querySelector('option + option').value;
@@ -125,6 +138,7 @@ function addEventListeners() {
       }
     });
   });
+
 
   let popupButtons2 = document.querySelectorAll('button[name=show_popup2]');
   [].forEach.call(popupButtons2, function(button){
