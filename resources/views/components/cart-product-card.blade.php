@@ -1,4 +1,11 @@
-@props(['product'])
+@props(['product', 'user'])
+@php 
+    if(!$user->isAdmin()){
+        $auth = $user->authenticated()->first();
+        $wallet = $auth->wallet()->first();
+        $currency = $wallet->currency()->first();
+    }
+@endphp
 <div data-id="{{$product->pivot->id}}">
     <a href="{{ route('single-product', $product) }}">
         <div class="product-info">
@@ -8,7 +15,7 @@
         <div class="product-details">
         <h3> {{ $product->name }} </h3>
         <p> {{ $product->synopsis }} </p>
-        <p> {{ $product->price }} </p>
+        <p> {{ number_format(($product->price-($product->discount*$product->price/100))/100, 2, ',', '.')}}{{$user->isAdmin() ? '€' : $currency->currency_symbol}} </p>
     </a>
     @if (auth()->check())
     <form class = "remove_cart" method="" action="{{ route('shopping-cart.destroy', ['user_id' => Auth::user()->id]) }}">

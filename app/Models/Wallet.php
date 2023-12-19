@@ -28,7 +28,7 @@ class Wallet extends Model
 
     public function currency()
     {
-        return $this->has(Currency::class, 'currency_type');
+        return $this->belongsTo(Currency::class, 'currency_type');
     }
 
 
