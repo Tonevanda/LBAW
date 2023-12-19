@@ -32,17 +32,19 @@ class PurchaseController extends Controller
 
         $auth = Authenticated::findOrFail($user_id);
         $wallet = $auth->wallet()->first();
-        if($wallet->money < intval($data['price'])){
-            $wallet->money = 0;
+        if($request->pay_all == "false"){
+            if($wallet->money < intval($data['price'])){
+                $wallet->money = 0;
+            }
+            else{
+                $wallet->money = $wallet->money - intval($data['price']);
+            }
+            $wallet_data = [
+                'money' => $wallet->money,
+                'currency_type' => $wallet->currency_type
+            ];
+            $wallet->update($wallet_data);
         }
-        else{
-            $wallet->money = $wallet->money - intval($data['price']);
-        }
-        $wallet_data = [
-            'money' => $wallet->money,
-            'currency_type' => $wallet->currency_type
-        ];
-        $wallet->update($wallet_data);
         $cart_products = $auth->shoppingCartSameProduct();
         $longest_days = 0;
         foreach ($cart_products as $cart_product) {

@@ -339,13 +339,19 @@ function createPurchaseRequest(event){
   const country = checkout_form.querySelector('select[name=country]').value;
   const destination = address + " " + city + ", " + postal_code + " " + country;
   let is_tracked = this.querySelector('input[name=tracked]');
+  const low_money_tag = document.querySelector('div#fullScreenPopup form div.low_money');
+  const pay_all_checkbox = low_money_tag.querySelector('input');
+  let pay_all = false;
+  if(pay_all_checkbox.checked && low_money_tag.style.display == 'block'){
+    pay_all = true;
+  }
   if(is_tracked.checked){
     is_tracked = true;
   }
   else{
     is_tracked = false;
   }
-  sendAjaxRequest('post', '/checkout/'+user_id, {price: price, quantity: quantity, destination: destination, payment_type: payment_type, istracked: is_tracked}, createPurchaseHandler);
+  sendAjaxRequest('post', '/checkout/'+user_id, {price: price, quantity: quantity, destination: destination, payment_type: payment_type, istracked: is_tracked, pay_all: pay_all}, createPurchaseHandler);
   event.preventDefault();
 }
 
