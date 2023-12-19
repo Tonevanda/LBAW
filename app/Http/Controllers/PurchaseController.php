@@ -46,7 +46,6 @@ class PurchaseController extends Controller
         $date->addMinutes(random_int(0, 59));
         $data['orderarrivedat'] = $date->toDateTimeString();
         $data['user_id'] = $user_id;
-        $data['stage_state'] = "payment";
 
 
         try {

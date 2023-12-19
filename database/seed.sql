@@ -118,7 +118,7 @@ CREATE TABLE purchase(
     quantity INTEGER NOT NULL CONSTRAINT quantity_ck CHECK (quantity > 0),
     payment_type TEXT NOT NULL REFERENCES payment (payment_type) ON UPDATE CASCADE ON DELETE CASCADE,
     destination TEXT NOT NULL,
-    stage_state TEXT NOT NULL REFERENCES stage (stage_state) ON UPDATE CASCADE ON DELETE CASCADE,
+    stage_state TEXT NOT NULL DEFAULT 'payment' REFERENCES stage (stage_state) ON UPDATE CASCADE ON DELETE CASCADE,
     isTracked BOOLEAN DEFAULT FALSE NOT NULL,
     orderedAt TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL,
     orderArrivedAt TIMESTAMP WITH TIME ZONE NOT NULL CONSTRAINT order_ck CHECK (orderArrivedAt > orderedAt) 
