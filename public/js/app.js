@@ -601,7 +601,9 @@ function deleteReviewHandler(){
 
 function reviewCreateHandler(){
   if(this.status == 201){
-    let user_review_option = document.querySelector('div.user_review_option');
+    let user_review_option = document.querySelector('div.modified_review');
+    let open_popup_button = document.querySelector('button[name=show_popup_review]').style.display = 'none';
+    let review_popup = document.querySelector('div.pop-form').style.display = 'none';
     let response = JSON.parse(this.responseText);
     let image_path = assetBaseUrl + '/' + response.profile_picture;
     user_review_option.innerHTML = `

@@ -147,6 +147,8 @@
                     </form>
                 </li>
             @endif
+            <div class = "modified_review">
+            </div>
         @endif
     @endif
             </div>
