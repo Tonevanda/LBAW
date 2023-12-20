@@ -12,12 +12,15 @@
     </a>
     @if (auth()->check() && !Auth::user()->isAdmin())
     <form class = "remove_wishlist" method="" action="{{ route('wishlist.destroy', ['user_id' => $user->user_id]) }}">
-        {{ csrf_field() }}
-        <input type="hidden" name="product_id" value="{{ $product->id }}" required>
-        <input type="hidden" name="user_id" value="{{ Auth::user()->id }}" required>
-        <button type="submit" name="remove-from-wishlist" class="cancel">
-            Remove
-        </button>
+        <fieldset>
+            <legend class="sr-only">Remove from Wishlist</legend>
+            {{ csrf_field() }}
+            <input type="hidden" name="product_id" value="{{ $product->id }}" required>
+            <input type="hidden" name="user_id" value="{{ Auth::user()->id }}" required>
+            <button type="submit" name="remove-from-wishlist" class="cancel">
+                Remove
+            </button>
+        </fieldset>
     </form>
     @endif
 </div>
