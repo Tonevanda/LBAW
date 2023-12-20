@@ -20,12 +20,14 @@
 <div class="shopping-cart-page">
     <h2>Shopping Cart</h2>
     <div class="shopping-page">
-    @foreach ($products as $product)
-    @php
-        $total = $total+($product->price-($product->discount*$product->price/100));
-    @endphp
-        <x-cart-product-card :product="$product" :user="$user"/>
-    @endforeach
+    <section class = "product_listing">
+        @foreach ($products as $product)
+        @php
+            $total = $total+($product->price-($product->discount*$product->price/100));
+        @endphp
+            <x-cart-product-card :product="$product" :user="$user"/>
+        @endforeach
+    </section>
     <table>
         <tr>
             <td>Quantity</td>

@@ -72,6 +72,7 @@
                 $user_info = $user->first();
                 empty($userReview) ? $flag = false : $flag = true;
             @endphp
+            
             @if ($flag===false)
             <div class="user-details-container">
                 <div class = "user-image">
@@ -79,7 +80,7 @@
                 </div>
                 <p class = "user_name"> {{$user->name}} </p>
             </div>
-            <button class="open-pop-form">Add Review</button>
+            <button class="open-pop-form" name = "show_popup_review">Add Review</button>
             <div class="overlay"></div>
             <div class="pop-form">
                 <form class = "add_review" method="POST" action="{{ route('review.store', ['user_id' => $user->id]) }}">
@@ -108,7 +109,7 @@
                         </span>
                     @endif
                     <div class="navigation-buttons">
-                        <button type="button" class="close-pop-form">Cancel</button>
+                        <button type="button" class="close-pop-form" name = "cancel_review_popup">Cancel</button>
                     <button type="submit" name="add-review">
                         Add Review
                     </button>
@@ -129,15 +130,15 @@
                         {{ csrf_field() }}
                         <input type="hidden" name="review_id" value="{{ $userReview->id }}" required>
                         <label>Title</label>
-                        <textarea type="text" name="title" required readonly>{{ $userReview->title }}</textarea>
+                        <textarea type="text" name="title" data-info = "{{$userReview->title}}" value = "{{$userReview->title}}" required readonly>{{ $userReview->title }}</textarea>
                         <label>Description</label>
-                        <textarea type="text" name="description" required readonly>{{ $userReview->description }}</textarea>
+                        <textarea type="text" name="description" data-info = "{{$userReview->description}}" value = "{{$userReview->description}}" required readonly>{{ $userReview->description }}</textarea>
                         {{ $userReview->rating }}
                         <button type="submit" name="update-review">
                             Save
                         </button>
                     </form>
-                    <form class = "delete_review" method="" action="{{ route('review.destroy', ['review_id' => $userReview->id]) }}">
+                    <form class = "delete_review" method="" action="">
                         {{ csrf_field() }}
                         <input type="hidden" name="product_id" value="{{ $product->id }}" required>
                         <input type="hidden" name="review_id" value="{{ $userReview->id }}" required>

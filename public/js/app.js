@@ -232,7 +232,7 @@ function addEventListeners() {
             const currency_symbol = user_money.charAt(user_money.length-1);
             const deformatted_money = deformat_money(money, currency_symbol);
             let deformatted_user_money = deformat_money(user_money, currency_symbol);
-            payment_method_tag.textContent = "Payment Method: "+ payment_method + ": (" + format_money(deformatted_money-deformatted_user_money, currency_symbol) + ") Wallet: ("+money+")";
+            payment_method_tag.textContent = "Payment Method: "+ payment_method + ": (" + format_money(deformatted_money-deformatted_user_money, currency_symbol) + ") Wallet: ("+user_money+")";
           }
           else {
             document.querySelector('div#fullScreenPopup2 form div div.column:nth-child(2) p').textContent = money;
@@ -305,6 +305,17 @@ function addEventListeners() {
     change_language_option.addEventListener('click', function(){
       window.location.href = '/';
     });
+  }
+  let review_popup = document.querySelector('div.pop-form');
+  let add_review_button = document.querySelector('button[name=show_popup_review]');
+  if(add_review_button!=null){
+    add_review_button.addEventListener('click', showFullScreenPopup.bind(review_popup));
+  }
+
+  const cancel_review_popup_button = document.querySelector('button[name=cancel_review_popup]');
+  console.log(cancel_review_popup_button);
+  if(cancel_review_popup_button != null){
+    cancel_review_popup_button.addEventListener('click', hideFullScreenPopup.bind(review_popup));
   }
 
 }
@@ -398,6 +409,8 @@ function editReview(){
     document.querySelector('li form').addEventListener('submit', updateReviewRequest);
   }
   else{
+    title.value = title.getAttribute('data-info');
+    description.value = description.getAttribute('data-info');
     this.classList.remove("fa-times");
     this.classList.add("fa-edit");
   }
@@ -437,9 +450,6 @@ function updateLocation(user_id){
 function createPurchaseRequest(event){
   const checkout_form = document.querySelector('div#fullScreenPopup form');
   const user_id = checkout_form.querySelector('input[name=user_id]').value;
-  const currency_symbol = money.charAt(money.length-1);
-  const price = deformat_money(money, currency_symbol);
-  const quantity = document.querySelector('table tr:first-child td:last-child').textContent;
   const payment_type = checkout_form.querySelector('select[name=payment_type]').value;
   const address = checkout_form.querySelector('input[name=address]').value;
   const city = checkout_form.querySelector('input[name=city]').value;
@@ -449,6 +459,9 @@ function createPurchaseRequest(event){
   let is_tracked = this.querySelector('input[name=tracked]');
   const low_money_tag = document.querySelector('div#fullScreenPopup form div.low_money');
   const pay_all_checkbox = low_money_tag.querySelector('input');
+  if(document.querySelector('input[name=remember]').checked){
+    updateLocation.bind(checkout_form, user_id)();
+  }
   let pay_all = false;
   if(pay_all_checkbox.checked && low_money_tag.style.display == 'block'){
     pay_all = true;
@@ -459,7 +472,7 @@ function createPurchaseRequest(event){
   else{
     is_tracked = false;
   }
-  sendAjaxRequest('post', '/checkout/'+user_id, {price: price, quantity: quantity, destination: destination, payment_type: payment_type, istracked: is_tracked, pay_all: pay_all}, createPurchaseHandler);
+  sendAjaxRequest('post', '/checkout/'+user_id, {destination: destination, payment_type: payment_type, istracked: is_tracked, pay_all: pay_all}, createPurchaseHandler);
   event.preventDefault();
 }
 
@@ -546,30 +559,6 @@ function updateProfilePictureRequest(event){
   event.preventDefault();
 }
 
-/*function initializePopup(openButtonSelector, closeButtonSelector, popFormSelector, overlaySelector) {
-  const popForm = document.querySelector(popFormSelector);
-  const overlay = document.querySelector(overlaySelector);
-  const openButton = document.querySelector(openButtonSelector);
-  const closeButton = document.querySelector(closeButtonSelector);
-
-  openButton.addEventListener('click', function () {
-      popForm.style.display = 'block';
-      overlay.style.display = 'block';
-  });
-
-  closeButton.addEventListener('click', function () {
-      popForm.style.display = 'none';
-      overlay.style.display = 'none';
-  });
-}
-document.addEventListener('DOMContentLoaded', function () {
-  // Example of initialization for a specific pop-up form
-  //initializePopup('.open-pop-form', '.close-pop-form', '.pop-form', '.overlay');
-
-  // You can initialize other pop-up forms similarly
-  // initializePopup('.open-pop-form-2', '.close-pop-form-2', '.pop-form-2', '.overlay-2');
-  // initializePopup('.open-pop-form-3', '.close-pop-form-3', '.pop-form-3', '.overlay-3');
-});*/
 
 function togglePopup() {
   const popup = document.getElementById('stockPopup');
@@ -582,37 +571,44 @@ function deleteReviewHandler(){
     console.log(response);
   }
   else if(this.status == 200){
-    console.log("deleted review");
     let response = JSON.parse(this.responseText);
-    let deletion_target = document.querySelector('li[data-id="' + response.review_id + '"]');
-    deletion_target.remove();
-    console.log(response);
     let user_review_option = document.querySelector('div.user_review_option');
-
+    console.log(response);
     let image_path = assetBaseUrl + '/' + response.profile_picture;
-
-
-    user_review_option.innerHTML = `
-                    <form class="add_review" method="" action="">
-                        <div class = "user_image">
-                          <img src ="${image_path}" alt="" />
-                        </div>
-                        <input type="hidden" name="product_id" value="${response.product_id}" required>
-                        <input type="hidden" name="user_id" value="${response.user_id}" required>
-                        <label for="title">Title</label>
-                        <input id="title" type="text" name="title" required>
-                        <label for="description">Description</label>
-                        <textarea id="description" type="text" name="description" required> </textarea>
-                        <label for="rating">Rating</label>
-                        <input id="rating" type="number" name="rating" min="1" max="5" required>
-                        <button type="submit" name="add-review" class="button button-outline">
-                            Add Review
-                        </button>
-                    </form>
-                              `;
-
-    let reviewCreate1 = document.querySelector('form.add_review');
-    reviewCreate1.addEventListener('submit', createReviewRequest);
+    user_review_option.innerHTML= `
+                                <div class="user-details-container">
+                                <div class = "user-image">
+                                    <img src ="${image_path}" alt="" />
+                                </div>
+                                <p class = "user_name"> ${response.name} </p>
+                                </div>
+                                <button class="open-pop-form" name = "show_popup_review">Add Review</button>
+                                <div class="overlay"></div>
+                                <div class="pop-form">
+                                    <form class = "add_review" method="" action="">
+                                        <input type="hidden" name="product_id" value="${response.product_id}" required>
+                                        <input type="hidden" name="user_id" value="${response.user_id}" required>
+                                        <label for="title">Title</label>
+                                        <input id="title" type="text" name="title" required>
+                                        <label for="description">Description</label>
+                                        <textarea id="description" type="text" name="description" required> </textarea>
+                                        <label for="rating">Rating</label>
+                                        <input id="rating" type="number" name="rating" min="1" max="5" required>
+                                        <div class="navigation-buttons">
+                                            <button type="button" class="close-pop-form" name = "cancel_review_popup">Cancel</button>
+                                        <button type="submit" name="add-review">
+                                            Add Review
+                                        </button>
+                                    </div>
+                                    </form>
+                                </div>
+    
+                                  `
+    user_review_option.querySelector('form').addEventListener('submit', createReviewRequest);
+    let review_popup = user_review_option.querySelector('div.pop-form');
+    user_review_option.querySelector('button[name=show_popup_review]').addEventListener('click', showFullScreenPopup.bind(review_popup));
+    user_review_option.querySelector('button[name=cancel_review_popup]').addEventListener('click', hideFullScreenPopup.bind(review_popup));
+    
 
   }
 }
@@ -621,36 +617,44 @@ function reviewCreateHandler(){
   if(this.status == 201){
     let user_review_option = document.querySelector('div.user_review_option');
     let response = JSON.parse(this.responseText);
+    console.log(response);
     let image_path = assetBaseUrl + '/' + response.profile_picture;
     user_review_option.innerHTML = `
-                            <li class="my-review" data-id="${response.review_id}">
-                            <form class="edit_review" method="" action="">
-                              <input type="hidden" name="review_id" value="${response.review_id}" required>
-                              <strong>${response.date} ${response.title}</strong>
-                              <div class = "user_image">
-                                <img src ="${image_path}" alt="" />
-                              </div>
-                              <p class = "user_name"> ${response.name} </p>
-                              <label for="title">Title</label>
-                              <textarea type="text" name="title" required readonly>${response.title}</textarea>
-                              <label for="description">Description</label>
-                              <textarea type="text" name="description" required readonly>${response.description}</textarea>
-                              ${response.rating}
-                              <button type="submit" name="update-review">Save</button>
-                              <i class="fas fa-edit"></i>
-                            </form>
-                            <form class="delete_review" method="" action="">
-                              <input type="hidden" name="product_id" value="${response.product_id}" required>
-                              <input type="hidden" name="review_id" value="${response.review_id}" required>
-                              <button type="submit" name="delete-review" class="button button-outline">Delete Review</button>
-                            </form>
-                          </li>
+                            <li class="my-review" data-id="${response.review_id}}">
+                                <div class="user-details-container">
+                                    <div class = "user-image">
+                                        <img src ="${image_path}" alt="" />
+                                    </div>
+                                    <p class = "user_name"> ${response.name} </p>
+                                    <p>${response.date}</p>
+                                    <p class="edit-review"><i class="fas fa-edit"></i> Edit Review</p>
+                                </div>
+                                <form class = "edit_review" method="" action="">
+                                    <input type="hidden" name="review_id" value="${response.review_id}" required>
+                                    <label>Title</label>
+                                    <textarea type="text" name="title" data-info = "${response.title}" value = "${response.title}" required readonly>${response.title}</textarea>
+                                    <label>Description</label>
+                                    <textarea type="text" name="description" data-info = "${response.description}" value = "${response.description}" required readonly>${response.description}</textarea>
+                                    <p>${response.rating}</p>
+                                    <button type="submit" name="update-review">
+                                        Save
+                                    </button>
+                                </form>
+                                <form class = "delete_review" method="" action="">
+                                    <input type="hidden" name="product_id" value="${response.product_id}" required>
+                                    <input type="hidden" name="review_id" value="${response.review_id}" required>
+                                    <button type="submit" name="delete-review" class="delete-review">
+                                        <i class="fas fa-trash-alt"></i> Delete Review
+                                    </button>
+                                </form>
+                            </li>
                                   `;
 
     let deleteRev = document.querySelector('form.delete_review');
     deleteRev.addEventListener('submit', deleteReviewRequest);
     let reviewEditIcon2= document.querySelector('li i');
     reviewEditIcon2.addEventListener('click', editReview);
+    
   }
   if(this.status == 301){
     let response = JSON.parse(this.responseText);
@@ -696,7 +700,18 @@ function createPurchaseHandler(){
     console.log(response);
   }
   else if(this.status===200){
-    console.log("hello");
+    let response = JSON.parse(this.responseText);
+    document.querySelector('section.product_listing').remove();
+    document.querySelector('table tr:first-child td:last-child').textContent = 0;
+    let total_price = document.querySelector('table tr:last-child td:last-child');
+    const currency_symbol = total_price.textContent.charAt(total_price.textContent.length-1);
+    console.log(currency_symbol);
+    total_price.textContent = "0,00"+currency_symbol;
+    let user_money = document.querySelector('p.wallet').textContent = format_money(response, currency_symbol);
+    let purchase_popup = document.querySelector('div#fullScreenPopup2');
+    console.log(purchase_popup);
+    hideFullScreenPopup.bind(purchase_popup)();
+
     
 
   }
@@ -714,6 +729,10 @@ function reviewHandler(){
   else if(this.status == 200){
     console.log("updated review");
     let reviewEditIcon1= document.querySelector('li i');
+    let title = document.querySelector('li textarea[name=title]');
+    let description = document.querySelector('li textarea[name=description]');
+    title.setAttribute('data-info', title.value);
+    description.setAttribute('data-info', description.value);
     reviewEditIcon1.editReview = editReview.bind(reviewEditIcon1);
     reviewEditIcon1.editReview();
     
