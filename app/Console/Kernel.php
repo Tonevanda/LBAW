@@ -19,17 +19,20 @@ class Kernel extends ConsoleKernel
     {
         //$schedule->command('auth:clear-resets')->everyFifteenMinutes();
         $schedule->call(function() {
-            $purchases = Purchase::where('orderedat', '>', now()->toDateString())
+            error_log(now());
+            $purchases = Purchase::where('orderarrivedat', '<=', now())
                                         ->where('istracked', '=', true)
                                         ->where('stage_state', '!=', 'delivered')
                                         ->get();
             foreach($purchases as $purchase){
                 $purchase->stage_state = "next";
-                $purchase->save();
-                $updated_purchase = Purchase::find($purchase->id);
-                error_log($updated_purchase->user_id);
-                error_log($updated_purchase->stage_state);
+                $new_date = now()->addMinutes(random_int(0, 2))->addSeconds(random_int(0, 30));
+                $purchase->update([
+                    'stage_state' => 'next',
+                    'orderarrivedat' => $new_date
+                ]);
             }
+            
         })->everyMinute();
 
     }
@@ -44,3 +47,6 @@ class Kernel extends ConsoleKernel
         require base_path('routes/console.php');
     }
 }
+
+
+

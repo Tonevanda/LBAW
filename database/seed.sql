@@ -98,8 +98,7 @@ CREATE TABLE product(
     author TEXT DEFAULT 'anonymous' NOT NULL,
     editor TEXT DEFAULT 'self published' NOT NULL,
     language TEXT NOT NULL,
-    image TEXT DEFAULT 'default.png' NOT NULL,
-    orderStatus INTEGER NOT NULL DEFAULT 0 CONSTRAINT orderStatus_ck CHECK (orderStatus >= 0)
+    image TEXT DEFAULT 'default.png' NOT NULL
 );
 
 
@@ -876,7 +875,7 @@ INSERT INTO product(name, synopsis, price, discount, stock, author, editor, lang
 INSERT INTO product_category(product_id, category_type) VALUES(48, 'science fiction');
 
 INSERT INTO purchase (user_id, price, quantity, payment_type, destination, stage_state, isTracked, orderedAt, orderArrivedAt) 
-VALUES (60, 5000, 3, 'paypal', '123 Main St', 'payment', TRUE, DEFAULT, '2024-01-02T14:30:00Z');
+VALUES (60, 5000, 3, 'paypal', '123 Main St', 'payment', TRUE, '2021-12-20T17:30:00Z', '2022-12-20T17:30:00Z');
 
 INSERT INTO purchase (user_id, price, quantity, payment_type, destination, stage_state, isTracked, orderedAt, orderArrivedAt) 
 VALUES (70, 200, 3, 'paypal', '123 Main St', 'payment', FALSE, DEFAULT, '2025-01-02T14:30:00Z');
