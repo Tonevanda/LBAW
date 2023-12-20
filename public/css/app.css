@@ -342,17 +342,16 @@ main > header span {
   max-width: 20em;
   border: 1px solid #ccc;
 }
-#content > form .error {
-  font-weight: bold;
+.content > form .error {
   color: #ff3333;
 }
-#content > form .success {
-  font-weight: bold;
+.content > form .success {
   color: #106af1;
 }
 #content > form input {
   background-color: white;
 }
+
 @media (max-width: 70em) {
   #cards {
     grid-template-columns: repeat(2, 1fr);
@@ -1295,6 +1294,9 @@ form.profile_pic input[name="update_pic"]{
 form label {
   font-weight: normal;
 }
+
+
+
 
 .pop-form {
   /* Add your existing styles for the pop-form class here */

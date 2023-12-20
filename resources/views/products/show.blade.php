@@ -115,6 +115,7 @@
                     </button>
                 </div>
                 </form>
+                <div id="errorReview" style="display: none; color: red; font-size: small;"></div>
             </div>
             @else
                 <li class="my-review" data-id="{{$userReview->id}}">
@@ -145,6 +146,7 @@
                         <button type="submit" name="delete-review" class="delete-review">
                             <i class="fas fa-trash-alt"></i> Delete Review
                         </button>
+                        <div id="errorReviewUpdate" style="display: none; color: red; font-size: small;"></div>
                     </form>
                 </li>
             @endif
@@ -185,6 +187,7 @@
                                     <button type="submit" name="delete-review" class="button button-outline">
                                         Delete Review
                                     </button>
+                                    <div id="errorDeleteReview" style="display: none; color: red; font-size: small;"></div>
                                 </form>
                             @else
                                 <form class="report_review" method="" action="{{ route('review.report', ['review_id' => $review->id]) }}">
@@ -194,6 +197,7 @@
                                     <button type="submit" name="report-review" class="button button-outline">
                                         Report
                                     </button>
+                                    <div id="errorReport" style="display: none; color: red; font-size: small;"></div>
                                 </form>
                             @endif
                         @endif

@@ -96,6 +96,7 @@
             <button name="cancel2">Cancel</button>
             <button type = "submit">Confirm Payment</button>
         </div>
+        <div id="errorCheckout" style="display: none; color: red; font-size: small;"></div>
     </form>
 </div>
 @endsection

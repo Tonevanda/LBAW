@@ -19,7 +19,7 @@ $currency = $wallet->currency()->first();
     <div class="ad_box">
     <div class="ad_wallet">  
     <h4> Wallet Balance: {{number_format($wallet->money, 2, ',', '.')}}{{$currency->currency_symbol}}</h4>
-    <a class = "ad_button" href="{{ route('wallet',$user->id) }}">
+    <a title="Boost your balance" class="ad_button" href="{{ route('wallet',$user->id) }}">
         <i class="fas fa-plus"></i> Add funds to your Bibliophile Bliss Wallet</a>
     </div>
     <p> {{$auth->paymentMethod == NULL ? 'You have no payment methods associated with this account.' : ''}}
@@ -29,7 +29,7 @@ $currency = $wallet->currency()->first();
         <a class = "blue" href="#"> Update Currency.</a>
     </p>
 </div>
-    <a class = "ad_button2" href="{{route('purchase_history',$user->id)}}"> View Purchase History</a>
+    <a title="Review your past transactions" class = "ad_button2" href="{{route('purchase_history',$user->id)}}"> View Purchase History</a>
 </div>
 <div class = "details_box">
     <h3><i class="fas fa-user"></i>Profile Information</h3>

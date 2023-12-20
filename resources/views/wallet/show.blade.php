@@ -28,23 +28,23 @@
 <p> Choose the value you want to add. </p>
 </div>
 <div class = "money_fund_option">
-    <button class="button-fund" name = "show_popup" data-money = {{"5" . $currency->currency_symbol}}>
+    <button title="Add to your wallet" class="button-fund" name = "show_popup" data-money = {{"5" . $currency->currency_symbol}}>
         Add 5{{$currency->currency_symbol}}
     </button>
 
-    <button class="button-fund" name = "show_popup" data-money = {{"10" . $currency->currency_symbol}}>
+    <button title="Add to your wallet" class="button-fund" name = "show_popup" data-money = {{"10" . $currency->currency_symbol}}>
         Add 10{{$currency->currency_symbol}}
     </button>
 
-    <button class="button-fund" name = "show_popup" data-money = {{"25" . $currency->currency_symbol}}>
+    <button title="Add to your wallet" class="button-fund" name = "show_popup" data-money = {{"25" . $currency->currency_symbol}}>
         Add 25{{$currency->currency_symbol}}
     </button>
 
-    <button class="button-fund" name = "show_popup" data-money = {{"50" . $currency->currency_symbol}}>
+    <button title="Add to your wallet" class="button-fund" name = "show_popup" data-money = {{"50" . $currency->currency_symbol}}>
         Add 50{{$currency->currency_symbol}}
     </button>
 
-    <button class="button-fund" name = "show_popup" data-money = {{"100" . $currency->currency_symbol}}>
+    <button title="Add to your wallet" class="button-fund" name = "show_popup" data-money = {{"100" . $currency->currency_symbol}}>
         Add 100{{$currency->currency_symbol}}
     </button>
 </div>
@@ -101,6 +101,7 @@
             <button name="cancel2">Cancel</button>
             <button>Confirm Payment</button>
         </div>
+        <div id="errorMoneyUpdate" style="display: none; color: red; font-size: small;"></div>
     </form>
 </div>
 @endsection

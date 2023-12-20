@@ -2,7 +2,7 @@
 
 <div class="product" id="product-{{ $product->id }}">
     <a href="{{ route('single-product', $product->id) }}">
-    <div class = "product_image">
+    <div class = "product_image" title="Read more about this">
         <img src= "{{asset('images/product_images/' . $product->image)}}" alt="" />
     </div>
     <h2> {{ $product->name }} </h2>
@@ -34,13 +34,15 @@
                     @if(Auth::user()->authenticated()->get()->first()->wishlist->contains($product))
                         <input type="hidden" name="wishlist_id" value="{{ Auth::user()->authenticated()->get()->first()->wishlist->where('id', $product->id)->first()->pivot->id }}" required>
                     @endif
-                    <button id="heartButton" class="heart-button" type="submit" name="add-to-wishlist">
+                    <button id="heartButton" class="heart-button" type="submit" name="add-to-wishlist" title="Add to wishlist">
                         <i class="fas fa-heart"></i>
-                    </button>
+                    </button>                                       
                 </form>
             </div>
+            <div id="errorMessage" style="display: none; color: red; font-size: small;"></div>
+            <div id="errorDeleteWishlist" style="display: none; color: red; font-size: small;"></div>
         @else
-        <i class="fas fa-box-open icon-box-open" onclick="togglePopup()"></i>
+        <i class="fas fa-box-open icon-box-open" title="Stock" onclick="togglePopup()"></i>
 
 <!-- Pop-up content -->
 <div class="popup" id="stockPopup">

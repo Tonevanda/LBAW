@@ -26,6 +26,7 @@
             Remove
         </button>
     </form>
+    <div id="errorDeleteCart" style="display: none; color: red; font-size: small;"></div>
     @endif
 </div>
 </div>
