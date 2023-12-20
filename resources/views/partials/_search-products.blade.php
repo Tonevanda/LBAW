@@ -1,5 +1,15 @@
 @php
     use App\Models\Category;
+    $user = Auth::user();
+    if($user != null && !$user->isAdmin()){
+        $auth = $user->authenticated()->first();
+        $wallet = $auth->wallet()->first();
+        $currency = $wallet->currency()->first();
+        $currency_symbol = '€';
+    }
+    else{
+        $currency_symbol = '€';
+    }
 @endphp
 
 <form class = "products_search" action="" method="GET">
@@ -16,7 +26,7 @@
     <label for="price">Select a price:</label>
     <input type="range" name="price" min="1" max="500" step="1" value= "{{ request('price') }}">
     <div>
-        {{ request('price') == '' ? '250' : request('price')}}
+        {{ request('price') == '' ? number_format(250/100, 2, ',', '.') . $currency_symbol : number_format(request('price')/100, 2, ',', '.') . $currency_symbol}}
     </div>
     <button type="submit">Search</button>
 </form>

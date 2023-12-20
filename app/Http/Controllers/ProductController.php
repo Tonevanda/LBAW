@@ -13,7 +13,38 @@ class ProductController extends Controller
 {   
     //Show all products
     public function index(Request $request){
-        $products = Product::filter($request->input())->paginate(12);
+        $search_filter = '1 = ?';
+        $name_filter = '1';
+        $filters = $request->input();
+        if(!($filters['price'] ?? false)){
+            $filters['price'] = '250';
+        }
+
+        if($filters['price'] == 500){
+            $filters['price'] = '1000000';
+        }
+
+
+        if($filters['category'] ?? false){
+            $category_filter = 'category_type = ?';
+        }
+        else{
+            $category_filter = '1 = ?';
+            $filters['category'] = '1';
+        }
+
+        if($filters['search'] ?? false){       
+            $search_array = array_filter(explode(' ',$filters['search']));
+            while(!empty($search_array)){
+                $name_filter = implode('&', $search_array).':*';
+                $temp_query =  Product::FilterVectors($name_filter);
+                array_pop($search_array);        
+                if($temp_query->exists())break;
+            }
+            $search_filter = 'tsvectors @@ to_tsquery(\'english\', ?)';
+        };
+        $products = Product::Filter($filters, $category_filter, $search_filter, $name_filter)->paginate(12);
+        //$products = Product::filter($request->input())->paginate(12);
         return view('products.index', ['products' => $products]);
     }
 

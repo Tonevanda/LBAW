@@ -34,11 +34,13 @@ function addEventListeners() {
   
   let priceFilter = document.querySelector('form.products_search input[name=price]');
   let priceShow = document.querySelector('form.products_search div');
+  const user_money = document.querySelector('span#user_money').textContent;
+  const currency_symbol = user_money.charAt(user_money.length-1);
   if(priceFilter != null && priceShow != null){
-    if(priceShow.textContent == 500)priceShow.textContent = `MAX`;
+    if(deformat_money(priceShow.textContent, currency_symbol) == 500)priceShow.textContent = `MAX`;
     priceFilter.addEventListener('input', function () {
-      priceShow.textContent = this.value;
-      if(priceShow.textContent == 500){
+      priceShow.textContent = format_money(this.value, currency_symbol);
+      if(deformat_money(priceShow.textContent, currency_symbol) == 500){
         priceShow.textContent = `MAX`;
       }
     });
@@ -679,9 +681,9 @@ function updateMoneyHandler(){
   }
   else if(this.status===200){
     let response = JSON.parse(this.responseText);
-    document.querySelector('div.user_wallet p + h2').textContent = response.money + response.currencySymbol;
-    document.querySelector('span.#user_money').textContent = response.money + response.currencySymbol;
-    document.querySelector('div.mini-menu ul li:nth-child(4) a').textContent = "Wallet " + response.money + response.currencySymbol;
+    document.querySelector('div.details_box h4').textContent = "Current Wallet Balance: " + response.money + response.currencySymbol;
+    document.querySelector('span#user_money').textContent = response.money + response.currencySymbol;
+    //document.querySelector('div.mini-menu ul li:nth-child(4) a').textContent = "Wallet " + response.money + response.currencySymbol;
   }
 }
 
@@ -816,7 +818,8 @@ function deformat_money(target, currency_symbol){
 
 function format_money(target, currency_symbol){
   if(currency_symbol == '€'){
-    const formatted_target = (target / 100).toFixed(2);
+    let formatted_target = (target / 100).toFixed(2);
+    formatted_target = formatted_target.replace('.', ',');
     return `${formatted_target}${currency_symbol}`;
   }
   return null;
