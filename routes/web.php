@@ -109,3 +109,7 @@ Route::get('/about_us', function () {
 Route::get('/contact_us', function () {
     return view('contact_us');
 })->name('contact_us');
+
+Route::get('/main_features', function () {
+    return view('main_features');
+})->name('main_features');

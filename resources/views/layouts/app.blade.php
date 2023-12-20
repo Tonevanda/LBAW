@@ -90,6 +90,7 @@ if($user != NULL && !$user->isAdmin()){
         <footer>
             <p><a href="{{ route('about_us')}}">About us</a></p>
             <p><a href="{{ route('contact_us') }}">Contact us</a></p>
+            <p><a href="{{ route('main_features') }}">Main Features</a></p>
             <p>&copy; 2023 Bibliophile's Bliss. All rights reserved.</p>
         </footer>
     </body>
