@@ -35,6 +35,7 @@ CREATE TABLE category(
     category_type TEXT PRIMARY KEY
 );
 
+
 CREATE TABLE users(
     id SERIAL PRIMARY KEY,
     name TEXT NOT NULL,
@@ -85,6 +86,7 @@ CREATE TABLE authenticated_notification(
     isNew BOOLEAN DEFAULT TRUE  NOT NULL
 );
 
+
 CREATE TABLE product(
     id SERIAL PRIMARY KEY,
     name TEXT NOT NULL,
@@ -98,6 +100,7 @@ CREATE TABLE product(
     image TEXT DEFAULT 'default.png' NOT NULL,
     orderStatus INTEGER NOT NULL DEFAULT 0 CONSTRAINT orderStatus_ck CHECK (orderStatus >= 0)
 );
+
 
 CREATE TABLE shopping_cart(
     id SERIAL PRIMARY KEY,
