@@ -876,7 +876,7 @@ INSERT INTO product(name, synopsis, price, discount, stock, author, editor, lang
 INSERT INTO product_category(product_id, category_type) VALUES(48, 'science fiction');
 
 INSERT INTO purchase (user_id, price, quantity, payment_type, destination, stage_state, isTracked, orderedAt, orderArrivedAt) 
-VALUES (60, 5000, 3, 'paypal', '123 Main St', 'payment', TRUE, '2021-12-20T17:30:00Z', '2022-12-20T17:30:00Z');
+VALUES (60, 5000, 3, 'paypal', '123 Main St', 'start', TRUE, '2021-12-20T17:30:00Z', '2022-12-20T17:30:00Z');
 
 INSERT INTO purchase (user_id, price, quantity, payment_type, destination, stage_state, isTracked, orderedAt, orderArrivedAt) 
-VALUES (70, 200, 3, 'paypal', '123 Main St', 'payment', FALSE, DEFAULT, '2025-01-02T14:30:00Z');
+VALUES (70, 200, 3, 'paypal', '123 Main St', 'start', FALSE, DEFAULT, '2025-01-02T14:30:00Z');

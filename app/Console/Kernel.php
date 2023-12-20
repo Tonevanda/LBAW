@@ -30,6 +30,7 @@ class Kernel extends ConsoleKernel
                     'stage_state' => 'next',
                     'orderarrivedat' => $new_date
                 ]);
+
             }           
         })->everyMinute();
 

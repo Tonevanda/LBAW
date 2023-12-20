@@ -161,7 +161,7 @@ function addEventListeners() {
       event.preventDefault();
       money = document.querySelector('table tr:last-child td:last-child').textContent;
       const currency_symbol = money.charAt(money.length - 1);
-      let user_money = document.querySelector('p.wallet');
+      let user_money = document.querySelector('span#user_money');
       const deformatted_money_cart = deformat_money(money, currency_symbol);
       const deformatted_user_money = deformat_money(user_money.textContent, currency_symbol);
       let low_money_tag = document.querySelector('div#fullScreenPopup form div.low_money');
@@ -228,7 +228,7 @@ function addEventListeners() {
           const payment_method = document.querySelector('div#fullScreenPopup form select[name=payment_type]').value;
           const pay_all_checkbox = low_money_tag.querySelector('input');
           if(low_money_tag.style.display == 'block' && !pay_all_checkbox.checked){
-            const user_money = document.querySelector('p.wallet').textContent;
+            const user_money =document.querySelector('span#user_money').textContent;
             const currency_symbol = user_money.charAt(user_money.length-1);
             const deformatted_money = deformat_money(money, currency_symbol);
             let deformatted_user_money = deformat_money(user_money, currency_symbol);
@@ -680,7 +680,7 @@ function updateMoneyHandler(){
   else if(this.status===200){
     let response = JSON.parse(this.responseText);
     document.querySelector('div.user_wallet p + h2').textContent = response.money + response.currencySymbol;
-    document.querySelector('p.wallet').textContent = response.money + response.currencySymbol;
+    document.querySelector('span.#user_money').textContent = response.money + response.currencySymbol;
     document.querySelector('div.mini-menu ul li:nth-child(4) a').textContent = "Wallet " + response.money + response.currencySymbol;
   }
 }
@@ -721,7 +721,7 @@ function createPurchaseHandler(){
     const currency_symbol = total_price.textContent.charAt(total_price.textContent.length-1);
     console.log(currency_symbol);
     total_price.textContent = "0,00"+currency_symbol;
-    let user_money = document.querySelector('p.wallet').textContent = format_money(response, currency_symbol);
+    let user_money = document.querySelector('span#user_money').textContent = format_money(response, currency_symbol);
     let purchase_popup = document.querySelector('div#fullScreenPopup2');
     console.log(purchase_popup);
     hideFullScreenPopup.bind(purchase_popup)();
