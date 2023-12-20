@@ -85,9 +85,6 @@ $user_info = $user->user()->first();
       update
     </button>
 
-    <button type="submit" name="update" value="{{ false }}">
-      delete
-    </button>
 </form>
 <a class="button" href="{{ route('wishlist',$user->user_id)}}">Wishlist</a>
 @endsection

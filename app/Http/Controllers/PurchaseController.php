@@ -94,5 +94,24 @@ class PurchaseController extends Controller
 
 
     }
+
+    public function update(Purchase $purchase){
+        switch($purchase->stage_state){
+            case "payment":
+                $purchase->stage_state = "order";
+                $purchase->save();
+                break;
+            case "order":
+                $purchase->stage_state = "transportation";
+                $purchase->save();
+                break;
+            case "transportation":
+                $purchase->stage_state = "delivered";
+                $purchase->save();
+                break;
+            default:
+                break;
+        }
+    }
 }
 

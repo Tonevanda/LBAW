@@ -2,7 +2,7 @@ FROM ubuntu:22.04
 
 # Install dependencies
 env DEBIAN_FRONTEND=noninteractive
-RUN apt-get update; apt-get install -y --no-install-recommends libpq-dev vim nginx php8.1-fpm php8.1-mbstring php8.1-xml php8.1-pgsql php8.1-curl ca-certificates
+RUN apt-get update; apt-get install -y --no-install-recommends libpq-dev vim nginx php8.1-fpm php8.1-mbstring php8.1-xml php8.1-pgsql php8.1-curl ca-certificates cron
 
 # Copy project code and install project dependencies
 COPY --chown=www-data . /var/www/
@@ -14,7 +14,11 @@ COPY .env_production /var/www/.env
 COPY docker_run.sh /docker_run.sh
 
 # Change shebang of docker_run.sh
-RUN sed -i '1s/^.*$/#!\/bin\/bash/' /docker_run.sh
+#RUN sed -i '1s/^.*$/#!\/bin\/bash/' /docker_run.sh
 
 # Start command
-CMD ["bash", "/docker_run.sh"]
+#CMD ["bash", "/docker_run.sh"]
+
+
+# Start command
+CMD sh /docker_run.sh
