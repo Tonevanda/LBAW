@@ -60,13 +60,12 @@
             @endforeach
         </select>
 
-        <input type="checkbox" name="remember">
-        <p>Save my payment information to make checkout easier next time</p>
+        <input type="checkbox" name="remember"> Save my payment information to make checkout easier next time
 
         <p>You will have the opportunity to review your purchase before finalizing it.</p>
         <!-- Add buttons for navigation -->
         <div class="navigation-buttons">
-            <button name="cancel">Cancel</button>
+            <button class="cancel" name="cancel">Cancel</button>
             <button name="show_popup2">Continue</button>
         </div>
     </form>

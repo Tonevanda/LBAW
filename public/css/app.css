@@ -1,22 +1,117 @@
+html, body {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+  height: 100%;
+}
+
 body {
   background-color: #ffffff;
   color: #003740;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  margin: 0;
+  flex-direction: column;
   overflow-x: hidden; 
 }
 
 main {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%; /* Ensure main takes up full width */
 }
 
 @media (max-width: 500px) {
   main {
-    width: 100vh;
+    width: 100vw;
   }
 }
 
+@media (max-width: 1050px) {
+  main > header {
+    margin: 0;
+    padding-left:1em !important;
+    padding-right:1em !important;
+  }
+
+  .button-s {
+    padding-left: 0 !important; 
+  }
+  .user-button {
+    padding-left: 0 !important; 
+  }
+  .buttonss {
+    padding-left: 0 !important; 
+  }
+  .header-text {
+    /* Collapses the text, effectively hiding it and taking up no space */
+    display: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .circle {
+    width: 1.5em; /* Adjust the size of the circle as needed */
+    height: 1.5em; /* Adjust the size of the circle as needed */
+    border-radius: 50%; /* Creates a circular shape */
+    background-color: rgba(144, 203, 222, 0.73); /* Replace with your desired background color */
+    color: #ffffff; /* White text color */
+    text-align: center;
+    font-weight: bold;
+    line-height: 1.5em; /* Should be equal to the height for vertical centering */
+    font-size: 12px; 
+    margin-right: 0.8em;
+  }
+  .n-title {
+    font-size: small !important;
+  }
+  .padding-left {
+    padding-left: 0 !important;
+  }
+  .notifications {
+    padding: 1.5em 1.5em !important;
+  }
+  .ad_box {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    text-align: justify;
+  }
+  .users-search {
+    padding:0 !important;
+  }
+  .user-container {
+    display: block !important;
+  }
+
+
+  main > header {
+    padding: 0.5em;
+  }
+
+  main > header h1 {
+    font-size: 1.2em; /* Even smaller font size for smaller tablets */
+  }
+}
+
+.clearfix::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Certifique-se de que as imagens ou outros elementos de mídia sejam responsivos */
+img, video, canvas {
+  max-width: 100%;
+  height: auto;
+}
+
+*, *:before, *:after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
 main > header {
   display: flex;
@@ -63,9 +158,10 @@ main > header span {
 }
 
 .form-page {
+  flex: 1;
   background-color: #e5e5e5c7;
   padding: 1.5em 3em;
-  margin: 8px 0;
+  margin: 6px 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -89,10 +185,11 @@ main > header span {
 .notifications-page {
   background-color: #e5e5e5c7;
   padding: 1em;
-  margin: 8px 0;
+  margin: 6px 0;
   display: flex;
   flex-direction: column;
   align-items: center;
+  flex: 1;
 }
 
 .circle {
@@ -235,10 +332,6 @@ main > header span {
   body {
     margin: 0;
   }
-  main > header {
-    margin: 0;
-    padding: 0.5em;
-  }
   main > header span {
     margin: 0;
   }
@@ -304,15 +397,24 @@ input[type=password]:focus {
   margin-top: 0.5em;
 }
 
+.content {
+  display: flex;
+  flex-direction: column;
+    flex: 1; /* Flex grow to take available space */
+    /* Your existing styles for .content */
+
+}
+
 
 .home-container {
   display: grid;
   grid-template-columns:0.7fr 4fr; /* Adjust the width of the sidebar as needed */
   gap: 20px;
   padding: 20px;
-  margin-bottom: 1em;
+  margin: 6px 0;
   background-color: #e5e5e5c7;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+  flex: 1;
 }
 
 .product {
@@ -332,9 +434,10 @@ input[type=password]:focus {
 .wallet-page {
   background-color: #e5e5e5c7;
   padding: 1.5em 3em 3em 3em;
-  margin: 8px 0;
+  margin: 6px 0;
   display: flex;
   flex-direction: column;
+  flex:1;
 }
 
 .money_fund_option {
@@ -346,7 +449,7 @@ input[type=password]:focus {
   background-color: #d2d2d2;
   color: white;
   border-radius: 6px;
-  margin-right: 2em;
+  margin-right: 1em;
   font-weight: 300;
   font-size: large;
   text-transform: none;
@@ -366,9 +469,10 @@ input[type=password]:focus {
 .account-page {
   background-color: #e5e5e5c7;
   padding: 1.5em 3em 3em 3em;
-  margin: 8px 0;
+  margin: 6px 0;
   display: flex;
   flex-direction: column;
+  flex:1;
 }
 
 .user_review_option {
@@ -491,7 +595,8 @@ h4 i {
 .wishlist-page {
   background-color: #e5e5e5c7;
   padding: 1.5em 3em 3em 3em;
-  margin: 8px 0;
+  margin: 6px 0;
+  flex:1;
   display: flex;
   flex-direction: column;
 }
@@ -504,8 +609,9 @@ h4 i {
 .shopping-cart-page {
   background-color: #e5e5e5c7;
   padding: 1.5em 3em 3em 3em;
-  margin: 8px 0;
+  margin: 6px 0;
   display: flex;
+  flex:1;
   flex-direction: column;
 }
 
@@ -513,6 +619,15 @@ h4 i {
   margin: 1em 0;
   padding: 2em 3em 2em 5em;
 }
+
+@media (max-width: 900px) {
+    .home-container {
+      display: block; /* Use block layout instead of grid */
+      padding: 10px; /* Adjust padding for smaller screens if needed */
+    }
+}
+
+
 
 
 h1, p {
@@ -532,11 +647,13 @@ table {
   margin-top: 20px;
 }
 
+
 .purchases-container {
-  padding: 8px 0;
+  padding: 6px 0;
   display: flex;
   flex-direction: column;
   gap: 20px; /* Adjust the gap between purchases */
+  flex:1;
 }
 
 .purchase {
@@ -576,10 +693,19 @@ table {
   width: 100%; /* Set to a specific value or percentage */
 }
 
-
 @media (min-width: 900px) {
   .product-grid {
-    grid-template-columns: repeat(5, 2fr);
+    grid-template-columns: repeat(3, 2fr);
+  }
+}
+
+
+@media (min-width: 1050px) {
+  .product-grid {
+    grid-template-columns: repeat(5, 2fr) !important;
+  }
+  .button-fund {
+    margin-right: 2em;
   }
 }
 
@@ -589,9 +715,23 @@ table {
   padding: 20px;
   width: 100%; /* Set to a specific value or percentage */
 }
+.users_search input{
+  background-color: white;
+  color: #003740;
+  border: none;
+}
+
+.users_search select{
+  background-color: white;
+  color: #003740;
+  border: none;
+}
+.users_search {
+  margin-bottom: 0;
+}
 
 
-@media (min-width: 900px) {
+@media (min-width: 1050px) {
   .home-grid {
     grid-template-columns: repeat(3, 2fr);
   }
@@ -603,18 +743,6 @@ table {
 
 .users-sidebar {
   padding: 1.2em 2em;
-}
-
-.user-search input{
-  background-color: white;
-  color: #003740;
-  border: none;
-}
-
-.user-search select{
-  background-color: white;
-  color: #003740;
-  border: none;
 }
 
 .users-grid  {
@@ -638,6 +766,7 @@ table {
 }
 
 .user-container {
+  margin-top: 6px;
   display: grid;
   grid-template-columns:0.7fr 4fr; /* Adjust the width of the sidebar as needed */
   gap: 20px;
@@ -645,6 +774,7 @@ table {
   margin-bottom: 1em;
   background-color: #e5e5e5c7;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+  flex: 1;
 }
 
 .products_search {
@@ -666,9 +796,10 @@ table {
 .product-page {
   background-color: #e5e5e5c7;
   padding: 3em;
-  margin: 8px 0;
+  margin: 6px 0;
   display: flex;
   flex-direction: column;
+  flex:1;
 }
 
 .product-info {
@@ -883,10 +1014,9 @@ li {
 }
 
 footer {
-  margin: 0;
-  background-color: #003740;
-  color: #fff;
-  padding: 20px;
+    padding: 20px;
+    background-color: #003740;
+    color: #fff;
 }
 
 footer p {
@@ -1150,7 +1280,6 @@ form.profile_pic input[name="update_pic"]{
 }
 
 .popup-form p {
-  font-weight: bold;
   font-size: medium;
 }
 

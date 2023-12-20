@@ -43,27 +43,27 @@ if($user != NULL && !$user->isAdmin()){
                 @if (Auth::check())
                     @if ($user->isAdmin())
                     <a class="buttonss" href="{{ route('add_products')}}">
-                        <i class="fas fa-plus"></i> Add Product
+                        <i class="fas fa-plus"></i> <span class="header-text">Add Product</span>
                     </a>  
                     <a class="buttonss" href="{{ route('users') }}">
-                        <i class="fas fa-user"></i> Users
+                        <i class="fas fa-user"></i><span class="header-text"> Users</span>
                     </a>  
                         <a class="button-s" href="{{ route('create_user')}}">Create User</a>
                         <a class="buttonss" href="{{ route('logout') }}">
-                            <i class="fa fa-power-off"></i> Logout
+                            <i class="fa fa-power-off"></i><span class="header-text"> Logout</span>
                         </a> 
                     @else
                     <a class="buttonss" href="{{ route('wallet',$user->id)}}">
-                        <i class="fas fa-wallet"></i> {{number_format($wallet->money/100, 2, ',', '.')}}{{$currency->currency_symbol}}
+                        <i class="fas fa-wallet"></i><span class="header-text"> {{number_format($wallet->money/100, 2, ',', '.')}}{{$currency->currency_symbol}}</span>
                     </a> 
                     <a class="buttonss" href="{{ route('notifications',$user->id) }}">
-                        <i class="fas fa-bell"></i> Notifications
+                        <i class="fas fa-bell"></i> <span class="header-text">Notifications</span>
                     </a>   
                         <a class="buttonss" href="{{ route('shopping-cart',$user->id) }}">
-                            <i class="fas fa-shopping-cart"></i> Shopping Cart
+                            <i class="fas fa-shopping-cart"></i> <span class="header-text">Shopping Cart</span>
                         </a>  
                         <a class="buttonss" href="{{ route('wishlist',$user->id) }}">
-                            <i class="fas fa-heart"></i> Wishlist
+                            <i class="fas fa-heart"></i><span class="header-text"> Wishlist</span>
                         </a>  
                         <div class="user-button" onclick="toggleMenu()">
                             <i class="fas fa-user"></i> 
@@ -83,7 +83,7 @@ if($user != NULL && !$user->isAdmin()){
                 @endif
                 </div>
             </header>
-                <div id="content">
+                <div class="content">
                 @yield('content')
                 </div>
         </main>
