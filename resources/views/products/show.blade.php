@@ -123,8 +123,8 @@
                             <img src ="{{asset('images/user_images/' . $user->profile_picture)}}" alt="" />
                         </div>
                         <p class = "user_name"> {{$user->name}} </p>
-                        <p>{{ \Carbon\Carbon::parse($userReview->date)->format('Y-m-d')}}</p>
-                        <p class="edit-review"><i class="fas fa-edit"></i> Edit Review</p>
+                        <p class="small-center">{{ \Carbon\Carbon::parse($userReview->date)->format('Y-m-d')}}</p>
+                        <p class="edit-review"><i class="fas fa-edit"></i><span class="header-text"> Edit Review</span></p>
                     </div>
                     <form class = "edit_review" method="" action="">
                         {{ csrf_field() }}

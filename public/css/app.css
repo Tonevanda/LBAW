@@ -23,7 +23,39 @@ main {
   width: 100%; /* Ensure main takes up full width */
 }
 
+.product-page .product_img {
+  width: 18em;
+  height: auto;
+    object-fit: cover;
+}
+
+@media (min-width: 500px) {
+.product_img {
+  padding-left: 1em;
+width: 12em; /* maintain aspect ratio */
+  height: auto; /* adjust this value as needed */
+   object-fit: cover; /* this will cover the area of the box without stretching the image */
+}
+
+.user_review_option {
+  padding-left: 8em !important;
+}
+
+.product_img img{
+  width: auto; /* maintain aspect ratio */
+    height: auto; /* adjust this value as needed */
+    object-fit: cover; /* this will cover the area of the box without stretching the image */
+  } 
+}
+
 @media (max-width: 500px) {
+  .small-center {
+    text-align: center;
+    font-size: small;
+  }
+  .user-details-container {
+    gap: 0.7em !important;
+  }
   main {
     width: 100vw;
   } 
@@ -33,6 +65,9 @@ main {
   }
   .product-details {
     margin: 1em !important;
+  }
+  .product_img {
+    padding: 1.5em;
   }
 }
 
@@ -484,7 +519,7 @@ input[type=password]:focus {
 
 .user_review_option {
   background-color: white;
-  padding: 2em 14em;
+  padding: 2em;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
   margin-top: 0.5em;
 }
@@ -611,6 +646,7 @@ h4 i {
 .wishlist-page .product-info{
   margin: 1em 0;
   padding: 2em;
+  align-items: center;
 }
 
 .shopping-cart-page {
@@ -624,6 +660,7 @@ h4 i {
 
 .shopping-cart-page .product-info{
   margin: 1em 0;
+  align-items: center;
   padding: 2em;
 }
 
@@ -811,34 +848,36 @@ table {
 
 .product-info {
   background-color: white;
-  padding: 4em 10em;
+  padding: 3em 4em;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
   display: grid;
   grid-template-columns: auto 1fr;
-  align-items: start;
-}
-
-.product-page .product-info {
-  grid-template-columns: 20% 80%;
-  padding: 4em 10em;
+  align-items: center;
 }
 
 .product-info img {
   height: 100%;
 }
-
+.product-page .product-details {
+  margin-left: 5em;
+  margin-top: 0;
+  margin-right: 2em;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
 
 .product-details {
   margin-left: 4em;
   margin-top: 0;
-  margin-right: 1em;
+  margin-right: 2em;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
 }
 
 .synopsis {
-  font-size: 24px;
+  font-size: 22px;
   margin-top: 0.8em;
   margin-bottom: 1em;
 }
@@ -1209,18 +1248,8 @@ li button[name="update-review"].visible{
   color: #ccc;
 
 }
-.product_img {
-  padding-top: 1em;
-width: auto; /* maintain aspect ratio */
-  height: 200px; /* adjust this value as needed */
-   object-fit: cover; /* this will cover the area of the box without stretching the image */
-}
 
-.product_img img{
-  width: auto; /* maintain aspect ratio */
-    height: 200px; /* adjust this value as needed */
-    object-fit: cover; /* this will cover the area of the box without stretching the image */
-  } 
+
 .product_image{
   width:100%;
   display: flex;
@@ -1263,11 +1292,14 @@ form.profile_pic input[name="update_pic"]{
   z-index: 1000;
 }
 
+form label {
+  font-weight: normal;
+}
+
 .pop-form {
   /* Add your existing styles for the pop-form class here */
   display: none; /* Start with the form hidden */
   position: fixed;
-  min-width: 30%;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -1332,6 +1364,7 @@ span {
 
 .navigation-buttons {
   display: flex;
+  gap:10px;
   justify-content: space-between;
 }
 
