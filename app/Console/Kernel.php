@@ -17,11 +17,10 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        //$schedule->command('auth:clear-resets')->everyFifteenMinutes();
+        $schedule->command('auth:clear-resets')->everyFifteenMinutes();
         $schedule->call(function() {
             error_log(now());
             $purchases = Purchase::where('orderarrivedat', '<=', now())
-                                        ->where('istracked', '=', true)
                                         ->where('stage_state', '!=', 'delivered')
                                         ->get();
             foreach($purchases as $purchase){
@@ -31,8 +30,7 @@ class Kernel extends ConsoleKernel
                     'stage_state' => 'next',
                     'orderarrivedat' => $new_date
                 ]);
-            }
-            
+            }           
         })->everyMinute();
 
     }

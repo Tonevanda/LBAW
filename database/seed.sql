@@ -121,7 +121,7 @@ CREATE TABLE purchase(
     quantity INTEGER NOT NULL CONSTRAINT quantity_ck CHECK (quantity > 0),
     payment_type TEXT NOT NULL REFERENCES payment (payment_type) ON UPDATE CASCADE ON DELETE CASCADE,
     destination TEXT NOT NULL,
-    stage_state TEXT NOT NULL DEFAULT 'payment' REFERENCES stage (stage_state) ON UPDATE CASCADE ON DELETE CASCADE,
+    stage_state TEXT NOT NULL DEFAULT 'start' REFERENCES stage (stage_state) ON UPDATE CASCADE ON DELETE CASCADE,
     isTracked BOOLEAN DEFAULT FALSE NOT NULL,
     orderedAt TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL,
     orderArrivedAt TIMESTAMP WITH TIME ZONE NOT NULL CONSTRAINT order_ck CHECK (orderArrivedAt > orderedAt) 
@@ -545,6 +545,7 @@ INSERT INTO payment VALUES('store money');
 INSERT INTO payment VALUES('paypal');
 INSERT INTO payment VALUES('credit/debit card');
 
+INSERT INTO stage VALUES('start', 0);
 INSERT INTO stage VALUES('payment', 1);
 INSERT INTO stage VALUES('order', 2);
 INSERT INTO stage VALUES('transportation', 3);

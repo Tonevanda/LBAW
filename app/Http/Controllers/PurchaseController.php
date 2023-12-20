@@ -77,9 +77,7 @@ class PurchaseController extends Controller
 
         $data['price'] = $total_price;
         $data['quantity'] = $total_quantity;
-        $date = now()->addMinutes(random_int(0, 2));
-        $date->addSeconds(random_int(0, 2));
-        $data['orderarrivedat'] = $date->toDateTimeString();
+        $data['orderarrivedat'] = now()->addSeconds(5);
         $data['user_id'] = $user_id;
 
         Purchase::create($data);
