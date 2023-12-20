@@ -124,7 +124,8 @@ CREATE TABLE purchase(
     stage_state TEXT NOT NULL DEFAULT 'start' REFERENCES stage (stage_state) ON UPDATE CASCADE ON DELETE CASCADE,
     isTracked BOOLEAN DEFAULT FALSE NOT NULL,
     orderedAt TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL,
-    orderArrivedAt TIMESTAMP WITH TIME ZONE NOT NULL CONSTRAINT order_ck CHECK (orderArrivedAt > orderedAt) 
+    orderArrivedAt TIMESTAMP WITH TIME ZONE NOT NULL CONSTRAINT order_ck CHECK (orderArrivedAt > orderedAt),
+    isRefunded BOOLEAN DEFAULT FALSE NOT NULL
 );
 
 
