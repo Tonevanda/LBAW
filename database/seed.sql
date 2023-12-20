@@ -24,7 +24,8 @@ CREATE TABLE payment(
 );
 
 CREATE TABLE stage(
-    stage_state TEXT PRIMARY KEY
+    stage_state TEXT PRIMARY KEY,
+    stage_order INTEGER NOT NULL
 );
 
 CREATE TABLE statistic(
@@ -34,6 +35,7 @@ CREATE TABLE statistic(
 CREATE TABLE category(
     category_type TEXT PRIMARY KEY
 );
+
 
 CREATE TABLE users(
     id SERIAL PRIMARY KEY,
@@ -85,6 +87,7 @@ CREATE TABLE authenticated_notification(
     isNew BOOLEAN DEFAULT TRUE  NOT NULL
 );
 
+
 CREATE TABLE product(
     id SERIAL PRIMARY KEY,
     name TEXT NOT NULL,
@@ -95,9 +98,9 @@ CREATE TABLE product(
     author TEXT DEFAULT 'anonymous' NOT NULL,
     editor TEXT DEFAULT 'self published' NOT NULL,
     language TEXT NOT NULL,
-    image TEXT DEFAULT 'default.png' NOT NULL,
-    orderStatus INTEGER NOT NULL DEFAULT 0 CONSTRAINT orderStatus_ck CHECK (orderStatus >= 0)
+    image TEXT DEFAULT 'default.png' NOT NULL
 );
+
 
 CREATE TABLE shopping_cart(
     id SERIAL PRIMARY KEY,
@@ -118,7 +121,7 @@ CREATE TABLE purchase(
     quantity INTEGER NOT NULL CONSTRAINT quantity_ck CHECK (quantity > 0),
     payment_type TEXT NOT NULL REFERENCES payment (payment_type) ON UPDATE CASCADE ON DELETE CASCADE,
     destination TEXT NOT NULL,
-    stage_state TEXT NOT NULL DEFAULT 'payment' REFERENCES stage (stage_state) ON UPDATE CASCADE ON DELETE CASCADE,
+    stage_state TEXT NOT NULL DEFAULT 'start' REFERENCES stage (stage_state) ON UPDATE CASCADE ON DELETE CASCADE,
     isTracked BOOLEAN DEFAULT FALSE NOT NULL,
     orderedAt TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL,
     orderArrivedAt TIMESTAMP WITH TIME ZONE NOT NULL CONSTRAINT order_ck CHECK (orderArrivedAt > orderedAt) 
@@ -284,6 +287,37 @@ CREATE TRIGGER manage_purchase_insert_trigger
 
 ---- END MANAGE PURCHASE INSERT TRIGGER  ----
 
+
+---- BEGIN MANAGE UPDATE PURCHASE ORDER STATE TRIGGER (TRIGGER??) ----
+
+CREATE OR REPLACE FUNCTION manage_purchase_stage_state_update() RETURNS TRIGGER AS
+$BODY$
+DECLARE
+    stage_number INTEGER;
+    next_stage TEXT;
+
+BEGIN
+    BEGIN
+        EXECUTE 'SELECT stage_order FROM stage WHERE stage_state = $1' INTO stage_number USING OLD.stage_state;
+        stage_number := stage_number + 1;
+        EXECUTE 'SELECT stage_state FROM stage WHERE stage_order = $1' INTO next_stage USING stage_number;
+        NEW.stage_state := next_stage;
+    EXCEPTION
+        WHEN others THEN
+            RAISE EXCEPTION 'Something wrong when updating order_stage';
+    END;
+    RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER manage_purchase_stage_state_update_trigger
+        BEFORE UPDATE ON purchase
+        FOR EACH ROW
+        EXECUTE PROCEDURE manage_purchase_stage_state_update();
+
+---- END MANAGE PURCHASE STAGE STATE UPDATE TRIGGER  ----
+
 ---- BEGIN MANAGE INITIATE PRODUCT STATISTICS TRIGGER (TRIGGER03) ----
 
 CREATE OR REPLACE FUNCTION initiate_product_statistics() RETURNS TRIGGER AS
@@ -410,7 +444,7 @@ DECLARE
 
 BEGIN
     BEGIN
-        IF NEW.price - NEW.discount != OLD.price - OLD.discount THEN
+        IF NEW.price - (NEW.price*NEW.discount/100) != OLD.price - (OLD.price*OLD.discount/100) THEN
             FOR user_id IN EXECUTE 'SELECT user_id FROM shopping_cart WHERE product_id = $1 GROUP BY user_id' USING NEW.id
             LOOP
                 EXECUTE 'INSERT INTO authenticated_notification (user_id, notification_type, date, isNew) VALUES ($1, $2, DEFAULT, DEFAULT)' USING user_id, 'pricechange_notification';
@@ -511,10 +545,11 @@ INSERT INTO payment VALUES('store money');
 INSERT INTO payment VALUES('paypal');
 INSERT INTO payment VALUES('credit/debit card');
 
-INSERT INTO stage VALUES('payment');
-INSERT INTO stage VALUES('order');
-INSERT INTO stage VALUES('transportation');
-INSERT INTO stage VALUES('delivered');
+INSERT INTO stage VALUES('start', 0);
+INSERT INTO stage VALUES('payment', 1);
+INSERT INTO stage VALUES('order', 2);
+INSERT INTO stage VALUES('transportation', 3);
+INSERT INTO stage VALUES('delivered', 4);
 
 INSERT INTO statistic VALUES('sales');
 INSERT INTO statistic VALUES('revenue');
@@ -839,3 +874,9 @@ INSERT INTO product(name, synopsis, price, discount, stock, author, editor, lang
 INSERT INTO product_category(product_id, category_type) VALUES(47, 'classic');
 INSERT INTO product(name, synopsis, price, discount, stock, author, editor, language, image) VALUES('The Hitchhiker''s Guide to the Galaxy', 'A science fiction comedy series by Douglas Adams. It follows the misadventures of an unwitting human and his alien friend as they travel through space.', 220, 0, 16, 'Douglas Adams', 'Pan Books', 'English', 'the_hitchhikers_guide_to_the_galaxy.png');
 INSERT INTO product_category(product_id, category_type) VALUES(48, 'science fiction');
+
+INSERT INTO purchase (user_id, price, quantity, payment_type, destination, stage_state, isTracked, orderedAt, orderArrivedAt) 
+VALUES (60, 5000, 3, 'paypal', '123 Main St', 'payment', TRUE, '2021-12-20T17:30:00Z', '2022-12-20T17:30:00Z');
+
+INSERT INTO purchase (user_id, price, quantity, payment_type, destination, stage_state, isTracked, orderedAt, orderArrivedAt) 
+VALUES (70, 200, 3, 'paypal', '123 Main St', 'payment', FALSE, DEFAULT, '2025-01-02T14:30:00Z');

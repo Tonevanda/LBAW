@@ -1,4 +1,5 @@
-@props(['product'])
+@props(['product', 'currency_symbol'])
+
 
 <div class="product" id="product-{{ $product->id }}">
     <a href="{{ route('single-product', $product->id) }}">
@@ -6,7 +7,7 @@
         <img src= "{{asset('images/product_images/' . $product->image)}}" alt="" />
     </div>
     <h2> {{ $product->name }} </h2>
-        <p> {{ $product->price }} </p>
+        <p> {{ number_format(($product->price-($product->discount*$product->price/100))/100, 2, ',', '.')}}{{$currency_symbol}} </p>
         <p> {{ $product->discount }} </p>
     @if ($product->stock > 0 && $product->stock < 10)
         <p class="low-stock">Only {{$product->stock}} left in stock</p>

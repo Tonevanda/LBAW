@@ -5,6 +5,8 @@ use Carbon\Carbon;
 
 
 @section('content')
+
+
     <div class="purchases-container">
         @foreach ($purchases as $purchase)
             <div class="purchase">

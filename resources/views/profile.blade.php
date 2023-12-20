@@ -87,9 +87,6 @@ $user_info = $user->user()->first();
       update
     </button>
 
-    <button type="submit" name="update" value="{{ false }}">
-      delete
-    </button>
 </form>
   </div>
 </div>
