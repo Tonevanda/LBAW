@@ -26,6 +26,13 @@ main {
 @media (max-width: 500px) {
   main {
     width: 100vw;
+  } 
+  .product-info {
+    display: block !important;
+    padding:2em !important;
+  }
+  .product-details {
+    margin: 1em !important;
   }
 }
 
@@ -603,7 +610,7 @@ h4 i {
 
 .wishlist-page .product-info{
   margin: 1em 0;
-  padding: 2em 3em 2em 5em;
+  padding: 2em;
 }
 
 .shopping-cart-page {
@@ -617,7 +624,7 @@ h4 i {
 
 .shopping-cart-page .product-info{
   margin: 1em 0;
-  padding: 2em 3em 2em 5em;
+  padding: 2em;
 }
 
 @media (max-width: 900px) {
@@ -807,7 +814,8 @@ table {
   padding: 4em 10em;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
   display: grid;
-  grid-template-columns: 10% 88%;
+  grid-template-columns: auto 1fr;
+  align-items: start;
 }
 
 .product-page .product-info {
@@ -1201,7 +1209,18 @@ li button[name="update-review"].visible{
   color: #ccc;
 
 }
+.product_img {
+  padding-top: 1em;
+width: auto; /* maintain aspect ratio */
+  height: 200px; /* adjust this value as needed */
+   object-fit: cover; /* this will cover the area of the box without stretching the image */
+}
 
+.product_img img{
+  width: auto; /* maintain aspect ratio */
+    height: 200px; /* adjust this value as needed */
+    object-fit: cover; /* this will cover the area of the box without stretching the image */
+  } 
 .product_image{
   width:100%;
   display: flex;
