@@ -10,6 +10,7 @@
         $auth = $user->authenticated()->first();
         $payments = Payment::filter("store money")->get();
         $currency = $wallet->currency()->first();
+
     }
 @endphp
 
@@ -68,34 +69,39 @@
 
 
 <div id="fullScreenPopup2" class="popup-form" style="display: none;">
-    <form class = "add_funds_form" method="" action="">
+    <form class="add_funds_form" method="" action="">
         {{ csrf_field() }}
-        <div class="shipping-address">
-            <div class="column">
-                <p>Being added to your Bibliophile Bliss Wallet</p>
-
+        <fieldset>
+            <legend class="sr-only">Money being added to your Bibliophile Bliss Wallet</legend>
+            <div class="shipping-address">
+                <div class="column">
+                    <p>Being added to your Bibliophile Bliss Wallet</p>
+                </div>
+                <div class="column">
+                    <p></p>
+                </div>
             </div>
-            <div class="column">
-                <p></p>
+        </fieldset>
+
+        <fieldset>
+            <legend class="sr-only">Your Username</legend>
+            <p class="payment_info">Bibliophile Bliss Account: {{$user->name}}</p>
+            <p class="payment_info"></p>
+        </fieldset>
+
+        <fieldset>
+            <legend class="sr-only"></legend>
+            <div class="shipping-address">
+                <div class="column">
+                    <p class="payment_info"></p>
+                    <p class="payment_info"></p>
+                </div>
+                <div class="column">
+                    <button name="back">Change</button>
+                    <p class="payment_info"></p>
+                </div>
             </div>
-        </div>
-
-        <p class = "payment_info">Bibliophile Bliss Account: {{$user->name}}</p>
-        <p class = "payment_info"></p>
-
-        <div class="shipping-address">
-            <div class="column">
-                <p class = "payment_info"></p>
-                <p class = "payment_info"></p>
-
-            </div>
-            <div class="column">
-                <button name="back"> Change </button>
-                <p class = "payment_info"></p>
-            </div>
-        </div>
-
-
+        </fieldset>
 
         <div class="navigation-buttons">
             <button name="cancel2">Cancel</button>

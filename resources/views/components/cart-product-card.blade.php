@@ -18,13 +18,16 @@
         <p> {{ number_format(($product->price-($product->discount*$product->price/100))/100, 2, ',', '.')}}{{$user->isAdmin() ? '€' : $currency->currency_symbol}} </p>
     </a>
     @if (auth()->check())
-    <form class = "remove_cart" method="" action="{{ route('shopping-cart.destroy', ['user_id' => Auth::user()->id]) }}">
+    <form class="remove_cart" method="" action="{{ route('shopping-cart.destroy', ['user_id' => Auth::user()->id]) }}">
         {{ csrf_field() }}
-        <input type="hidden" name="cart_id" value="{{ $product->pivot->id }}" required>
-        <input type="hidden" name="user_id" value="{{ Auth::user()->id }}" required>
-        <button class="cancel" type="submit" name="remove-from-cart">
-            Remove
-        </button>
+        <fieldset>
+            <legend class="sr-only">Remove from Cart</legend>
+            <input type="hidden" name="cart_id" value="{{ $product->pivot->id }}" required>
+            <input type="hidden" name="user_id" value="{{ Auth::user()->id }}" required>
+            <button class="cancel" type="submit" name="remove-from-cart">
+                Remove
+            </button>
+        </fieldset>
     </form>
     <div id="errorDeleteCart" style="display: none; color: red; font-size: small;"></div>
     @endif
