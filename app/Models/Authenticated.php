@@ -52,8 +52,8 @@ class Authenticated extends Model
     {
         return $this->belongsToMany(Product::class, 'shopping_cart', 'user_id', 'product_id')
                     ->withPivot('id')
-                    ->get()
-                    ->groupBy('product_id');
+                    ->orderBy('product_id', 'desc');
+
     }
 
     public function wishlist()

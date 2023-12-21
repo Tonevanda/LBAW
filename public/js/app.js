@@ -324,6 +324,11 @@ function addEventListeners() {
     cancel_review_popup_button.addEventListener('click', hideFullScreenPopup.bind(review_popup));
   }
 
+  const refund_cancel_forms = document.querySelectorAll('form.refund_cancel_purchase');
+  [].forEach.call(refund_cancel_forms, function(form){
+    refund_cancel_forms.addEventListener('submit', refundPurchaseRequest);
+  })
+
 }
 
 
@@ -491,6 +496,13 @@ function createReviewRequest(event){
   let description = this.querySelector('textarea[name=description]').value;
   let rating = this.querySelector('input[name=rating]').value;
   sendAjaxRequest('post', '/review/create/'+user_id, {user_id: user_id, product_id: product_id, title: title, description: description, rating: rating}, reviewCreateHandler);
+  event.preventDefault();
+}
+
+function refundPurchaseRequest(event){
+  console.log(this);
+  
+  //sendAjaxRequest('post', '/review/create/'+user_id, {user_id: user_id, product_id: product_id, title: title, description: description, rating: rating}, reviewCreateHandler);
   event.preventDefault();
 }
 

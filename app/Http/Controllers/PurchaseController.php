@@ -31,22 +31,23 @@ class PurchaseController extends Controller
         }
 
 
-        $cart_products = $auth->shoppingCartSameProduct();
+        $cart_products = $auth->shoppingCartSameProduct()->get();
         $total_quantity = 0;
         $total_price = 0;
-        foreach ($cart_products as $cart_product) {
-            $stock = 0;
-            foreach ($cart_product as $product) {
-                $stock = $stock+1;
-                $total_quantity = $total_quantity + 1;
-                $total_price = $total_price+$product->price;
-                try{
-                    $this->authorize('hasStock', [$product, $stock]);
-                }catch(AuthorizationException $e){
-                    return response()->json($e->getMessage(), 301);
-                }
+        $temp_id = $cart_products[0]->id;
+        $stock = 0;
+        foreach ($cart_products as $product) {
+            if($product->id != $temp_id){
+                $stock = 0;
             }
-            
+            $stock = $stock+1;
+            $total_quantity = $total_quantity + 1;
+            $total_price = $total_price+$product->price;
+            try{
+                $this->authorize('hasStock', [$product, $stock]);
+            }catch(AuthorizationException $e){
+                return response()->json($e->getMessage(), 301);
+            }
         }
 
 
