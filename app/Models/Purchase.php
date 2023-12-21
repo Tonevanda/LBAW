@@ -26,6 +26,7 @@ class Purchase extends Model
         'istracked',
         'orderedat',
         'orderarrivedat',
+        'isrefunded'
     ];
     
     public function user()

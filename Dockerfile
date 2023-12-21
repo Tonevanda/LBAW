@@ -21,4 +21,4 @@ CMD ["bash", "/docker_run.sh"]
 
 
 # Start command
-CMD sh /docker_run.sh
+#CMD sh /docker_run.sh

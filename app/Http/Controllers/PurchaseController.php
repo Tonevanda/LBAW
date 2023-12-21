@@ -89,7 +89,15 @@ class PurchaseController extends Controller
 
     function update(Request $request, $purchase_id)
     {
-        return response()->json(["hello"], 200);
+        $data = $request->validate([
+            'user_id' => 'required'
+        ]);
+
+        $purchase = Purchase::findOrFail($purchase_id);
+        $purchase->update(['isrefunded' => true]);
+        $purchase = Purchase::findOrFail($purchase_id);
+        
+        return response()->json($purchase->isrefunded, 200);
     }
 
 
