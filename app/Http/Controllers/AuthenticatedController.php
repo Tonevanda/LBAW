@@ -19,7 +19,7 @@ class AuthenticatedController extends Controller
     //Show all products in the shopping cart
 
     public function index(Request $request){
-        $users = Authenticated::filter($request->input())->paginate(10);
+        $users = Authenticated::filter($request->input())->paginate(12);
         try {
             $this->authorize('list', Authenticated::class);
         } catch (AuthorizationException $e) {
@@ -289,5 +289,18 @@ class AuthenticatedController extends Controller
         return view('notifications', [
             'notifications' => $user->notifications()->get()
         ]);
+    }
+
+    public function toggleBlock(Request $request, $user_id){
+        $user = Authenticated::findOrFail($user_id);
+        try{
+            $this->authorize('toggleBlock', $user);
+        }catch(AuthorizationException $e){
+            return response()->json($e->getMessage(), 301);
+        }
+        $user->update([
+            'isblocked' => !$user->isblocked
+        ]);
+        return response()->json(["isblocked"=> $user->isblocked,"user_id"=> $user_id], 200);
     }
 }

@@ -23,7 +23,7 @@ class Authenticated extends Model
         'phone_number',
         'postal_code',
         'address',
-        'isBlocked',
+        'isblocked',
         'payment_method'
     ];
 
