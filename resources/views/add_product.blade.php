@@ -9,28 +9,32 @@
   <img src="{{ asset('images/product_images/' . 'default.png') }}">
       </div>
       <div class="product-details">
-      <h2> Please Submit Name </h2>
+
       <form class = "update_product" method="" action="">
           {{ csrf_field() }}
           <fieldset>
+            <legend class="sr-only">Name</legend>
+            <b> Name </b><textarea id = "name" placeholder="Enter the book's Author here..."></textarea>
+        </fieldset>
+          <fieldset>
               <legend class="sr-only">Author</legend>
-              <b>Author: </b><p id="author" class="editable">Enter Author</p>
+              <b>Author: </b><textarea id = "author" placeholder="Enter the book's Author here..."></textarea>
           </fieldset>
           <fieldset>
               <legend class="sr-only">Editor</legend>
-              <b>Editor: </b><p id="editor" class="editable">Enter Editor</p>
+              <b>Editor: </b><textarea id = "editor" placeholder="Enter the book's Editor here..."></textarea>
           </fieldset>
           <fieldset>
               <legend class="sr-only">Synopsis</legend>
-              <p id="synopsis" class="synopsis editable">Fill this synopsis</p>
+              <b>Synopsis: </b><textarea id = "synopsis" placeholder="Enter the book's Synopsis here..."></textarea>
           </fieldset>
           <fieldset>
               <legend class="sr-only">Language</legend>
-              <b>Language: </b><p id="language" class="editable">English</p>
+              <b>Language: </b><textarea id = "language" placeholder="Enter the book's language here..."></textarea>
           </fieldset>
           <fieldset>
               <legend class="sr-only">Price</legend>
-              <b>Price: </b><p id="price" class="editable">2,50€</p>
+              <b>Price: </b><textarea id = "price" placeholder="Enter the book's Price here..."></textarea>
           </fieldset>
         <button type="button" class="edit_product">
             Edit
