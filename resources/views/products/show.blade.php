@@ -21,7 +21,7 @@
 <div class = 'product-page'>
     <div class="product-info">
     <div class = "product_img">
-    <img src="{{ asset('images/product_images/' . $product->image) }}">
+    <img src="{{ asset('images/product_images/' . $product->image) }}" alt="{{$product->name}} image">
         </div>
         <div class="product-details">
         <h2> {{ $product->name }} </h2>

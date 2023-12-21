@@ -7,7 +7,7 @@
     <div class="product-info">
         <a href="{{ route('single-product', $product) }}">
             <div class = "product_img">
-                <img src= "{{asset('images/product_images/' . $product->image)}}" alt="" />
+                <img src= "{{asset('images/product_images/' . $product->image)}}" alt="{{$product->name}} image" />
             </div>
         </a>
         <div class="product-details">
