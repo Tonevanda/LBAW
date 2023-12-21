@@ -41,6 +41,6 @@ class InStock
 
     // You should specify the name of the generated notification.
     public function broadcastAs() {
-        return 'in-dtock-notification';
+        return 'in-stock-notification';
     }
 }

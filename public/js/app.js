@@ -33,6 +33,42 @@ fetch('/user/get')
         }
       });
     })
+    channel.bind('out-stock-notification', function(notification) {
+      fetch('/shopping-cart/get/' + id)
+      .then(response => response.json())
+      .then(data => {
+        if (data.shopping_cart.some(item => item.id == notification.product_id)) {
+          console.log(`New notification: ${notification.message}`);
+          notification_item.textContent++;
+        }
+      });
+      fetch('/wishlist/get/' + id)
+      .then(response => response.json())
+      .then(data => {
+        if (data.wishlist.some(item => item.id == notification.product_id)) {
+          console.log(`New notification: ${notification.message}`);
+          notification_item.textContent++;
+        }
+      });
+    })
+    channel.bind('in-stock-notification', function(notification) {
+      fetch('/shopping-cart/get/' + id)
+      .then(response => response.json())
+      .then(data => {
+        if (data.shopping_cart.some(item => item.id == notification.product_id)) {
+          console.log(`New notification: ${notification.message}`);
+          notification_item.textContent++;
+        }
+      });
+      fetch('/wishlist/get/' + id)
+      .then(response => response.json())
+      .then(data => {
+        if (data.wishlist.some(item => item.id == notification.product_id)) {
+          console.log(`New notification: ${notification.message}`);
+          notification_item.textContent++;
+        }
+      });
+    })
   }
   else if(data.userType=="admin"){
     const channel = pusher.subscribe('admins');
