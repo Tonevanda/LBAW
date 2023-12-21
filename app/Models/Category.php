@@ -18,7 +18,7 @@ class Category extends Model
     protected $primaryKey = 'category_type';
 
     protected $fillable = [
-        'category_type',
+        'category_type'
     ];
     
 

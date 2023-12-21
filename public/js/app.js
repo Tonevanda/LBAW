@@ -392,7 +392,9 @@ function addEventListeners() {
         const parent_formfield = textarea.parentNode;
         let input = parent_formfield.querySelector('input');
         input.value = textarea.value;
+        console.log(input.value);
       });
+
     });
   }
 
@@ -980,6 +982,9 @@ function changePictureHandler(){
     var imageUrl = assetBaseUrl + '/' + response;
     let product_pic = document.querySelector('form.product_pic img');
     product_pic.setAttribute('src', imageUrl);
+    let image_name_input = document.querySelector('input[name=image_name]');
+    image_name_input.value = response;
+
   }
 }
 

@@ -9,6 +9,8 @@ use App\Models\PurchaseProduct;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\DB;
 use App\Events\PriceChange;
+use App\Models\Category;
+
 class ProductController extends Controller
 {   
     //Show all products
@@ -65,12 +67,17 @@ class ProductController extends Controller
 
     public function showCreateProductForm(): View
     {
-        return view('add_product');
+        $categories = Category::all();
+        return view('add_product', [
+            'categories' => $categories
+        ]);
     }
 
     public function createProduct(Request $request)
     {
+        //dd($request);
         $request->validate([
+            'image_name' => 'required',
             'name' => 'required|string',
             'synopsis' => 'required|string',
             'price' => 'required|string',
@@ -78,17 +85,13 @@ class ProductController extends Controller
             'author' => 'string|nullable',
             'editor' => 'string|nullable',
             'language' => 'string|nullable',
+            'category' => 'string|nullable'
             #'image' => 'required|string|min:0',
             #'category' => 'required|string|max:250',
         ]);
-        /*try{
-            $this->authorize('create', Product::class);
-        }catch(AuthorizationException $e){
-            return redirect()->route('all-products');
-        }*/
         $price = preg_replace('/[^0-9]/', '', $request->price);
 
-        Product::create([   
+        $product = Product::create([   
             'name' => $request->name,
             'synopsis' => $request->synopsis,
             'price' => intval($price),
@@ -96,9 +99,13 @@ class ProductController extends Controller
             'author' => $request->author == null ? 'anonymous' : $request->author,
             'editor' => $request->editor == null ? 'self-published' : $request->editor,
             'language' => $request->language == null ? 'english' : $request->language,
+            'image' => $request->image_name
             #'image' => $request->image,
             #'category' => $request->category
         ]);
+
+        $product->productCategories()->attach($request->category);
+
         return redirect()->route('all-products');
     }
 

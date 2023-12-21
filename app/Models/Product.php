@@ -33,6 +33,11 @@ class Product extends Model
         return $this->belongsToMany(Purchase::class, 'purchase_product', 'product_id', 'purchase_id');
     }
 
+    public function productCategories()
+    {
+        return $this->belongsToMany(Category::class, 'product_category', 'product_id', 'category_type');
+    }
+
     public function wishlists()
     {
         return $this->belongsToMany(Authenticated::class, 'wishlist', 'product_id', 'user_id')->withPivot('id');
