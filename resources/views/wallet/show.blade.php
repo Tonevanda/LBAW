@@ -69,7 +69,7 @@
 
 
 <div id="fullScreenPopup2" class="popup-form" style="display: none;">
-    <form class="add_funds_form" method="" action="">
+    <form class="add_funds_form" method="POST" action="{{route('wallet.update',$user->id)}}">
         {{ csrf_field() }}
         <fieldset>
             <legend class="sr-only">Money being added to your Bibliophile Bliss Wallet</legend>
