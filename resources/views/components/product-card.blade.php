@@ -37,7 +37,7 @@
                         <div id="overlay"></div>
                     </fieldset>
                 </form>
-                <form class = "add_wishlist" method="" action="{{ route('wishlist.store', ['user_id' => Auth::user()->id]) }}">
+                <form class = "add_wishlist" method="" action="">
                     <fieldset>
                         <legend class="sr-only">Add to Wishlist</legend>
                         {{ csrf_field() }}
@@ -46,9 +46,8 @@
                         @if(Auth::user()->authenticated()->get()->first()->wishlist->contains($product))
                             <input type="hidden" name="wishlist_id" value="{{ Auth::user()->authenticated()->get()->first()->wishlist->where('id', $product->id)->first()->pivot->id }}" required>
                         @endif
-                        <button id="heartButton" class="heart-button" type="submit" name="add-to-wishlist" title="Add to wishlist">
-                            <i class="fas fa-heart"></i>
-                        </button>                                       
+                        <i class="fas fa-heart" title="Add to wishlist"></i>
+                                       
                     </fieldset>
                 </form>
             </div>

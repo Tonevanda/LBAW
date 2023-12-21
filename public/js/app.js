@@ -32,10 +32,17 @@ function addEventListeners() {
     creator.addEventListener('submit', createCartProductRequest);
   });
 
-  let wishlistCreator = document.querySelectorAll('form.add_wishlist');
-  [].forEach.call(wishlistCreator, function(creator){
-    creator.addEventListener('submit', createWishlistProductRequest);
+  const heartIcons = document.querySelectorAll('i.fa-heart');
+  [].forEach.call(heartIcons, function(heart_icon){
+    heart_icon.addEventListener('click', createWishlistProductRequest);
   });
+
+  /*let wishlistCreator = document.querySelectorAll('form.add_wishlist');
+  [].forEach.call(wishlistCreator, function(creator){
+
+    creator.addEventListener('submit', createWishlistProductRequest);
+  });*/
+
   
   let priceFilter = document.querySelector('form.products_search input[name=price]');
   let priceShow = document.querySelector('form.products_search div');
@@ -86,7 +93,6 @@ function addEventListeners() {
       update_pic_button.click();
     });
   }
-
 
   let reportCreator = document.querySelectorAll('form.report_review');
   [].forEach.call(reportCreator, function(creator){
@@ -538,18 +544,20 @@ function deleteReviewRequest(event){
 }
 
 function createWishlistProductRequest(event){
-  let user_id = this.querySelector('input[name=user_id]').value;
-  let product_id = this.querySelector('input[name=product_id]').value;
-  console.log(this);
+  const form = this.parentNode.parentNode;
+  console.log(form);
+  let user_id = form.querySelector('input[name=user_id]').value;
+  let product_id = form.querySelector('input[name=product_id]').value;
+  console.log(form);
   event.preventDefault();
-  if (this.querySelector('.heart-button').classList.contains('clicked')) {
-    let wishlist_id = this.querySelector('input[name=product_id]').value;
-    this.querySelector('.heart-button').classList.remove('clicked')
+  if (this.classList.contains('clicked')) {
+    let wishlist_id = form.querySelector('input[name=product_id]').value;
+    this.classList.remove('clicked')
     console.log("entered delete");
     sendAjaxRequest('delete', '/api/wishlist/'+user_id, {product_id: product_id}, deleteHomeWishlistProductHandler);
   }
   else{
-    this.querySelector('.heart-button').classList.add('clicked')
+    this.classList.add('clicked')
     console.log("entered delete");
     sendAjaxRequest('post', '/api/wishlist/'+user_id, {product_id: product_id}, createCartProductHandler);
   }
@@ -1010,8 +1018,8 @@ window.onload = function() {
       let productId = form.querySelector('input[name=product_id]').value; // Get the product id from the form
       // If the product is in the user's wishlist, set the form's action to the remove route
       if (data.wishlist.some(item => item.id == productId)) {
-        console.log(form.querySelector('.heart-button'));
-        form.querySelector('.heart-button').classList.add('clicked');
+        let icon = form.querySelector('i.fa-heart');
+        icon.classList.add('clicked');
       }
     });
   });

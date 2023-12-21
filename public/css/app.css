@@ -410,7 +410,7 @@ input[type=password]:focus {
   border-color: #003740;
 }
 
-.heart-button {
+form i.fa-heart {
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -419,11 +419,11 @@ input[type=password]:focus {
   text-align: right;
 }
 
-.heart-button.clicked {
+form i.fa-heart.clicked {
     color: #003740; /* Color when clicked */
 }
 
-.heart-button:hover {
+form i.fa-heart:hover {
   background-color: transparent;
   color: #333; 
 }
