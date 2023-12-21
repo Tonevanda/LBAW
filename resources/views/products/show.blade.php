@@ -91,7 +91,7 @@
         <!--review forms-->
         <div class = "user_review_option">
         @if (auth()->check())
-            @if (!Auth::user()->isAdmin())
+            @if (!Auth::user()->isAdmin() && Auth::user()->authenticated()->first()->isblocked===false)
                 @php
                     $user = Auth::user();
                     $userReview = $user->getReviewFromProduct($product->id)->first();
