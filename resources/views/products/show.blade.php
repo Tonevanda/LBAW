@@ -20,6 +20,7 @@
 
 <div class = 'product-page'>
     <div class="product-info">
+        
     <div class = "product_img">
     <img src="{{ asset('images/product_images/' . $product->image) }}">
         </div>

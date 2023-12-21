@@ -67,14 +67,31 @@ function addEventListeners() {
 
   let profile_pic_input = document.querySelector('input[name=profile_picture]');
 
+  let product_pic_input = document.querySelector('input[name=product_picture]');
+
   let profile_pic_form = document.querySelector('form.profile_pic');
+
+  const product_pic_form = document.querySelector('form.product_pic');
+
+  const product_pic_edit_icon = document.querySelector('form.product_pic i');
 
   let product_edit = document.querySelector('button.edit_product');
 
-  let product_save = document.querySelector('button.save_product');
+
+  //let product_save = document.querySelector('button.save_product');
 
   if(product_edit != null){
     product_edit.addEventListener('click', handleEditButtonClick);
+  }
+
+  if(product_pic_form != null){
+    product_pic_form.addEventListener('submit', changePictureRequest);
+  }
+
+  if(product_pic_edit_icon != null){
+    product_pic_edit_icon.addEventListener('click', function(){
+      product_pic_input.click();
+    });
   }
 
   if(profile_pic_form != null){
@@ -84,6 +101,13 @@ function addEventListeners() {
   if(profile_pic_edit_icon != null){
     profile_pic_edit_icon.addEventListener('click', function(){
       profile_pic_input.click();
+    });
+  }
+
+  if(product_pic_input != null){
+    product_pic_input.addEventListener('change', function(){
+      let update_product_pic_button = product_pic_form.querySelector('input[name=update_pic]');
+      update_product_pic_button.click();
     });
   }
 
@@ -605,6 +629,17 @@ function deleteCartProductRequest(event){
   event.preventDefault();
 }
 
+function changePictureRequest(event){
+  console.log(this);
+  const file = this.querySelector('input[name=product_picture]').files[0];
+  let formData = new FormData();
+  formData.append('product_picture', file);
+  console.log(formData);
+  sendAjaxRequestImage('post', '/product/picture', formData, changePictureHandler);
+
+  event.preventDefault();
+}
+
 function updateProfilePictureRequest(event){
   console.log(this);
 
@@ -935,6 +970,20 @@ function deleteWishlistProductHandler(){
     deletion_target.remove();
   }
 }
+
+function changePictureHandler(){
+  if(this.status === 301){
+    let response = JSON.parse(this.responseText);
+    console.log(response);
+  }
+  else if(this.status == 200){
+    let response = JSON.parse(this.responseText);
+    var imageUrl = assetBaseUrl + '/' + response;
+    let product_pic = document.querySelector('form.product_pic img');
+    product_pic.setAttribute('src', imageUrl);
+  }
+}
+
 
 function updateProfilePictureHandler(){
   if(this.status == 200){

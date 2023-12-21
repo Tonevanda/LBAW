@@ -33,6 +33,7 @@ Route::controller(ProductController::class)->group(function () {
     Route::get('/products/{product_id}', 'show')->name('single-product');
     Route::get('/product/create', 'showCreateProductForm')->name('add_products');
     Route::post('/product/create', 'createProduct')->name('product.create');
+    Route::post('/product/picture', 'updateImage')->name('product.updateImage');
     Route::post('/product/update/{product_id}', 'updateProduct')->name('product.update');
     Route::post('/post/change', 'change')->name('post.change');
 });

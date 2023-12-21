@@ -1274,7 +1274,7 @@ li button[name="update-review"].visible{
   border: 10px solid #ffffff;
 }
 
-form.profile_pic input[name="update_pic"]{
+input[name="update_pic"]{
   display: none;
 }
 

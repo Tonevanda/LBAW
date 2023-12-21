@@ -3,11 +3,27 @@
 @section('content')
 
 
+<script>
+  var assetBaseUrl = "{{ asset('images/product_images') }}";
+</script>
+
 <div class = 'product-page'>
   <div class="product-info">
-  <div class = "product_img">
-  <img src="{{ asset('images/product_images/' . 'default.png') }}">
-      </div>
+    <form class="product_pic" method="" action="" enctype="multipart/form-data">
+      {{ csrf_field() }}
+      @method('PUT')
+      <fieldset>
+        <legend class="sr-only">Profile Picture</legend>
+        <div class = "product_image">
+          <img src="{{ asset('images/product_images/' . 'default.png') }}" alt = "" />
+          <i class="fas fa-edit"></i>
+        </div>
+    
+        <input type="file" name="product_picture" hidden>
+
+          <input type="submit" name="update_pic" value="{{ false }}" hidden>
+      </fieldset>
+    </form>
       <div class="product-details">
 
       <form class = "add_product" method="POST" action="{{route('product.create')}}">

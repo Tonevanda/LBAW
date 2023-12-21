@@ -102,6 +102,14 @@ class ProductController extends Controller
         return redirect()->route('all-products');
     }
 
+    public function updateImage(Request $request){
+
+
+        $request->file('product_picture')->storeAs('images/product_images', $request->file('product_picture')->getClientOriginalName() ,'public');
+
+        return response()->json($request->file('product_picture')->getClientOriginalName(), 200);
+    }
+
     public function updateProduct(Request $request, $product_id){
         $data = $request->validate([
             'synopsis' => 'required|string|max:250',
