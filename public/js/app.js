@@ -1,17 +1,22 @@
 let money;
 
 
-const pusher = new Pusher("d9bbd171e0110783c3ad", {
-  cluster: "eu",
-  encrypted: true
-  });
+const pusher = new Pusher("2c7cbe6273c479512671", {
+cluster: "eu",
+encrypted: true
+});
 
-  const channel = pusher.subscribe('lbaw');
-  console.log(channel);
-  channel.bind('notification-pricechange', function(data) {
+const channel = pusher.subscribe('users');
+console.log(channel);
+channel.bind('notification-pricechange', function(data) {
+  fetch('/shopping-cart/get/' + 101)
+  .then(response => response.json())
+  
   console.log(`New notification: ${data.message}`);
-  })
-  //Pusher.logToConsole = true;
+})
+
+Pusher.logToConsole = true;
+
 function addEventListeners() {
   let cartDeleter = document.querySelectorAll('form.remove_cart');
   [].forEach.call(cartDeleter, function(deleter){
@@ -27,15 +32,26 @@ function addEventListeners() {
     creator.addEventListener('submit', createCartProductRequest);
   });
 
-  let wishlistCreator = document.querySelectorAll('form.add_wishlist');
-  [].forEach.call(wishlistCreator, function(creator){
-    creator.addEventListener('submit', createWishlistProductRequest);
+  const heartIcons = document.querySelectorAll('i.fa-heart');
+  [].forEach.call(heartIcons, function(heart_icon){
+    heart_icon.addEventListener('click', createWishlistProductRequest);
   });
+
+  /*let wishlistCreator = document.querySelectorAll('form.add_wishlist');
+  [].forEach.call(wishlistCreator, function(creator){
+
+    creator.addEventListener('submit', createWishlistProductRequest);
+  });*/
+
   
   let priceFilter = document.querySelector('form.products_search input[name=price]');
   let priceShow = document.querySelector('form.products_search div');
-  const user_money = document.querySelector('span#user_money').textContent;
-  const currency_symbol = user_money.charAt(user_money.length-1);
+  const user_money_tag = document.querySelector('span#user_money');
+  let currency_symbol = '€';
+  if(user_money_tag != null){
+    const user_money = user_money_tag.textContent;
+    currency_symbol = user_money.charAt(user_money.length-1);
+  }
   if(priceFilter != null && priceShow != null){
     if(deformat_money(priceShow.textContent, currency_symbol) == 500)priceShow.textContent = `MAX`;
     priceFilter.addEventListener('input', function () {
@@ -77,7 +93,6 @@ function addEventListeners() {
       update_pic_button.click();
     });
   }
-
 
   let reportCreator = document.querySelectorAll('form.report_review');
   [].forEach.call(reportCreator, function(creator){
@@ -183,7 +198,7 @@ function addEventListeners() {
 
         let warning_tag = low_money_tag.querySelector('p');
         warning_tag.textContent = 'Please select a payment method for the remaining ' + remaining_money;
-        low_money_tag.querySelector('p:last-child').textContent = 'Pay for all the ' + money;
+        low_money_tag.querySelector('p:last-child').textContent = 'Pay for all the ' + money + ' with payment method only';
         let checkbox_pay_all = low_money_tag.querySelector('input');
         checkbox_pay_all.checked = false;
         warning_tag.style.display = 'block';
@@ -319,6 +334,22 @@ function addEventListeners() {
   if(cancel_review_popup_button != null){
     cancel_review_popup_button.addEventListener('click', hideFullScreenPopup.bind(review_popup));
   }
+
+  const toggle_user_block = document.querySelectorAll('form.form-toggle-block');
+  if(toggle_user_block != null){
+    [].forEach.call(toggle_user_block, function(form){
+      form.addEventListener('submit', function(event){
+        event.preventDefault();
+        const user_id = form.querySelector('button').getAttribute('data-id');
+        console.log(user_id);
+        sendAjaxRequest('put', '/api/users/block/'+ user_id, {}, blockHandler);
+      });
+    });
+  }
+  const refund_cancel_forms = document.querySelectorAll('form.refund_cancel_purchase');
+  [].forEach.call(refund_cancel_forms, function(form){
+    form.addEventListener('submit', refundPurchaseRequest);
+  })
 
 }
 
@@ -490,6 +521,13 @@ function createReviewRequest(event){
   event.preventDefault();
 }
 
+function refundPurchaseRequest(event){
+  const user_id = this.querySelector('input[name=user_id]').value;
+  const purchase_id = this.getAttribute('data-id');
+  sendAjaxRequest('put', '/refund/'+purchase_id, {user_id: user_id}, refundPurchaseHandler);
+  event.preventDefault();
+}
+
 function createReportRequest(event){
   let review_id = this.querySelector('input[name=review_id]').value;
   let product_id = this.querySelector('input[name=product_id]').value;
@@ -506,18 +544,20 @@ function deleteReviewRequest(event){
 }
 
 function createWishlistProductRequest(event){
-  let user_id = this.querySelector('input[name=user_id]').value;
-  let product_id = this.querySelector('input[name=product_id]').value;
-  console.log(this);
+  const form = this.parentNode.parentNode;
+  console.log(form);
+  let user_id = form.querySelector('input[name=user_id]').value;
+  let product_id = form.querySelector('input[name=product_id]').value;
+  console.log(form);
   event.preventDefault();
-  if (this.querySelector('.heart-button').classList.contains('clicked')) {
-    let wishlist_id = this.querySelector('input[name=product_id]').value;
-    this.querySelector('.heart-button').classList.remove('clicked')
+  if (this.classList.contains('clicked')) {
+    let wishlist_id = form.querySelector('input[name=product_id]').value;
+    this.classList.remove('clicked')
     console.log("entered delete");
     sendAjaxRequest('delete', '/api/wishlist/'+user_id, {product_id: product_id}, deleteHomeWishlistProductHandler);
   }
   else{
-    this.querySelector('.heart-button').classList.add('clicked')
+    this.classList.add('clicked')
     console.log("entered delete");
     sendAjaxRequest('post', '/api/wishlist/'+user_id, {product_id: product_id}, createCartProductHandler);
   }
@@ -571,8 +611,7 @@ function deleteReviewHandler(){
   if(this.status == 301){
     let response = JSON.parse(this.responseText);
     console.log(response);
-    let message = "Failed to delete review.";
-    document.getElementById('errorDeleteReview').textContent = message;
+    document.getElementById('errorDeleteReview').textContent = response;
     document.getElementById('errorDeleteReview').style.display = 'block';
   }
   else if(this.status == 200){
@@ -664,8 +703,7 @@ function reviewCreateHandler(){
   if(this.status == 301){
     let response = JSON.parse(this.responseText);
     console.log(response);
-    let message = "Sorry, we were unable to submit your review.";
-    document.getElementById('errorReview').textContent = message;
+    document.getElementById('errorReview').textContent = response;
     document.getElementById('errorReview').style.display = 'block';
   }
   
@@ -675,8 +713,7 @@ function updateMoneyHandler(){
   if(this.status === 301){
     let response = JSON.parse(this.responseText);
     console.log(response);
-    let message = "We encountered an issue updating your funds.";
-    document.getElementById('errorMoneyUpdate').textContent = message;
+    document.getElementById('errorMoneyUpdate').textContent = response;
     document.getElementById('errorMoneyUpdate').style.display = 'block';
   }
   else if(this.status===200){
@@ -687,12 +724,25 @@ function updateMoneyHandler(){
   }
 }
 
+function refundPurchaseHandler(){
+  if(this.status === 301){
+    let response = JSON.parse(this.responseText);
+    let = error_message = document.querySelector("div[data-id='" + response.purchase_id + "']");
+    error_message.textContent = response.message;
+    error_message.style.display = 'block';
+  }
+  else if(this.status===200){
+    let response = JSON.parse(this.responseText);
+    let form = document.querySelector('form[data-id="' + response +  '"]');
+    form.remove();
+  }
+}
+
 function updateLocationHandler(){
   if(this.status ===301){
     let response = JSON.parse(this.responseText);
     console.log(response);
-    let message = "Location update failed.";
-    document.getElementById('errorLocationUpdate').textContent = message;
+    document.getElementById('errorLocationUpdate').textContent = response;
     document.getElementById('errorLocationUpdate').style.display = 'block';
   }
   else if(this.status===200){
@@ -711,11 +761,10 @@ function createPurchaseHandler(){
   if(this.status === 301){
     let response = JSON.parse(this.responseText);
     console.log(response);
-    let message = "We encountered an issue processing your purchase.";
-    document.getElementById('errorCheckout').textContent = message;
+    document.getElementById('errorCheckout').textContent = response;
     document.getElementById('errorCheckout').style.display = 'block';
   }
-  else if(this.status===200){
+  else if(this.status===201){
     let response = JSON.parse(this.responseText);
     document.querySelector('section.product_listing').remove();
     document.querySelector('table tr:first-child td:last-child').textContent = 0;
@@ -730,6 +779,26 @@ function createPurchaseHandler(){
   }
 }
 
+function blockHandler(){
+  if(this.status == 301){
+    let response = JSON.parse(this.responseText);
+    console.log(response);
+    document.getElementById('errorBlock').textContent = response;
+    document.getElementById('errorBlock').style.display = 'block';
+  }
+  else if(this.status == 200){
+    let response = JSON.parse(this.responseText);
+    console.log(response.user_id);
+    let block_button = document.querySelector("button[data-id='"+response.user_id+"']");
+    console.log(block_button);
+    if(response.isblocked){
+      block_button.textContent = 'Unblock';
+    }
+    else{
+      block_button.textContent = 'Block';
+    }
+  }
+}
 
 function reviewHandler(){
   if(this.status == 201){
@@ -738,8 +807,7 @@ function reviewHandler(){
   else if(this.status == 301){
     let response = JSON.parse(this.responseText);
     console.log(response);
-    let message = "Unable to save your review changes.";
-    document.getElementById('errorReviewUpdate').textContent = message;
+    document.getElementById('errorReviewUpdate').textContent = response;
     document.getElementById('errorReviewUpdate').style.display = 'block';
   }
   else if(this.status == 200){
@@ -761,23 +829,20 @@ function createReportHandler(){
   if(this.status == 301){
     let response = JSON.parse(this.responseText);
     console.log(response);
-    let message = "Failed to create review report.";
-    document.getElementById('errorReport').textContent = message;
+    document.getElementById('errorReport').textContent = response;
     document.getElementById('errorReport').style.display = 'block';
   }
 }
   
 function createCartProductHandler(){
-  if(this.status == 201){
-    console.log("added to shopping cart");
-    
-  }
   if(this.status == 301){
     let response = JSON.parse(this.responseText);
-    console.log(response);
-    let message = "Product couldn't be added to your shopping cart.";
-    document.getElementById('errorMessage').textContent = message;
-    document.getElementById('errorMessage').style.display = 'block';
+    let error_message_tag = document.querySelector("div[data-id='" + response.product_id + "']");
+    error_message_tag.textContent = response.message;
+    error_message_tag.style.display = 'block';
+  }
+  else if(this.status == 201){
+    
   }
 }
 
@@ -801,10 +866,9 @@ function deleteCartProductHandler(){
   }
   if(this.status == 301){
     let response = JSON.parse(this.responseText);
-    console.log(response);
-    let message = "Failed to remove product from shopping cart.";
-    document.getElementById('errorDeleteCart').textContent = message;
-    document.getElementById('errorDeleteCart').style.display = 'block';
+    let error_message_tag = document.querySelector("div[data-id='" + response.cart_id + "'] div.error_message");
+    error_message_tag.textContent = response.message;
+    error_message_tag.style.display = 'block';
   }
 }
 
@@ -832,14 +896,17 @@ function deleteHomeWishlistProductHandler(){
   if(this.status == 301){
     let response = JSON.parse(this.responseText);
     console.log(response);
-    let message = "Failed to remove product from wishlist.";
-    document.getElementById('errorDeleteWishlist').textContent = message;
-    document.getElementById('errorDeleteWishlist').style.display = 'block';
+    let error_message_tag = document.querySelector("div[data-id='" + response.product_id + "']");
+    error_message_tag.textContent = response.message;
+    error_message_tag.style.display = 'block';
   }
 }
 function deleteWishlistProductHandler(){
-  if(this.status == 200){
-    console.log(this)
+  if(this.status == 301){
+    let response = JSON.parse(this.responseText);
+    console.log(response);
+  }
+  else if(this.status == 200){
     console.log("removed from wishlist");
     let response = JSON.parse(this.responseText);
     let deletion_target = document.querySelector('div[data-id="' + response + '"]');
@@ -943,15 +1010,15 @@ window.onload = function() {
   console.log(forms);
   let user_id = forms[0].querySelector('input[name=user_id]').value;
   // Send an AJAX request to the server to get all the products in the user's wishlist
-  fetch('/wishlist/test/' + user_id)
+  fetch('/wishlist/get/' + user_id)
   .then(response => response.json())
   .then(data => {
     forms.forEach(form => {
       let productId = form.querySelector('input[name=product_id]').value; // Get the product id from the form
       // If the product is in the user's wishlist, set the form's action to the remove route
       if (data.wishlist.some(item => item.id == productId)) {
-        console.log(form.querySelector('.heart-button'));
-        form.querySelector('.heart-button').classList.add('clicked');
+        let icon = form.querySelector('i.fa-heart');
+        icon.classList.add('clicked');
       }
     });
   });
@@ -1038,6 +1105,5 @@ var port = process.env.PORT || 5000;
 app.listen(port);
 */
 addEventListeners();
-  
   
 

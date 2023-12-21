@@ -52,12 +52,14 @@ if($user != NULL && !$user->isAdmin()){
                         <a class="buttonss" href="{{ route('logout') }}">
                             <i class="fa fa-power-off"></i><span class="header-text"> Logout</span>
                         </a> 
-                    @else
+                    @else 
                     <a title="Wallet" class="buttonss" href="{{ route('wallet',$user->id)}}">
                         <i class="fas fa-wallet"></i><span class="header-text" id = "user_money"> {{number_format($wallet->money/100, 2, ',', '.')}}{{$currency->currency_symbol}}</span>
                     </a> 
                     <a class="buttonss" href="{{ route('notifications',$user->id) }}">
-                        <i class="fas fa-bell"></i> <span class="header-text">Notifications</span>
+                        <i class="fas fa-bell"></i>
+                        {{$user->authenticated()->first()->notifications()->count()}} 
+                        <span class="header-text">Notifications</span>
                     </a>   
                         <a class="buttonss" href="{{ route('shopping-cart',$user->id) }}">
                             <i class="fas fa-shopping-cart"></i> <span class="header-text">Shopping Cart</span>

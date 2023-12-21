@@ -430,7 +430,7 @@ input[type=password]:focus {
   border-color: #003740;
 }
 
-.heart-button {
+form i.fa-heart {
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -439,11 +439,11 @@ input[type=password]:focus {
   text-align: right;
 }
 
-.heart-button.clicked {
+form i.fa-heart.clicked {
     color: #003740; /* Color when clicked */
 }
 
-.heart-button:hover {
+form i.fa-heart:hover {
   background-color: transparent;
   color: #333; 
 }
@@ -1616,4 +1616,15 @@ body.popup-open .popup {
   border: 1px solid #ccc;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   z-index: 1000;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  border: 0;
 }

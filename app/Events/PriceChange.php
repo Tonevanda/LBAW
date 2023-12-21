@@ -15,17 +15,17 @@ class PriceChange implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $message;
-    public $post_id;
+    public $product_id;
 
 
     /**
      * Create a new event instance.
      */
-    public function __construct($post_id)
+    public function __construct($product_id)
     {
-        error_log($post_id);
-        $this->post_id = $post_id;
-        $this->message = 'item info changed ' . $post_id;
+        error_log($product_id);
+        $this->product_id = $product_id;
+        $this->message = 'an item in your shopping cart has changed info';
 
     }
 
@@ -36,7 +36,7 @@ class PriceChange implements ShouldBroadcast
      */
     // You should specify the name of the channel created in Pusher.
     public function broadcastOn(): array {
-        return ['lbaw'];
+        return ['users'];
     }
 
     // You should specify the name of the generated notification.

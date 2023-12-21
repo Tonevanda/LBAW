@@ -10,6 +10,7 @@
         $auth = $user->authenticated()->first();
         $payments = Payment::filter("store money")->get();
         $currency = $wallet->currency()->first();
+
     }
 @endphp
 
@@ -21,7 +22,7 @@
 
 <div class="ad_box">
 
-<p> Funds in your wallet can be used to purchase any book on Bibliophile Bliss.
+<p> Funds in your wallet can be used to purchase any book on Bibliophile's Bliss.
 
     You will have the opportunity to review your request before it is processed. </p>
 
@@ -50,7 +51,7 @@
 </div>
 </div>
 <div class="details_box"> 
-    <h3> Your Bibliophile Bliss Account </h3>
+    <h3> Your Bibliophile's Bliss Account </h3>
     <div class="ad_box">
         <div class="ad_wallet"> 
     <h4> Current Wallet Balance: {{ number_format($wallet->money/100, 2, ',', '.') }}{{$currency->currency_symbol}}</h4>
@@ -68,34 +69,39 @@
 
 
 <div id="fullScreenPopup2" class="popup-form" style="display: none;">
-    <form class = "add_funds_form" method="" action="">
+    <form class="add_funds_form" method="" action="">
         {{ csrf_field() }}
-        <div class="shipping-address">
-            <div class="column">
-                <p>Being added to your Bibliophile Bliss Wallet</p>
-
+        <fieldset>
+            <legend class="sr-only">Money being added to your Bibliophile Bliss Wallet</legend>
+            <div class="shipping-address">
+                <div class="column">
+                    <p>Being added to your Bibliophile Bliss Wallet</p>
+                </div>
+                <div class="column">
+                    <p></p>
+                </div>
             </div>
-            <div class="column">
-                <p></p>
+        </fieldset>
+
+        <fieldset>
+            <legend class="sr-only">Your Username</legend>
+            <p class="payment_info">Bibliophile's Bliss Account: {{$user->name}}</p>
+            <p class="payment_info"></p>
+        </fieldset>
+
+        <fieldset>
+            <legend class="sr-only"></legend>
+            <div class="shipping-address">
+                <div class="column">
+                    <p class="payment_info"></p>
+                    <p class="payment_info"></p>
+                </div>
+                <div class="column">
+                    <button name="back">Change</button>
+                    <p class="payment_info"></p>
+                </div>
             </div>
-        </div>
-
-        <p class = "payment_info">Bibliophile Bliss Account: {{$user->name}}</p>
-        <p class = "payment_info"></p>
-
-        <div class="shipping-address">
-            <div class="column">
-                <p class = "payment_info"></p>
-                <p class = "payment_info"></p>
-
-            </div>
-            <div class="column">
-                <button name="back"> Change </button>
-                <p class = "payment_info"></p>
-            </div>
-        </div>
-
-
+        </fieldset>
 
         <div class="navigation-buttons">
             <button name="cancel2">Cancel</button>

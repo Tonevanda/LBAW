@@ -31,22 +31,23 @@ class PurchaseController extends Controller
         }
 
 
-        $cart_products = $auth->shoppingCartSameProduct();
+        $cart_products = $auth->shoppingCartSameProduct()->get();
         $total_quantity = 0;
         $total_price = 0;
-        foreach ($cart_products as $cart_product) {
-            $stock = 0;
-            foreach ($cart_product as $product) {
-                $stock = $stock+1;
-                $total_quantity = $total_quantity + 1;
-                $total_price = $total_price+$product->price;
-                try{
-                    $this->authorize('hasStock', [$product, $stock]);
-                }catch(AuthorizationException $e){
-                    return response()->json($e->getMessage(), 301);
-                }
+        $temp_id = $cart_products[0]->id;
+        $stock = 0;
+        foreach ($cart_products as $product) {
+            if($product->id != $temp_id){
+                $stock = 0;
             }
-            
+            $stock = $stock+1;
+            $total_quantity = $total_quantity + 1;
+            $total_price = $total_price+$product->price;
+            try{
+                $this->authorize('hasStock', [$product, $stock]);
+            }catch(AuthorizationException $e){
+                return response()->json($e->getMessage(), 301);
+            }
         }
 
 
@@ -82,10 +83,30 @@ class PurchaseController extends Controller
 
         Purchase::create($data);
 
-        return response()->json($wallet->money, 200);
+        return response()->json($wallet->money, 201);
+
+    }
+
+    function update(Request $request, $purchase_id)
+    {
+        $data = $request->validate([
+            'user_id' => 'required'
+        ]);
 
 
+        $purchase = Purchase::findOrFail($purchase_id);
 
+        try{
+            $this->authorize('update', [$purchase, $data['user_id']]);
+        }
+        catch(AuthorizationException $e){
+            return response()->json(['message' => $e->getMessage(), 'purchase_id' => $purchase_id], 301);
+        }
+
+
+        $purchase->update(['refundedat' => now()->addMinutes(0, 2)->addSeconds(0, 30)]);
+        
+        return response()->json($purchase_id, 200);
     }
 
 

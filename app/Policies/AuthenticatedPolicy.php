@@ -35,7 +35,15 @@ class AuthenticatedPolicy
     public function updateLocation(User $user, Authenticated $auth): bool
     {
         if($user->id != $auth->user_id && !$user->isAdmin()){
-            throw new AuthorizationException("you can't update the location of an account that isn't yours, unless you are an admin");
+            throw new AuthorizationException("You can't update the location of an account that isn't yours, unless you are an admin");
+        }
+        return true;
+    }
+
+    public function toggleBlock(User $user, Authenticated $auth): bool
+    {
+        if(!$user->isAdmin()){
+            throw new AuthorizationException("Only admins can block users");
         }
         return true;
     }

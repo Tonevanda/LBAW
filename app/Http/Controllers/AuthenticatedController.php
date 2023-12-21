@@ -19,7 +19,7 @@ class AuthenticatedController extends Controller
     //Show all products in the shopping cart
 
     public function index(Request $request){
-        $users = Authenticated::filter($request->input())->paginate(10);
+        $users = Authenticated::filter($request->input())->paginate(12);
         try {
             $this->authorize('list', Authenticated::class);
         } catch (AuthorizationException $e) {
@@ -176,6 +176,13 @@ class AuthenticatedController extends Controller
         return response()->json(['wishlist' => $wishlist]);
     }
 
+    public function getShoppingCart($user_id){
+        $user = Authenticated::findOrFail($user_id);
+        // Get the user's shopping cart from the database
+        $shopping_cart = $user->shoppingCart()->get();
+        // Return the shopping cart as a JSON response
+        return response()->json(['shopping_cart' => $shopping_cart]); 
+    }
     public function create(Request $request)
     {
 
@@ -216,7 +223,7 @@ class AuthenticatedController extends Controller
         try {
             $this->authorize('addToCart', [$product, $user_id]);
         } catch (AuthorizationException $e) {
-            return response()->json($e->getMessage(), 301);
+            return response()->json(['message' => $e->getMessage(), 'product_id' => $product->id], 301);
         }
         $user->shoppingCart()->attach($data['product_id']);
         return response()->json([], 201);
@@ -239,7 +246,7 @@ class AuthenticatedController extends Controller
         try{
             $this->authorize('addToWishlist', [$product, $user_id]);
         }catch(AuthorizationException $e){
-            return response()->json([], 301);
+            return response()->json(['message' => $e->getMessage(), 'product_id' => $product->id], 301);
         }
         $user->wishlist()->attach($data['product_id']);
         return response()->json([], 201);
@@ -254,7 +261,7 @@ class AuthenticatedController extends Controller
         try {
             $this->authorize('removeFromWishlist', $product);
         } catch (AuthorizationException $e) {
-            return response()->json($e->getMessage(), 301);
+            return response()->json(['message' => $e->getMessage(), 'product_id' => $product->id], 301);
         }
         $user->wishlist()->wherePivot('id', $user->wishlist->where('id', $product->id)->first()->pivot->id)->detach();
         return response()->json($data['product_id'], 200);
@@ -271,7 +278,7 @@ class AuthenticatedController extends Controller
         try {
             $this->authorize('removeFromCart', [Product::class, $data['cart_id']]);
         } catch (AuthorizationException $e) {
-            return response()->json($e->getMessage(), 301);
+            return response()->json(['message' => $e->getMessage(), 'cart_id' => $data['cart_id']], 301);
         }
         $user->shoppingCart()->wherePivot('id', $data['cart_id'])->detach();
         return response()->json($data['cart_id'],200);
@@ -282,5 +289,18 @@ class AuthenticatedController extends Controller
         return view('notifications', [
             'notifications' => $user->notifications()->get()
         ]);
+    }
+
+    public function toggleBlock(Request $request, $user_id){
+        $user = Authenticated::findOrFail($user_id);
+        try{
+            $this->authorize('toggleBlock', $user);
+        }catch(AuthorizationException $e){
+            return response()->json($e->getMessage(), 301);
+        }
+        $user->update([
+            'isblocked' => !$user->isblocked
+        ]);
+        return response()->json(["isblocked"=> $user->isblocked,"user_id"=> $user_id], 200);
     }
 }

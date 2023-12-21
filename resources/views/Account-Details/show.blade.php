@@ -10,7 +10,7 @@ $currency = $wallet->currency()->first();
 @endphp
 
 <div class="account-page">
-<h2> {{$user->name}} Account </h2>
+<h2> {{$user->name}}'s Account </h2>
 
 
 <div class = "details_box">
@@ -41,10 +41,13 @@ $currency = $wallet->currency()->first();
     <form method="POST" action="{{ route('user.delete', ['user_id' => $user->id]) }}">
         {{ csrf_field() }}
         @method('DELETE')
-        <button type="submit" class="cancel">
-            Delete Account
-        </button>
-        <p class="small"> After deleting the account all of your reviews will remain in Bibliophile Bliss, avaliable for everyone, but with your name removed.</p>
+        <fieldset>
+            <legend class="sr-only">Delete Account</legend>
+            <button type="submit" class="cancel">
+                Delete Account
+            </button>
+            <p class="small"> After deleting the account all of your reviews will remain in Bibliophile's Bliss, avaliable for everyone, but with your name removed.</p>
+        </fieldset>
     </form>
 </div>
 </div>

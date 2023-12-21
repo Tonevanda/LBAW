@@ -11,64 +11,67 @@
 
 
 <div id="fullScreenPopup" class="popup-form" style="display: none;">
-    <form class = "add_funds_form" method="" action="">
+    <form class="add_funds_form" method="" action="">
         {{ csrf_field() }}
 
-        <input type = "text" name = "user_id" data-info = "{{$user->id}}" hidden>
+        <input type="text" name="user_id" data-info="{{$user->id}}" hidden>
         <!-- Your form content here -->
         <h3 class="title">Payment Information</h3>
-        <h4>Billing information</h4>
+        <fieldset>
+            <legend>Billing information</legend>
             <div class="shipping-address">
                 <div class="column">
                     <label for="name">Name</label>
-                    <input type="text" name="name" placeholder="Enter name" data-info = "{{$auth->name == NULL ? '' : $auth->name}}">
+                    <input type="text" name="name" placeholder="Enter name" data-info="{{$auth->name == NULL ? '' : $auth->name}}">
 
                     <label for="address">Billing address</label>
-                    <input type="text" name="address" placeholder="Enter Billing address" data-info = "{{$auth->address == NULL ? '' : $auth->address}}">
+                    <input type="text" name="address" placeholder="Enter Billing address" data-info="{{$auth->address == NULL ? '' : $auth->address}}">
 
                     <label for="country">Country</label>
-                    <select name="country" data-info = "{{$user->country}}">
+                    <select name="country" data-info="{{$user->country}}">
                         <option value="{{$user->country}}">{{$user->country}}</option>
                         <option value="Other">Other</option>
-                    
                     </select>
                 </div>
                 <div class="column">
                     <label for="city">City</label>
-                    <input type="text" name="city" placeholder="Enter city" data-info = "{{$auth->city == NULL ? '' : $auth->city}}">
-            
+                    <input type="text" name="city" placeholder="Enter city" data-info="{{$auth->city == NULL ? '' : $auth->city}}">
+
                     <label for="postal_code">Postal Code</label>
-                    <input type="text" name="postal_code" placeholder="Enter Postal Code" data-info = "{{$auth->postal_code == NULL ? '' : $auth->postal_code}}">
+                    <input type="text" name="postal_code" placeholder="Enter Postal Code" data-info="{{$auth->postal_code == NULL ? '' : $auth->postal_code}}">
 
                     <label for="phone">Phone Number</label>
-                    <input type="text" name="phone" placeholder="Enter Phone Number" data-info = "{{$auth->phone_number == NULL ? '' : $auth->phone_number}}">
+                    <input type="text" name="phone" placeholder="Enter Phone Number" data-info="{{$auth->phone_number == NULL ? '' : $auth->phone_number}}">
                 </div>
             </div>
+        </fieldset>
 
         <!-- Payment Method -->
-        <h4>Payment Method</h4>
-        <div class = "low_money" style="display: none;">
-            <h6><i class="fas fa-exclamation-triangle"></i><b> Your Bibliophile Bliss Wallet balance is too low to cover this transaction!</b></h6>
-            <p style="display: block; margin-bottom:0;" ></p>
-            <div class="checkbox-container">
-            <input type="checkbox">
-            <p></p>
+        <fieldset>
+            <legend>Payment Method</legend>
+            <div class="low_money" style="display: none;">
+                <h6><i class="fas fa-exclamation-triangle">Your Bibliophile Bliss Wallet balance is too low to cover this transaction!</i></h6>
+                <p style="display: block; margin-bottom:0"></p>
+                <div class="checkbox-container">
+                <input type="checkbox">
+                <p></p>
+                </div>
             </div>
-        </div>
-        <label for="payment_type">Choose a payment method:</label>
-        <select name="payment_type" data-info = "{{$payment_value}}">
-            @foreach($payments as $payment)
-                <option value="{{$payment->payment_type}}">{{$payment->payment_type}}</option>
-            @endforeach
-        </select>
+            <label for="payment_type">Choose a payment method:</label>
+            <select name="payment_type" data-info="{{$payment_value}}">
+                @foreach($payments as $payment)
+                    <option value="{{$payment->payment_type}}">{{$payment->payment_type}}</option>
+                @endforeach
+            </select>
 
-        <input type="checkbox" name="remember"> Save my payment information to make checkout easier next time
+            <input type="checkbox" name="remember"> Save my payment information to make checkout easier next time
 
-        <p>You will have the opportunity to review your purchase before finalizing it.</p>
-        <!-- Add buttons for navigation -->
-        <div class="navigation-buttons">
-            <button class="cancel" name="cancel">Cancel</button>
-            <button name="show_popup2">Continue</button>
-        </div>
+            <p>You will have the opportunity to review your purchase before finalizing it.</p>
+            <!-- Add buttons for navigation -->
+            <div class="navigation-buttons">
+                <button class="cancel" name="cancel">Cancel</button>
+                <button name="show_popup2">Continue</button>
+            </div>
+        </fieldset>
     </form>
 </div>

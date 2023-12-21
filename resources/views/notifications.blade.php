@@ -10,20 +10,12 @@ use Carbon\Carbon;
             <div class="notifications">
                 <div class="n-title">
                 <p class=circle> {{$notification->id}} </p>
-                <div class="left"><b> 
-                    @if ($notification->notification_type == 'payment_notification')
-                        <p>Payment Notification</p>
-                    @elseif ($notification->notification_type == 'instock_notification')
-                        <p>In Stock Notification</p>
-                    @elseif ($notification->notification_type == 'purchaseinfo_notification')
-                         <p>Purchase Information Notification</p>
-                    @elseif ($notification->notification_type == 'pricechange_notification')
-                        <p>Price Change Notification</p>
-                @endif
+                <div class="left"><b>
+                    <p>{{$notification->pivot->notification_type}}</p>
                 </b> </div>
                 <p class="right">{{ Carbon::parse($notification->date)->format('d/m/Y H:i:s') }} </p>
             </div>
-                <p class="padding-left"> {{$notification->notificationType()->get()->first()->description}} </p>
+                <p class="padding-left"> {{$notification->description}} </p>
                 @if($notification->isnew == 1)
                     <p><b>New</b></p>
                 @endif

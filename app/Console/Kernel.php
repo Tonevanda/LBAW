@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Models\Wallet;
 use App\Models\Product;
 use App\Models\Purchase;
 use Illuminate\Console\Scheduling\Schedule;
@@ -19,17 +20,28 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('auth:clear-resets')->everyFifteenMinutes();
         $schedule->call(function() {
-            error_log(now());
             $purchases = Purchase::where('orderarrivedat', '<=', now())
+                                        ->whereNull('refundedat')
                                         ->where('stage_state', '!=', 'delivered')
                                         ->get();
             foreach($purchases as $purchase){
                 $purchase->stage_state = "next";
                 $new_date = now()->addMinutes(random_int(0, 2))->addSeconds(random_int(0, 30));
+
                 $purchase->update([
                     'stage_state' => 'next',
                     'orderarrivedat' => $new_date
                 ]);
+                error_log("hello");
+            }           
+        })->everyMinute();
+
+        $schedule->call(function() {
+            $purchases = Purchase::where('refundedat', '<=', now())
+                                        ->get();
+            foreach($purchases as $purchase){
+                error_log("goodbye");
+                $purchase->delete();
             }           
         })->everyMinute();
 

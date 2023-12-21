@@ -48,6 +48,7 @@ Route::controller(AuthenticatedController::class)->group(function () {
     Route::post('/api/wishlist/{user_id}', 'wishlistStore')->name('wishlist.store');
     Route::delete('/api/wishlist/{user_id}', 'wishlistDestroy')->name('wishlist.destroy');
     Route::post('/api/users/{user_id}', 'updateImage')->name('profileImage.update');
+    Route::put('/api/users/block/{user_id}', 'toggleBlock')->middleware('admin')->name('user.toggle-block');
 });
 
 
@@ -88,13 +89,15 @@ Route::controller(AuthenticatedController::class)->group(function () {
     Route::put('/users/{user_id}', 'update')->name('profile.update');
     Route::put('/users/location/{user_id}', 'updateLocation')->name('profile.updateLocation');
     Route::get('/purchase-history/{user_id}', 'showPurchases')->name('purchase_history');
-    Route::get('/wishlist/test/{user_id}', 'getWishlist')->name('getWishlist');
+    Route::get('/wishlist/get/{user_id}', 'getWishlist')->name('getWishlist');
+    Route::get('/shopping-cart/get/{user_id}', 'getShoppingCart')->name('getShoppingCart');
     Route::get('/account_details/{user_id}', 'showAccountDetails')->name('account_details');
     Route::get('/notifications/{user_id}', 'showNotifications')->name('notifications');
 });
 
 Route::controller(PurchaseController::class)->group(function () {
     Route::post('/checkout/{user_id}', 'store')->name('purchase.store');
+    Route::put('/refund/{purchase_id}', 'update')->name('purchase.refund');
 });
 
 Route::controller(WalletController::class)->group(function () {

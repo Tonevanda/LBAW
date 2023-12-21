@@ -23,7 +23,7 @@ class Authenticated extends Model
         'phone_number',
         'postal_code',
         'address',
-        'isBlocked',
+        'isblocked',
         'payment_method'
     ];
 
@@ -52,8 +52,8 @@ class Authenticated extends Model
     {
         return $this->belongsToMany(Product::class, 'shopping_cart', 'user_id', 'product_id')
                     ->withPivot('id')
-                    ->get()
-                    ->groupBy('product_id');
+                    ->orderBy('product_id', 'desc');
+
     }
 
     public function wishlist()
@@ -64,7 +64,7 @@ class Authenticated extends Model
     
     public function notifications()
     {
-        return $this->hasMany(Notification::class, 'user_id');
+        return $this->belongsToMany(Notification::class, 'authenticated_notification', 'user_id', 'notification_type')->withPivot('id');
     }
     
     public function wallet()
