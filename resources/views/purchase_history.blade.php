@@ -23,13 +23,13 @@ $user = Auth::user();
                 <a href="#">
                     <p>{{ Carbon::parse($purchase->orderedat)->format('d/m/Y H:i:s') }}</p>
                 </a>
-                @if (!$user->isAdmin() && $purchase->stage_state != 'delivered')
+                @if (!$user->isAdmin() && $purchase->stage_state != 'delivered' && $purchase->isRefunded == false)
                     <form method = "" action = "">
                         {{ csrf_field() }}
                         <input name = "user_id" value = {{$user->id}} hidden>
                         <button name = "cancel_order_button"> Cancel Order </button>
                     </form>
-                @elseif (!$user->isAdmin())
+                @elseif (!$user->isAdmin() && $purchase->isRefunded == false)
                     <form method = "" action = "">
                         {{ csrf_field() }}
                         <input name = "user_id" value = {{$user->id}} hidden>
