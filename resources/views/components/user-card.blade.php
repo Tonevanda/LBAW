@@ -23,4 +23,10 @@
             Delete
         </button>
     </form>
+    <form action="{{route('purchase_history',$user->id)}}">
+        {{ csrf_field() }}
+        <button class="purchase_history" type="submit" data-id="{{$user->id}}">
+            View Purchase History
+        </button>
+    </form>
 </div>
