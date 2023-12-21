@@ -19,7 +19,6 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('auth:clear-resets')->everyFifteenMinutes();
         $schedule->call(function() {
-            error_log(now());
             $purchases = Purchase::where('orderarrivedat', '<=', now())
                                         ->where('isrefunded', '=', false)
                                         ->where('stage_state', '!=', 'delivered')

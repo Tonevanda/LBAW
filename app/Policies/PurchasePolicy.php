@@ -18,7 +18,7 @@ class PurchasePolicy
 
     public function list(User $user, Purchase $purchase): bool
     {
-        if($user->id != $purchase->user_id){
+        if($user->id != $purchase->user_id && !$user->isAdmin()){
             throw new AuthorizationException("The person making the purchase isn't the one in the account currently logged in");
         }
         return true;
@@ -34,6 +34,20 @@ class PurchasePolicy
 
         if($user->id != $user_id){
             throw new AuthorizationException("You can't make a purchase if it's not your account");
+        }
+        return true;
+    }
+
+    public function update(User $user, Purchase $purchase, $user_id): bool
+    {
+        if($user->isAdmin()){
+            throw new AuthorizationException("Admins cant make cancels or refunds");
+        }
+        if($user->id != $purchase->user_id){
+            throw new AuthorizationException("You can't cancel or refund a purchase if it's not your account");
+        }
+        if($user->id != $user_id){
+            throw new AuthorizationException("This isn't your purchase");
         }
         return true;
     }

@@ -93,9 +93,18 @@ class PurchaseController extends Controller
             'user_id' => 'required'
         ]);
 
+
         $purchase = Purchase::findOrFail($purchase_id);
+
+        try{
+            $this->authorize('update', [$purchase, $data['user_id']]);
+        }
+        catch(AuthorizationException $e){
+            return response()->json($e->getMessage(), 301);
+        }
+
+
         $purchase->update(['isrefunded' => true]);
-        $purchase = Purchase::findOrFail($purchase_id);
         
         return response()->json($purchase->id, 200);
     }
