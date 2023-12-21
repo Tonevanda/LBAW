@@ -97,7 +97,7 @@ class PurchaseController extends Controller
         $purchase->update(['isrefunded' => true]);
         $purchase = Purchase::findOrFail($purchase_id);
         
-        return response()->json($purchase->isrefunded, 200);
+        return response()->json($purchase->id, 200);
     }
 
 

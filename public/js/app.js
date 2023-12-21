@@ -500,9 +500,8 @@ function createReviewRequest(event){
 }
 
 function refundPurchaseRequest(event){
-  console.log(this);
   const user_id = this.querySelector('input[name=user_id]').value;
-  const purchase_id = this.querySelector('input[name=purchase_id]').value;
+  const purchase_id = this.getAttribute('data-id');
   sendAjaxRequest('put', '/refund/'+purchase_id, {user_id: user_id}, refundPurchaseHandler);
   event.preventDefault();
 }
@@ -712,7 +711,8 @@ function refundPurchaseHandler(){
   }
   else if(this.status===200){
     let response = JSON.parse(this.responseText);
-    console.log(response);
+    let form = document.querySelector('form[data-id="' + response +  '"]');
+    form.remove();
   }
 }
 
