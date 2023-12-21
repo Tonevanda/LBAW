@@ -6,6 +6,17 @@
     var assetBaseUrl = "{{ asset('images/user_images') }}";
   </script>
 
+@php 
+    $user = Auth::user();
+    if($user != null && !$user->isAdmin()){
+        $wallet = $user->authenticated()->first()->wallet()->first();
+        $currency = $wallet->currency()->first();
+        $currency_symbol = $currency->currency_symbol;
+    }
+    else{
+        $currency_symbol = '€';
+    }
+@endphp
 
 <div class = 'product-page'>
     <div class="product-info">
@@ -34,7 +45,7 @@
             </fieldset>
             <fieldset>
                 <legend class="sr-only">Price</legend>
-                <b>Price: </b><p id="price" class="editable">{{ $product->price }} </p>
+                <b>Price: </b><p id="price" class="editable">{{ number_format(($product->price-($product->discount*$product->price/100))/100, 2, ',', '.')}}{{$currency_symbol}} </p>
             </fieldset>
         @if (auth()->check())
             @if (!Auth::user()->isAdmin())
