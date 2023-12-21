@@ -774,6 +774,17 @@ function reviewCreateHandler(){
     let response = JSON.parse(this.responseText);
     console.log(response);
     let image_path = assetBaseUrl + '/' + response.profile_picture;
+    let star_html = ``;
+    let count = 0;
+    while(response.rating > 0){
+      star_html = star_html + `<i class="fas fa-star"></i> `;
+      count = count+1;
+      response.rating = response.rating - 1;
+    }
+    while(count <= 5){
+      star_html = star_html + `<i class="far fa-star"></i> `;
+      count = count+ 1;
+    }
     user_review_option.innerHTML = `
                             <li class="my-review" data-id="${response.review_id}}">
                                 <div class="user-details-container">
@@ -790,7 +801,9 @@ function reviewCreateHandler(){
                                     <textarea type="text" name="title" data-info = "${response.title}" value = "${response.title}" required readonly>${response.title}</textarea>
                                     <label>Description</label>
                                     <textarea type="text" name="description" data-info = "${response.description}" value = "${response.description}" required readonly>${response.description}</textarea>
-                                    <p>${response.rating}</p>
+                                    <div class="star-rating">
+                                      ${star_html}
+                                    </div>
                                     <button type="submit" name="update-review">
                                         Save
                                     </button>
@@ -813,9 +826,9 @@ function reviewCreateHandler(){
   }
   if(this.status == 301){
     let response = JSON.parse(this.responseText);
-    console.log(response);
-    document.getElementById('errorReview').textContent = response;
-    document.getElementById('errorReview').style.display = 'block';
+    let = error_message = document.querySelector("div[data-id='" + response.review_id + "']");
+    error_message.textContent = response.message;
+    error_message.style.display = 'block';
   }
   
 }

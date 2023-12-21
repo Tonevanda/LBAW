@@ -58,12 +58,14 @@ class ProductController extends Controller
         $product = Product::with('productStatistic')->findOrFail($product_id);
         $productRevenue = $product->purchaseProducts->sum('price');
         $reviews = $product->reviews()->get();
+        $product_category = $product->productCategories()->first()->category_type;
     
         return view('products.show', [
             'product' => $product,
             'reviews' => $reviews,
             'statistics' => $product->productStatistic,
             'productRevenue' => $productRevenue,
+            'product_category' => $product_category
         ]);
     }
 

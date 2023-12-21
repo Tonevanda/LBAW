@@ -64,6 +64,14 @@
                 <legend class="sr-only">Price</legend>
                 <b>Price: </b><p id="price" class="editable">{{ number_format(($product->price-($product->discount*$product->price/100))/100, 2, ',', '.')}}{{$currency_symbol}} </p>
             </fieldset>
+            <fieldset>
+                <legend class="sr-only">Category</legend>
+                <b>Category: </b><p id="category" class="editable">{{$product_category}}</p>
+            </fieldset>
+            <fieldset>
+                <legend class="sr-only">Stock</legend>
+                <b>Stock: </b><p id="stock" class="editable">{{$product->stock}}</p>
+            </fieldset>
         @if (auth()->check())
             @if (!Auth::user()->isAdmin())
             </form>
@@ -190,7 +198,13 @@
                                 <label>Description</label>
                                 <textarea type="text" name="description" data-info = "{{$userReview->description}}" value = "{{$userReview->description}}" required readonly>{{ $userReview->description }}</textarea>
                             </fieldset>
-                            <p><b>Rate: </b>{{ $userReview->rating }}</p>
+                            <fieldset>
+                                <div class="star-rating">
+                                    @for ($i = 1; $i <= 5; $i++)
+                                    <i class="fa{{ $i <= $userReview->rating ? 's' : 'r' }} fa-star"></i>
+                                    @endfor   
+                                </div>
+                            </fieldset>
                             <button type="submit" name="update-review">
                                 Save
                             </button>
@@ -202,7 +216,7 @@
                             <button type="submit" name="delete-review" class="delete-review">
                                 <i class="fas fa-trash-alt"></i> Delete Review
                             </button>
-                            <div id="errorReviewUpdate" style="display: none; color: red; font-size: small;"></div>
+                            <div data-id= "{{$userReview->id}}" style="display: none; color: red; font-size: small;"></div>
                         </form>
                     </li>
                 @endif
