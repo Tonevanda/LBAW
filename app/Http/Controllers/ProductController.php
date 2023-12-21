@@ -71,33 +71,43 @@ class ProductController extends Controller
     public function createProduct(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:250',
-            'synopsis' => 'required|string|max:250',
-            'price' => 'required|numeric|min:0',
-            'stock' => 'required|numeric|min:0',
-            'author' => 'required|string|max:250',
-            'editor' => 'required|string|max:250',
-            'language' => 'required|string|max:250',
+            'name' => 'required|string',
+            'synopsis' => 'required|string',
+            'price' => 'required|string',
+            'stock' => 'required|string',
+            'author' => 'string|nullable',
+            'editor' => 'string|nullable',
+            'language' => 'string|nullable',
             #'image' => 'required|string|min:0',
             #'category' => 'required|string|max:250',
         ]);
-        try{
+        /*try{
             $this->authorize('create', Product::class);
         }catch(AuthorizationException $e){
             return redirect()->route('all-products');
-        }
-        Product::create([
+        }*/
+        $price = preg_replace('/[^0-9]/', '', $request->price);
+
+        Product::create([   
             'name' => $request->name,
             'synopsis' => $request->synopsis,
-            'price' => (int)$request->price,
-            'stock' => (int)$request->stock,
-            'author' => $request->author,
-            'editor' => $request->editor,
-            'language' => $request->language,
+            'price' => intval($price),
+            'stock' => intval($request->stock),
+            'author' => $request->author == null ? 'anonymous' : $request->author,
+            'editor' => $request->editor == null ? 'self-published' : $request->editor,
+            'language' => $request->language == null ? 'english' : $request->language,
             #'image' => $request->image,
             #'category' => $request->category
         ]);
-        return redirect()->route('add_products');
+        return redirect()->route('all-products');
+    }
+
+    public function updateImage(Request $request){
+
+
+        $request->file('product_picture')->storeAs('images/product_images', $request->file('product_picture')->getClientOriginalName() ,'public');
+
+        return response()->json($request->file('product_picture')->getClientOriginalName(), 200);
     }
 
     public function updateProduct(Request $request, $product_id){

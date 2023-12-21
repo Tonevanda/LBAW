@@ -20,6 +20,7 @@
 
 <div class = 'product-page'>
     <div class="product-info">
+        
     <div class = "product_img">
     <img src="{{ asset('images/product_images/' . $product->image) }}" alt="{{$product->name}} image">
         </div>
@@ -65,9 +66,7 @@
                     {{ csrf_field() }}
                     <input type="hidden" name="product_id" value="{{ $product->id }}" required>
                     <input type="hidden" name="user_id" value="{{ Auth::user()->id }}" required>
-                    <button id="heartButton" class="heart-button" type="submit" name="add-to-wishlist">
-                            <i class="fas fa-heart"></i>
-                    </button>
+                    <i class="fas fa-heart" title="Add to wishlist"></i>
                 </form>
             </div>
             @else

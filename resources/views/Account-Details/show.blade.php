@@ -18,7 +18,7 @@ $currency = $wallet->currency()->first();
     <h3><i class="fas fa-shopping-cart"></i>History - Store and Purchases</h3>
     <div class="ad_box">
     <div class="ad_wallet">  
-    <h4> Wallet Balance: {{number_format($wallet->money, 2, ',', '.')}}{{$currency->currency_symbol}}</h4>
+    <h4> Wallet Balance: {{number_format($wallet->money/100, 2, ',', '.')}}{{$currency->currency_symbol}}</h4>
     <a title="Boost your balance" class="ad_button" href="{{ route('wallet',$user->id) }}">
         <i class="fas fa-plus"></i> Add funds to your Bibliophile Bliss Wallet</a>
     </div>

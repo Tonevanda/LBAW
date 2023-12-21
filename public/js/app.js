@@ -67,14 +67,31 @@ function addEventListeners() {
 
   let profile_pic_input = document.querySelector('input[name=profile_picture]');
 
+  let product_pic_input = document.querySelector('input[name=product_picture]');
+
   let profile_pic_form = document.querySelector('form.profile_pic');
+
+  const product_pic_form = document.querySelector('form.product_pic');
+
+  const product_pic_edit_icon = document.querySelector('form.product_pic i');
 
   let product_edit = document.querySelector('button.edit_product');
 
-  let product_save = document.querySelector('button.save_product');
+
+  //let product_save = document.querySelector('button.save_product');
 
   if(product_edit != null){
     product_edit.addEventListener('click', handleEditButtonClick);
+  }
+
+  if(product_pic_form != null){
+    product_pic_form.addEventListener('submit', changePictureRequest);
+  }
+
+  if(product_pic_edit_icon != null){
+    product_pic_edit_icon.addEventListener('click', function(){
+      product_pic_input.click();
+    });
   }
 
   if(profile_pic_form != null){
@@ -84,6 +101,13 @@ function addEventListeners() {
   if(profile_pic_edit_icon != null){
     profile_pic_edit_icon.addEventListener('click', function(){
       profile_pic_input.click();
+    });
+  }
+
+  if(product_pic_input != null){
+    product_pic_input.addEventListener('change', function(){
+      let update_product_pic_button = product_pic_form.querySelector('input[name=update_pic]');
+      update_product_pic_button.click();
     });
   }
 
@@ -350,6 +374,27 @@ function addEventListeners() {
   [].forEach.call(refund_cancel_forms, function(form){
     form.addEventListener('submit', refundPurchaseRequest);
   })
+  const add_product_button = document.querySelector('form.add_product button');
+  if(add_product_button != null){
+    add_product_button.addEventListener('click', function(event){
+      const add_product_textareas = document.querySelectorAll('form.add_product textarea');
+      [].forEach.call(add_product_textareas, function(textarea){
+        if(textarea.getAttribute('id') == 'price'){
+          if(!validateMoneyInput.bind(textarea)()){
+            event.preventDefault();
+          }
+        }
+        else if(textarea.getAttribute('id') == 'stock'){
+          if(!validateNumericInput.bind(textarea)()){
+            event.preventDefault();
+          }
+        }
+        const parent_formfield = textarea.parentNode;
+        let input = parent_formfield.querySelector('input');
+        input.value = textarea.value;
+      });
+    });
+  }
 
 }
 
@@ -581,6 +626,17 @@ function deleteCartProductRequest(event){
   let user_id = this.querySelector('input[name=user_id]').value;
   let cart_id = this.querySelector('input[name=cart_id]').value;
   sendAjaxRequest('delete', '/api/shopping-cart/'+user_id, {cart_id: cart_id}, deleteCartProductHandler);
+  event.preventDefault();
+}
+
+function changePictureRequest(event){
+  console.log(this);
+  const file = this.querySelector('input[name=product_picture]').files[0];
+  let formData = new FormData();
+  formData.append('product_picture', file);
+  console.log(formData);
+  sendAjaxRequestImage('post', '/product/picture', formData, changePictureHandler);
+
   event.preventDefault();
 }
 
@@ -914,6 +970,20 @@ function deleteWishlistProductHandler(){
   }
 }
 
+function changePictureHandler(){
+  if(this.status === 301){
+    let response = JSON.parse(this.responseText);
+    console.log(response);
+  }
+  else if(this.status == 200){
+    let response = JSON.parse(this.responseText);
+    var imageUrl = assetBaseUrl + '/' + response;
+    let product_pic = document.querySelector('form.product_pic img');
+    product_pic.setAttribute('src', imageUrl);
+  }
+}
+
+
 function updateProfilePictureHandler(){
   if(this.status == 200){
     let response = JSON.parse(this.responseText);
@@ -1041,6 +1111,29 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 });
 
+function validateNumericInput(){
+  const value = this.value;
+  if(/^\d+$/.test(value)){
+    if(this.classList.contains('error'))
+      this.classList.remove('error');
+    return true;
+  }
+  if(!this.classList.contains('error'))
+        this.classList.add('error');
+  return false;
+}
+
+function validateMoneyInput(){
+  const value = this.value;
+  if(/^\d{1,},\d{2}€$/.test(value)){
+    if(this.classList.contains('error'))
+      this.classList.remove('error');
+    return true;
+  }
+  if(!this.classList.contains('error'))
+        this.classList.add('error');
+  return false;
+}
 
 function validatePhoneInput(){
   const value = this.value;

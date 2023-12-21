@@ -16,6 +16,7 @@ if($user != null && !$user->isAdmin()){
 }
 
 
+
 @endphp
 
     <div class="purchases-container">
@@ -31,13 +32,13 @@ if($user != null && !$user->isAdmin()){
                 <a href="#">
                     <p>{{ Carbon::parse($purchase->orderedat)->format('d/m/Y H:i:s') }} {{$purchase->destination}}</p>
                 </a>
-                @if (!$user->isAdmin() && $purchase->stage_state != 'delivered' && $purchase->isrefunded == false)
+                @if (!$user->isAdmin() && $purchase->stage_state != 'delivered' && $purchase->refundedat == null)
                     <form class = "refund_cancel_purchase" method = "" action = "" data-id = "{{$purchase->id}}">
                         {{ csrf_field() }}
                         <input name = "user_id" value = {{$user->id}} hidden>
                         <button type = "submit" name = "cancel_order_button"> Cancel Order </button>
                     </form>
-                @elseif (!$user->isAdmin() && $purchase->isrefunded == false)
+                @elseif (!$user->isAdmin() && $purchase->refundedat != null)
                     <form class = "refund_cancel_purchase" method = "" action = "" data-id = "{{$purchase->id}}">
                         {{ csrf_field() }}
                         <input name = "user_id" value = {{$user->id}} hidden>
