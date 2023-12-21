@@ -85,8 +85,11 @@ class PurchaseController extends Controller
 
         return response()->json($wallet->money, 200);
 
+    }
 
-
+    function update(Request $request, $purchase_id)
+    {
+        return response()->json(["hello"], 200);
     }
 
 

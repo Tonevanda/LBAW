@@ -503,7 +503,7 @@ function refundPurchaseRequest(event){
   console.log(this);
   const user_id = this.querySelector('input[name=user_id]').value;
   const purchase_id = this.querySelector('input[name=purchase_id]').value;
-  //sendAjaxRequest('put', '/review/create/'+user_id, {user_id: user_id, product_id: product_id, title: title, description: description, rating: rating}, reviewCreateHandler);
+  sendAjaxRequest('put', '/refund/'+purchase_id, {user_id: user_id}, refundPurchaseHandler);
   event.preventDefault();
 }
 
@@ -704,7 +704,7 @@ function updateMoneyHandler(){
   }
 }
 
-function refundPurchaseRequest(){
+function refundPurchaseHandler(){
   if(this.status === 301){
     let response = JSON.parse(this.responseText);
     console.log(response);

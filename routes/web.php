@@ -95,6 +95,7 @@ Route::controller(AuthenticatedController::class)->group(function () {
 
 Route::controller(PurchaseController::class)->group(function () {
     Route::post('/checkout/{user_id}', 'store')->name('purchase.store');
+    Route::put('/refund/{purchase_id}', 'update')->name('purchase.refund');
 });
 
 Route::controller(WalletController::class)->group(function () {
