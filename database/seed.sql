@@ -879,6 +879,7 @@ INSERT INTO product_category(product_id, category_type) VALUES(47, 'classic');
 INSERT INTO product(name, synopsis, price, discount, stock, author, editor, language, image) VALUES('The Hitchhiker''s Guide to the Galaxy', 'A science fiction comedy series by Douglas Adams. It follows the misadventures of an unwitting human and his alien friend as they travel through space.', 220, 0, 16, 'Douglas Adams', 'Pan Books', 'English', 'the_hitchhikers_guide_to_the_galaxy.png');
 INSERT INTO product_category(product_id, category_type) VALUES(48, 'science fiction');
 
+
 INSERT INTO purchase (user_id, price, quantity, payment_type, destination, stage_state, isTracked, orderedAt, orderArrivedAt, refundedAt) 
 VALUES (60, 5000, 3, 'paypal', '123 Main St', 'start', TRUE, '2021-12-20T17:30:00Z', '2022-12-20T17:30:00Z', '2023-10-20T17:30:00Z');
 

@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Models\Wallet;
 use App\Models\Product;
 use App\Models\Purchase;
 use Illuminate\Console\Scheduling\Schedule;
@@ -40,6 +41,7 @@ class Kernel extends ConsoleKernel
                                         ->get();
             foreach($purchases as $purchase){
                 error_log("goodbye");
+                $purchase->delete();
             }           
         })->everyMinute();
 
