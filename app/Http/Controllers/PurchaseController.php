@@ -83,7 +83,7 @@ class PurchaseController extends Controller
 
         Purchase::create($data);
 
-        return response()->json($wallet->money, 200);
+        return response()->json($wallet->money, 201);
 
     }
 

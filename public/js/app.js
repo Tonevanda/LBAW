@@ -756,7 +756,7 @@ function createPurchaseHandler(){
     document.getElementById('errorCheckout').textContent = response;
     document.getElementById('errorCheckout').style.display = 'block';
   }
-  else if(this.status===200){
+  else if(this.status===201){
     let response = JSON.parse(this.responseText);
     document.querySelector('section.product_listing').remove();
     document.querySelector('table tr:first-child td:last-child').textContent = 0;
