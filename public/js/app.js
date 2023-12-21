@@ -706,8 +706,8 @@ function updateMoneyHandler(){
 function refundPurchaseHandler(){
   if(this.status === 301){
     let response = JSON.parse(this.responseText);
-    let = error_message = document.querySelector('div#errorMessage');
-    error_message.textContent = response;
+    let = error_message = document.querySelector("div[data-id='" + response.purchase_id + "']");
+    error_message.textContent = response.message;
     error_message.style.display = 'block';
   }
   else if(this.status===200){

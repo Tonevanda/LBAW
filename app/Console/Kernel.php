@@ -39,7 +39,7 @@ class Kernel extends ConsoleKernel
             $purchases = Purchase::where('refundedat', '<=', now())
                                         ->get();
             foreach($purchases as $purchase){
-                error_log("hello");
+                error_log("goodbye");
             }           
         })->everyMinute();
 

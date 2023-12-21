@@ -49,6 +49,9 @@ class PurchasePolicy
         if($user->id != $user_id){
             throw new AuthorizationException("This isn't your purchase");
         }
+        if($purchase->stage_state != "delivered" && now()->diffInMinutes($purchase->orderarrivedat) > 5){
+            throw new AuthorizationException("You can't refund after the purchase after 5 days");
+        }
         return true;
     }
     

@@ -36,7 +36,7 @@ $user = Auth::user();
                         <button type = "submit" name = "refund_order_button"> Refund Order </button>
                     </form> 
                 @endif
-                <div id="errorMessage" style="display: none; color: red; font-size: small;"></div>
+                <div data-id = "{{$purchase->id}}" style="display: none; color: red; font-size: small;"></div>
             </div>
         @endforeach
     </div>

@@ -100,13 +100,13 @@ class PurchaseController extends Controller
             $this->authorize('update', [$purchase, $data['user_id']]);
         }
         catch(AuthorizationException $e){
-            return response()->json($e->getMessage(), 301);
+            return response()->json(['message' => $e->getMessage(), 'purchase_id' => $purchase_id], 301);
         }
 
 
         $purchase->update(['refundedat' => now()->addMinutes(0, 2)->addSeconds(0, 30)]);
         
-        return response()->json($purchase->id, 200);
+        return response()->json($purchase_id, 200);
     }
 
 
