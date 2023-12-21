@@ -329,6 +329,18 @@ function addEventListeners() {
     cancel_review_popup_button.addEventListener('click', hideFullScreenPopup.bind(review_popup));
   }
 
+  const toggle_user_block = document.querySelectorAll('form.form-toggle-block');
+  if(toggle_user_block != null){
+    [].forEach.call(toggle_user_block, function(form){
+      form.addEventListener('submit', function(event){
+        event.preventDefault();
+        const user_id = form.querySelector('button').getAttribute('data-id');
+        console.log(user_id);
+        sendAjaxRequest('put', '/api/users/block/'+ user_id, {}, blockHandler);
+      });
+    });
+  }
+
 }
 
 
@@ -734,6 +746,26 @@ function createPurchaseHandler(){
   }
 }
 
+function blockHandler(){
+  if(this.status == 301){
+    let response = JSON.parse(this.responseText);
+    console.log(response);
+    document.getElementById('errorBlock').textContent = response;
+    document.getElementById('errorBlock').style.display = 'block';
+  }
+  else if(this.status == 200){
+    let response = JSON.parse(this.responseText);
+    console.log(response.user_id);
+    let block_button = document.querySelector("button[data-id='"+response.user_id+"']");
+    console.log(block_button);
+    if(response.isblocked){
+      block_button.textContent = 'Unblock';
+    }
+    else{
+      block_button.textContent = 'Block';
+    }
+  }
+}
 
 function reviewHandler(){
   if(this.status == 201){
