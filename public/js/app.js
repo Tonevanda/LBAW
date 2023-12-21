@@ -907,7 +907,6 @@ function deleteWishlistProductHandler(){
     console.log(response);
   }
   else if(this.status == 200){
-    console.log(this)
     console.log("removed from wishlist");
     let response = JSON.parse(this.responseText);
     let deletion_target = document.querySelector('div[data-id="' + response + '"]');
