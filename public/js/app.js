@@ -187,7 +187,7 @@ function addEventListeners() {
 
         let warning_tag = low_money_tag.querySelector('p');
         warning_tag.textContent = 'Please select a payment method for the remaining ' + remaining_money;
-        low_money_tag.querySelector('p:last-child').textContent = 'Pay for all the ' + money;
+        low_money_tag.querySelector('p:last-child').textContent = 'Pay for all the ' + money + ' with payment method only';
         let checkbox_pay_all = low_money_tag.querySelector('input');
         checkbox_pay_all.checked = false;
         warning_tag.style.display = 'block';
