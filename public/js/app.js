@@ -168,10 +168,21 @@ function addEventListeners() {
     let elements = document.querySelectorAll('p.editable');
     console.log(elements);
     elements.forEach(function(element) {
-      newElem = document.createElement('textarea');
-      newElem.textContent = element.textContent;
-      newElem.name = element.getAttribute('id');
-      element.replaceWith(newElem);
+      if(element.getAttribute('id') == 'category'){
+        console.log("entered");
+        newElem = document.createElement('select');
+        newElem.value = element.value;
+        newElem.name = element.getAttribute('id');
+        const categories = document.querySelector('div.hidden_categories').innerHTML;
+        newElem.innerHTML = categories;
+        element.replaceWith(newElem);
+      }
+      else{
+        newElem = document.createElement('textarea');
+        newElem.textContent = element.textContent;
+        newElem.name = element.getAttribute('id');
+        element.replaceWith(newElem);
+      }
     });
     cancelButton = document.createElement('button');
     cancelButton.textContent = "Cancel";
@@ -451,6 +462,8 @@ function addEventListeners() {
     });
   }
 
+
+
 }
 
 
@@ -471,6 +484,7 @@ function handleEditButtonClick(event) {
   submitButton = document.createElement('button');
   submitButton.textContent = "Save";
   submitButton.classList.add("save_product");
+
   if(cancelButton.nextSibling) {
     product_edit.parentNode.insertBefore(submitButton, cancelButton.nextSibling);
   } else {

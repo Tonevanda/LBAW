@@ -67,6 +67,11 @@
             <fieldset>
                 <legend class="sr-only">Category</legend>
                 <b>Category: </b><p id="category" class="editable">{{$product_category}}</p>
+                <div class = "hidden_categories">
+                    @foreach ($categories as $category)
+                        <option name = "{{$category->category_type}}" {{$category->category_type == $product_category ? 'selected' : ''}}>{{$category->category_type}}</option>
+                    @endforeach
+                </div>
             </fieldset>
             <fieldset>
                 <legend class="sr-only">Stock</legend>
