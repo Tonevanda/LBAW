@@ -7,7 +7,7 @@ encrypted: true
 });
 
 
-fetch('/user/get/' + 101)
+fetch('/user/get')
 .then(response => response.json())
 .then(data => {
   const id = data.id;

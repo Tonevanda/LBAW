@@ -108,7 +108,7 @@ Route::controller(WalletController::class)->group(function () {
 });
 
 Route::controller(UserController::class)->group(function () {
-    Route::get('/user/get/{user_id}', 'getModel')->name('getModel');
+    Route::get('/user/get', 'getModel')->name('getModel');
 });
 Route::get('/about_us', function () {
     return view('about_us');
