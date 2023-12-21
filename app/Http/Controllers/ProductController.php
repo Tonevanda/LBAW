@@ -102,16 +102,18 @@ class ProductController extends Controller
 
     public function updateProduct(Request $request, $product_id){
         $data = $request->validate([
-            'synopsis' => 'required|string|max:250',
-            'price' => 'required|numeric|min:0',
-            #'stock' => 'required|numeric|min:0',
             'author' => 'required|string|max:250',
             'editor' => 'required|string|max:250',
+            'synopsis' => 'required|string|max:250',
             'language' => 'required|string|max:250',
+            'price' => 'required|string|min:0',
+            #'stock' => 'required|numeric|min:0',
             #'image' => 'required|string|min:0',
             #'category' => 'required|string|max:250',
         ]);
-        $data['price'] = (int) $data['price'];
+        $data['price'] = str_replace(',', '.', $data['price']);
+        $data['price'] = (float) $data['price'];
+        $data['price'] =(int)number_format($data['price']*100, 0, ',', '.');
         try{
             $this->authorize('update', Product::class);
         }catch(AuthorizationException $e){
