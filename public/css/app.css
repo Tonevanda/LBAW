@@ -1278,6 +1278,10 @@ input[name="update_pic"]{
   display: none;
 }
 
+form#modify_image i{
+  display: none;
+}
+
 .popup-form {
   display: none;
   position: fixed;

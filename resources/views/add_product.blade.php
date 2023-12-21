@@ -29,7 +29,7 @@
       <form class = "add_product" method="POST" action="{{route('product.create')}}">
           {{ csrf_field() }}
           <fieldset>
-            <input type = "text" name = "image_name" value = "default.png" hidden/>
+            <input type = "text" name = "image" value = "default.png" hidden/>
           </fieldset>
           <fieldset>
             <legend class="sr-only">Name</legend>

@@ -158,6 +158,10 @@ function addEventListeners() {
     } else {
       product_edit.parentNode.appendChild(submitButton);
     }
+    let edit_icon = document.querySelector('form#modify_image i');
+    if(edit_icon != null){
+      edit_icon.style.display = 'block';
+    }
     product_edit.replaceWith(cancelButton);
     cancelButton.addEventListener('click', handleCancelButtonClick);
   }
@@ -178,6 +182,15 @@ function addEventListeners() {
       newElem.id = element.getAttribute('name');
       element.replaceWith(newElem);
     });
+    let edit_icon = document.querySelector('form#modify_image i');
+    if(edit_icon != null){
+      edit_icon.style.display = 'none';
+      let product_image = document.querySelector('form#modify_image img');
+      const previous_image_name = product_image.getAttribute('data-info');
+      let imagePath = assetBaseUrl + '/' + previous_image_name;
+      product_image.setAttribute('src', imagePath);
+      document.querySelector('input[name=image]').value = previous_image_name;
+    }
     submitButton.remove();
     cancelButton.replaceWith(product_edit);
     product_edit.addEventListener('click', handleEditButtonClick);
@@ -982,7 +995,7 @@ function changePictureHandler(){
     var imageUrl = assetBaseUrl + '/' + response;
     let product_pic = document.querySelector('form.product_pic img');
     product_pic.setAttribute('src', imageUrl);
-    let image_name_input = document.querySelector('input[name=image_name]');
+    let image_name_input = document.querySelector('input[name=image]');
     image_name_input.value = response;
 
   }

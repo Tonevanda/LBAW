@@ -86,8 +86,6 @@ class ProductController extends Controller
             'editor' => 'string|nullable',
             'language' => 'string|nullable',
             'category' => 'string|nullable'
-            #'image' => 'required|string|min:0',
-            #'category' => 'required|string|max:250',
         ]);
         $price = preg_replace('/[^0-9]/', '', $request->price);
 
@@ -100,8 +98,6 @@ class ProductController extends Controller
             'editor' => $request->editor == null ? 'self-published' : $request->editor,
             'language' => $request->language == null ? 'english' : $request->language,
             'image' => $request->image_name
-            #'image' => $request->image,
-            #'category' => $request->category
         ]);
 
         $product->productCategories()->attach($request->category);
@@ -124,13 +120,9 @@ class ProductController extends Controller
             'synopsis' => 'required|string|max:250',
             'language' => 'required|string|max:250',
             'price' => 'required|string|min:0',
-            #'stock' => 'required|numeric|min:0',
-            #'image' => 'required|string|min:0',
-            #'category' => 'required|string|max:250',
+            'image' => 'required|string'
         ]);
-        $data['price'] = str_replace(',', '.', $data['price']);
-        $data['price'] = (float) $data['price'];
-        $data['price'] =(int)number_format($data['price']*100, 0, ',', '.');
+        $data['price'] = intval(preg_replace('/[^0-9]/', '', $request->price));
         try{
             $this->authorize('update', Product::class);
         }catch(AuthorizationException $e){

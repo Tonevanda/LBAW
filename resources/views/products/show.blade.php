@@ -3,8 +3,8 @@
 @section('content')
 
 <script>
-    var assetBaseUrl = "{{ asset('images/user_images') }}";
-  </script>
+    var assetBaseUrl = "{{ asset('images/product_images') }}";
+</script>
 
 @php 
     $user = Auth::user();
@@ -20,14 +20,30 @@
 
 <div class = 'product-page'>
     <div class="product-info">
+
+        <form id = "modify_image" class="product_pic" method="" action="" enctype="multipart/form-data">
+            {{ csrf_field() }}
+            @method('PUT')
+            <fieldset>
+              <legend class="sr-only">Product Picture</legend>
+              <div class = "product_image">
+                <img data-info = "{{$product->image}}" src="{{ asset('images/product_images/' . $product->image) }}" alt = "" />
+                <i class="fas fa-edit"></i>
+              </div>
+          
+              <input type="file" name="product_picture" hidden>
+      
+                <input type="submit" name="update_pic" value="{{ true }}" hidden>
+            </fieldset>
+          </form>
         
-    <div class = "product_img">
-    <img src="{{ asset('images/product_images/' . $product->image) }}" alt="{{$product->name}} image">
-        </div>
         <div class="product-details">
         <h2> {{ $product->name }} </h2>
         <form class = "update_product" method="post" action="{{route('product.update',['product_id' => $product->id])}}">
             {{ csrf_field() }}
+            <fieldset>
+                <input type = "text" name = "image" value = "{{$product->image}}" hidden/>
+              </fieldset>
             <fieldset>
                 <legend class="sr-only">Author</legend>
                 <b>Author: </b><p id="author" class="editable">{{ $product->author }} </p>
