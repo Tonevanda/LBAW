@@ -326,7 +326,7 @@ function addEventListeners() {
 
   const refund_cancel_forms = document.querySelectorAll('form.refund_cancel_purchase');
   [].forEach.call(refund_cancel_forms, function(form){
-    refund_cancel_forms.addEventListener('submit', refundPurchaseRequest);
+    form.addEventListener('submit', refundPurchaseRequest);
   })
 
 }
@@ -501,8 +501,9 @@ function createReviewRequest(event){
 
 function refundPurchaseRequest(event){
   console.log(this);
-  
-  //sendAjaxRequest('post', '/review/create/'+user_id, {user_id: user_id, product_id: product_id, title: title, description: description, rating: rating}, reviewCreateHandler);
+  const user_id = this.querySelector('input[name=user_id]').value;
+  const purchase_id = this.querySelector('input[name=purchase_id]').value;
+  //sendAjaxRequest('put', '/review/create/'+user_id, {user_id: user_id, product_id: product_id, title: title, description: description, rating: rating}, reviewCreateHandler);
   event.preventDefault();
 }
 
@@ -700,6 +701,18 @@ function updateMoneyHandler(){
     document.querySelector('div.details_box h4').textContent = "Current Wallet Balance: " + response.money + response.currencySymbol;
     document.querySelector('span#user_money').textContent = response.money + response.currencySymbol;
     //document.querySelector('div.mini-menu ul li:nth-child(4) a').textContent = "Wallet " + response.money + response.currencySymbol;
+  }
+}
+
+function refundPurchaseRequest(){
+  if(this.status === 301){
+    let response = JSON.parse(this.responseText);
+    console.log(response);
+    
+  }
+  else if(this.status===200){
+    let response = JSON.parse(this.responseText);
+    console.log(response);
   }
 }
 
