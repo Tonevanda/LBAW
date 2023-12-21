@@ -9,16 +9,20 @@ use Carbon\Carbon;
         @foreach ($notifications as $notification)
             <div class="notifications">
                 <div class="n-title">
-                <p class=circle> {{$notification->id}} </p>
-                <div class="left"><b>
-                    <p>{{$notification->pivot->notification_type}}</p>
-                </b> </div>
-                <p class="right">{{ Carbon::parse($notification->date)->format('d/m/Y H:i:s') }} </p>
-            </div>
+                    <p class=circle> {{$notification->id}} </p>
+                    <div class="left">
+                        <b>
+                            <p>{{$notification->pivot->notification_type}}</p>
+                        </b> 
+                    </div>
+                    <p class="right">{{ Carbon::parse($notification->date)->format('d/m/Y H:i:s') }} </p>
+                </div>
                 <p class="padding-left"> {{$notification->description}} </p>
                 @if($notification->isnew == 1)
-                    <p><b>New</b></p>
+                <p><b>New</b></p>
                 @endif
+                
+                <p class="Relevant-id">{{$notification->pivot->target_id}}</p>
             </div>
         @endforeach
     </div>

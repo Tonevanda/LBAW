@@ -64,7 +64,7 @@ class Authenticated extends Model
     
     public function notifications()
     {
-        return $this->belongsToMany(Notification::class, 'authenticated_notification', 'user_id', 'notification_type')->withPivot('id');
+        return $this->belongsToMany(Notification::class, 'authenticated_notification', 'user_id', 'notification_type')->withPivot('target_id');
     }
     
     public function wallet()
