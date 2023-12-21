@@ -48,6 +48,12 @@
               <textarea id = "price" placeholder="Enter the book's Price here..."></textarea>
               <input type = "text" name = "price" hidden>
           </fieldset>
+          <fieldset>
+            <legend class="sr-only">Stock</legend>
+            <b>Stock: </b>
+            <textarea id = "stock" placeholder="Enter the book's Stock here..."></textarea>
+            <input type = "text" name = "stock" hidden>
+        </fieldset>
         <button type="submit">
             Add Book
         </button>

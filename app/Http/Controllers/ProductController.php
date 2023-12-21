@@ -74,7 +74,7 @@ class ProductController extends Controller
             'name' => 'required|string',
             'synopsis' => 'required|string',
             'price' => 'required|string',
-            //'stock' => 'required|numeric|min:0',
+            'stock' => 'required|string',
             'author' => 'string',
             'editor' => 'string',
             'language' => 'string',
@@ -85,18 +85,18 @@ class ProductController extends Controller
             $this->authorize('create', Product::class);
         }catch(AuthorizationException $e){
             return redirect()->route('all-products');
-        }
+        }*/
         Product::create([
             'name' => $request->name,
             'synopsis' => $request->synopsis,
-            'price' => (int)$request->price,
-            'stock' => (int)$request->stock,
+            'price' => intval($request->price),
+            'stock' => intval($request->stock),
             'author' => $request->author,
             'editor' => $request->editor,
             'language' => $request->language,
             #'image' => $request->image,
             #'category' => $request->category
-        ]);*/
+        ]);
         return redirect()->route('all-products');
     }
 
