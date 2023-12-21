@@ -77,9 +77,8 @@ class ProductController extends Controller
 
     public function createProduct(Request $request)
     {
-        //dd($request);
         $request->validate([
-            'image_name' => 'required',
+            'image' => 'required',
             'name' => 'required|string',
             'synopsis' => 'required|string',
             'price' => 'required|string',
@@ -104,7 +103,7 @@ class ProductController extends Controller
             'author' => $request->author == null ? 'anonymous' : $request->author,
             'editor' => $request->editor == null ? 'self-published' : $request->editor,
             'language' => $request->language == null ? 'english' : $request->language,
-            'image' => $request->image_name
+            'image' => $request->image
         ]);
 
         $product->productCategories()->attach($request->category);

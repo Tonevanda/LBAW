@@ -7,7 +7,7 @@ encrypted: true
 });
 
 
-fetch('/user/get/' + 101)
+fetch('/user/get')
 .then(response => response.json())
 .then(data => {
   const id = data.id;
@@ -410,6 +410,19 @@ function addEventListeners() {
       });
     });
   }
+
+  const delete_user = document.querySelectorAll('#delete_user_form');
+  if(delete_user != null){
+    [].forEach.call(delete_user, function(form){
+      form.addEventListener('submit', function(event){
+        event.preventDefault();
+        const user_id = form.querySelector('button').getAttribute('data-id');
+        console.log(user_id);
+        sendAjaxRequest('delete', '/api/users/delete/'+ user_id, {}, deleteUserHandler);
+      });
+    });
+  }
+
   const refund_cancel_forms = document.querySelectorAll('form.refund_cancel_purchase');
   [].forEach.call(refund_cancel_forms, function(form){
     form.addEventListener('submit', refundPurchaseRequest);
@@ -887,7 +900,7 @@ function blockHandler(){
   else if(this.status == 200){
     let response = JSON.parse(this.responseText);
     console.log(response.user_id);
-    let block_button = document.querySelector("button[data-id='"+response.user_id+"']");
+    let block_button = document.querySelector("button.block[data-id='"+response.user_id+"']");
     console.log(block_button);
     if(response.isblocked){
       block_button.textContent = 'Unblock';
@@ -895,6 +908,22 @@ function blockHandler(){
     else{
       block_button.textContent = 'Block';
     }
+  }
+}
+
+function deleteUserHandler(){
+  if(this.status == 301){
+    let response = JSON.parse(this.responseText);
+    console.log(response);
+    document.getElementById('errorDeleteUser').textContent = response;
+    document.getElementById('errorDeleteUser').style.display = 'block';
+  }
+  else if(this.status == 200){
+    let response = JSON.parse(this.responseText);
+    console.log(response);
+    let user = document.querySelector("button.delete[data-id='"+response+"']").parentNode.parentNode;
+    console.log(user);
+    user.remove();
   }
 }
 
