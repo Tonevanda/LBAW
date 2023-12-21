@@ -34,8 +34,12 @@ function addEventListeners() {
   
   let priceFilter = document.querySelector('form.products_search input[name=price]');
   let priceShow = document.querySelector('form.products_search div');
-  const user_money = document.querySelector('span#user_money').textContent;
-  const currency_symbol = user_money.charAt(user_money.length-1);
+  const user_money_tag = document.querySelector('span#user_money');
+  let currency_symbol = '€';
+  if(user_money_tag != null){
+    const user_money = user_money_tag.textContent;
+    currency_symbol = user_money.charAt(user_money.length-1);
+  }
   if(priceFilter != null && priceShow != null){
     if(deformat_money(priceShow.textContent, currency_symbol) == 500)priceShow.textContent = `MAX`;
     priceFilter.addEventListener('input', function () {
