@@ -177,12 +177,12 @@ class AuthenticatedController extends Controller
     }
 
     public function getShoppingCart($user_id){
-        $user = Authenticated::findOrFail($user_id);
         // Get the user's shopping cart from the database
-        $shopping_cart = $user->shoppingCart()->get();
+        $shopping_cart = Authenticated::findOrFail($user_id)->shoppingCart()->get();
         // Return the shopping cart as a JSON response
         return response()->json(['shopping_cart' => $shopping_cart]); 
     }
+    
     public function create(Request $request)
     {
 

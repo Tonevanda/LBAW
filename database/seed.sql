@@ -413,6 +413,9 @@ CREATE TRIGGER instock_notification_trigger
     FOR EACH ROW
     EXECUTE PROCEDURE instock_notification();
 
+---- END INSTOCK NOTIFICATION TRIGGER ----
+
+---- BEGIN OUT OF STOCK NOTIFICATION TRIGGER (TRIGGER06) ----
     
 CREATE OR REPLACE FUNCTION nostock_notification() RETURNS TRIGGER AS
 $BODY$
@@ -441,35 +444,9 @@ CREATE TRIGGER nostock_notification_trigger
     FOR EACH ROW
     EXECUTE PROCEDURE nostock_notification();
 
-
-CREATE OR REPLACE FUNCTION changeproduct_notification() RETURNS TRIGGER AS
-$BODY$
-DECLARE
-    user_id INTEGER;
-
-BEGIN
-    BEGIN
-        FOR user_id IN EXECUTE 'SELECT user_id FROM shopping_cart WHERE product_id = $1 GROUP BY user_id' USING NEW.id
-        LOOP
-            EXECUTE 'INSERT INTO authenticated_notification (user_id, notification_type, target_id, date, isNew) VALUES ($1, $2, $3, DEFAULT, DEFAULT)' USING user_id, 'Product Change Notification',NEW.id;
-        END LOOP;
-    EXCEPTION
-        WHEN others THEN
-            RAISE EXCEPTION 'Something wrong when sending in stock notification';
-    END;
-    RETURN NEW;
-END
-$BODY$
-LANGUAGE plpgsql;
-
-CREATE TRIGGER changeproduct_notification_trigger
-    AFTER UPDATE ON product
-    FOR EACH ROW
-    EXECUTE PROCEDURE changeproduct_notification();
-
 ---- END INSTOCK NOTIFICATION TRIGGER ----
 
----- BEGIN PURCHASE INFO NOTIFICATION TRIGGER (TRIGGER06) ----
+---- BEGIN PURCHASE INFO NOTIFICATION TRIGGER (TRIGGER07) ----
 
 CREATE OR REPLACE FUNCTION purchaseinfo_notification() RETURNS TRIGGER AS
 $BODY$
@@ -496,9 +473,9 @@ CREATE TRIGGER purchaseinfo_notification_trigger
 
 ---- END PURCHASE INFO NOTIFICATION TRIGGER ----
 
----- BEGIN PRICE CHANGE NOTIFICATION TRIGGER (TRIGGER07) ----
+---- BEGIN PRICE CHANGE SHOPPING CART NOTIFICATION TRIGGER (TRIGGER08) ----
 
-CREATE OR REPLACE FUNCTION pricechange_notification() RETURNS TRIGGER AS
+CREATE OR REPLACE FUNCTION pricechangeshoppingcart_notification() RETURNS TRIGGER AS
 $BODY$
 DECLARE
     user_id INTEGER;
@@ -508,7 +485,7 @@ BEGIN
         IF NEW.price - (NEW.price*NEW.discount/100) != OLD.price - (OLD.price*OLD.discount/100) THEN
             FOR user_id IN EXECUTE 'SELECT user_id FROM shopping_cart WHERE product_id = $1 GROUP BY user_id' USING NEW.id
             LOOP
-                EXECUTE 'INSERT INTO authenticated_notification (user_id, notification_type, target_id, date, isNew) VALUES ($1, $2, 3, DEFAULT, DEFAULT)' USING user_id, 'Price Change Notification';
+                EXECUTE 'INSERT INTO authenticated_notification (user_id, notification_type, target_id, date, isNew) VALUES ($1, $2, $3, DEFAULT, DEFAULT)' USING user_id, 'Price Change Shopping Cart Notification', NEW.id;
             END LOOP;
         END IF;
     EXCEPTION
@@ -520,14 +497,45 @@ END
 $BODY$
 LANGUAGE plpgsql;
 
-CREATE TRIGGER pricechange_notification_trigger
+CREATE TRIGGER pricechangeshoppingcart_notification_trigger
         AFTER UPDATE ON product
         FOR EACH ROW
-        EXECUTE PROCEDURE pricechange_notification();
+        EXECUTE PROCEDURE pricechangeshoppingcart_notification();
 
----- END PRICE CHANGE NOTIFICATION TRIGGER ----
+---- END PRICE CHANGE SHOPPING CART NOTIFICATION TRIGGER ----
 
----- BEGIN REFUND PURCHASE TRIGGER (TRIGGER08) ----
+---- BEGIN PRICE CHANGE WISHLIST NOTIFICATION TRIGGER (TRIGGER08) ----
+
+CREATE OR REPLACE FUNCTION pricechangewishlist_notification() RETURNS TRIGGER AS
+$BODY$
+DECLARE
+    user_id INTEGER;
+
+BEGIN
+    BEGIN
+        IF NEW.price - (NEW.price*NEW.discount/100) != OLD.price - (OLD.price*OLD.discount/100) THEN
+            FOR user_id IN EXECUTE 'SELECT user_id FROM wishlist WHERE product_id = $1 GROUP BY user_id' USING NEW.id
+            LOOP
+                EXECUTE 'INSERT INTO authenticated_notification (user_id, notification_type, target_id, date, isNew) VALUES ($1, $2, $3, DEFAULT, DEFAULT)' USING user_id, 'Price Change Wishlist Notification', NEW.id;
+            END LOOP;
+        END IF;
+    EXCEPTION
+        WHEN others THEN
+            RAISE EXCEPTION 'Something wrong when sending price change notification';
+    END;
+    RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER pricechangewishlist_notification_trigger
+        AFTER UPDATE ON product
+        FOR EACH ROW
+        EXECUTE PROCEDURE pricechangewishlist_notification();
+
+---- END PRICE CHANGE WISHLIST NOTIFICATION TRIGGER ----
+
+---- BEGIN REFUND PURCHASE TRIGGER (TRIGGER089) ----
 
 CREATE OR REPLACE FUNCTION refund_purchase() RETURNS TRIGGER AS
 $BODY$
@@ -558,7 +566,7 @@ CREATE TRIGGER refund_purchase_trigger
 
 ---- END REFUND PURCHASE TRIGGER ----
 
----- BEGIN INSERT WALLET TRIGGER (TRIGGER09) ----
+---- BEGIN INSERT WALLET TRIGGER (TRIGGER10) ----
 
 CREATE OR REPLACE FUNCTION insert_wallet() RETURNS TRIGGER AS
 $BODY$
@@ -593,8 +601,9 @@ INSERT INTO notification VALUES('Payment Notification','Your payment has been su
 INSERT INTO notification VALUES('In Stock Notification','An item on your wishlist is currently in stock');
 INSERT INTO notification VALUES('Out Of Stock Notification','An item on your shopping cart is currently out of stock');
 INSERT INTO notification VALUES('Purchase Information Notification','Thank you for purchasing at our store, this is your purchase information:');
-INSERT INTO notification VALUES('Price Change Notification','An item on your wishlist has had its price changed');
-INSERT INTO notification VALUES('Product Change Notification','An item on your shoppingcart has had its info changed');
+
+INSERT INTO notification VALUES('Price Change Wishlist Notification','An item on your Wishlist has had its price changed');
+INSERT INTO notification VALUES('Price Change Shopping Cart Notification','An item on your Shopping Cart has had its info changed');
 
 INSERT INTO currency VALUES('euro');
 INSERT INTO currency VALUES('pound');

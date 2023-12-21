@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\DB;
 use App\Events\PriceChange;
 use App\Models\Category;
 
+use App\Events\InStock;
+use App\Events\OutOfStock;
 class ProductController extends Controller
 {   
     //Show all products
@@ -87,6 +89,11 @@ class ProductController extends Controller
             'language' => 'string|nullable',
             'category' => 'string|nullable'
         ]);
+        try{
+            $this->authorize('create', Product::class);
+        }catch(AuthorizationException $e){
+            return redirect()->route('all-products');
+        }
         $price = preg_replace('/[^0-9]/', '', $request->price);
 
         $product = Product::create([   
@@ -132,14 +139,16 @@ class ProductController extends Controller
         $originalData = $product->toArray();
         $product->update($data);
         $updatedData = $product->toArray();
-        if($originalData !== $updatedData){
+        if($originalData['price'] !== $updatedData['price']){
             event(new PriceChange($product_id));
         }
+        if($originalData['stock'] > 0 && $updatedData['stock'] = 0){
+            event(new OutOfStock($product_id));
+        }
+        if($originalData['stock'] = 0 && $updatedData['stock'] > 0){
+            event(new InStock($product_id));
+        }
         return redirect()->route('all-products');
-    }
-
-    function change(Request $request) {
-        event(new PriceChange($request->id));
     }
 }
 

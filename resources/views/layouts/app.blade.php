@@ -58,7 +58,7 @@ if($user != NULL && !$user->isAdmin()){
                     </a> 
                     <a class="buttonss" href="{{ route('notifications',$user->id) }}">
                         <i class="fas fa-bell"></i>
-                        {{$user->authenticated()->first()->notifications()->count()}} 
+                        <span class=user_notificiations>{{$user->authenticated()->first()->notifications()->count()}}</span> 
                         <span class="header-text">Notifications</span>
                     </a>   
                         <a class="buttonss" href="{{ route('shopping-cart',$user->id) }}">

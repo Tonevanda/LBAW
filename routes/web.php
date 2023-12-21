@@ -11,6 +11,7 @@ use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\RecoverPasswordController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\WalletController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\PostController;
 use Carbon\Carbon;
 use App\Models\User;
@@ -106,6 +107,9 @@ Route::controller(WalletController::class)->group(function () {
     Route::put('/wallet/{user_id}/add', 'update')->name('wallet.update');
 });
 
+Route::controller(UserController::class)->group(function () {
+    Route::get('/user/get/{user_id}', 'getModel')->name('getModel');
+});
 Route::get('/about_us', function () {
     return view('about_us');
 })->name('about_us');
