@@ -29,6 +29,9 @@
       <form class = "add_product" method="POST" action="{{route('product.create')}}">
           {{ csrf_field() }}
           <fieldset>
+            <input type = "text" name = "image" value = "default.png" hidden/>
+          </fieldset>
+          <fieldset>
             <legend class="sr-only">Name</legend>
             <b> Name </b>
             <textarea id = "name" placeholder="Enter the book's Name here..." required></textarea>
@@ -70,6 +73,16 @@
             <textarea id = "stock" placeholder="Enter the book's Stock here..." required></textarea>
             <input type = "text" name = "stock" hidden>
         </fieldset>
+        <fieldset>
+          <legend class="sr-only">Category</legend>
+          <b>Category: </b>
+          <select id = "category" name = "category">
+            <option value = "" selected></option>
+            @foreach ($categories as $category)
+              <option value = "{{$category->category_type}}">{{$category->category_type}}</option>
+            @endforeach
+          </select>
+      </fieldset>
         <button type="submit">
             Add Book
         </button>

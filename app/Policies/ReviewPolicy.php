@@ -20,7 +20,7 @@ class ReviewPolicy
         if($user->isAdmin()){
             throw new AuthorizationException("Admins can't create reviews");
         }
-        if($user->isBlocked()){
+        if($user->authenticated()->first()->isblocked){
             throw new AuthorizationException("Blocked users can't create reviews");
         }
         return true;

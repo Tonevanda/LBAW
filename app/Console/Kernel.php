@@ -32,6 +32,7 @@ class Kernel extends ConsoleKernel
                     'stage_state' => 'next',
                     'orderarrivedat' => $new_date
                 ]);
+                //notification for changed track order
                 error_log("hello");
             }           
         })->everyMinute();
@@ -40,8 +41,9 @@ class Kernel extends ConsoleKernel
             $purchases = Purchase::where('refundedat', '<=', now())
                                         ->get();
             foreach($purchases as $purchase){
-                error_log("goodbye");
                 $purchase->delete();
+                //notification for refunding or canceling purchase
+                error_log("goodbye");
             }           
         })->everyMinute();
 

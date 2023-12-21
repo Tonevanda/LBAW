@@ -9,6 +9,8 @@ use App\Models\PurchaseProduct;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\DB;
 use App\Events\PriceChange;
+use App\Models\Category;
+
 class ProductController extends Controller
 {   
     //Show all products
@@ -65,12 +67,17 @@ class ProductController extends Controller
 
     public function showCreateProductForm(): View
     {
-        return view('add_product');
+        $categories = Category::all();
+        return view('add_product', [
+            'categories' => $categories
+        ]);
     }
 
     public function createProduct(Request $request)
     {
+        //dd($request);
         $request->validate([
+            'image_name' => 'required',
             'name' => 'required|string',
             'synopsis' => 'required|string',
             'price' => 'required|string',
@@ -78,17 +85,11 @@ class ProductController extends Controller
             'author' => 'string|nullable',
             'editor' => 'string|nullable',
             'language' => 'string|nullable',
-            #'image' => 'required|string|min:0',
-            #'category' => 'required|string|max:250',
+            'category' => 'string|nullable'
         ]);
-        /*try{
-            $this->authorize('create', Product::class);
-        }catch(AuthorizationException $e){
-            return redirect()->route('all-products');
-        }*/
         $price = preg_replace('/[^0-9]/', '', $request->price);
 
-        Product::create([   
+        $product = Product::create([   
             'name' => $request->name,
             'synopsis' => $request->synopsis,
             'price' => intval($price),
@@ -96,9 +97,11 @@ class ProductController extends Controller
             'author' => $request->author == null ? 'anonymous' : $request->author,
             'editor' => $request->editor == null ? 'self-published' : $request->editor,
             'language' => $request->language == null ? 'english' : $request->language,
-            #'image' => $request->image,
-            #'category' => $request->category
+            'image' => $request->image_name
         ]);
+
+        $product->productCategories()->attach($request->category);
+
         return redirect()->route('all-products');
     }
 
@@ -117,13 +120,9 @@ class ProductController extends Controller
             'synopsis' => 'required|string|max:250',
             'language' => 'required|string|max:250',
             'price' => 'required|string|min:0',
-            #'stock' => 'required|numeric|min:0',
-            #'image' => 'required|string|min:0',
-            #'category' => 'required|string|max:250',
+            'image' => 'required|string'
         ]);
-        $data['price'] = str_replace(',', '.', $data['price']);
-        $data['price'] = (float) $data['price'];
-        $data['price'] =(int)number_format($data['price']*100, 0, ',', '.');
+        $data['price'] = intval(preg_replace('/[^0-9]/', '', $request->price));
         try{
             $this->authorize('update', Product::class);
         }catch(AuthorizationException $e){
