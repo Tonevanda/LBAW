@@ -70,7 +70,7 @@ class ProductController extends Controller
 
     public function createProduct(Request $request)
     {
-        $request->validate([
+        /*$request->validate([
             'name' => 'required|string|max:250',
             'synopsis' => 'required|string|max:250',
             'price' => 'required|numeric|min:0',
@@ -96,8 +96,8 @@ class ProductController extends Controller
             'language' => $request->language,
             #'image' => $request->image,
             #'category' => $request->category
-        ]);
-        return redirect()->route('add_products');
+        ]);*/
+        return redirect()->route('all-products');
     }
 
     public function updateProduct(Request $request, $product_id){

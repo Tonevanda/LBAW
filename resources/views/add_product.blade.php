@@ -10,11 +10,11 @@
       </div>
       <div class="product-details">
 
-      <form class = "update_product" method="" action="">
+      <form class = "update_product" method="POST" action="{{route('product.create')}}">
           {{ csrf_field() }}
           <fieldset>
             <legend class="sr-only">Name</legend>
-            <b> Name </b><textarea id = "name" placeholder="Enter the book's Author here..."></textarea>
+            <b> Name </b><textarea id = "name" placeholder="Enter the book's Name here..."></textarea>
         </fieldset>
           <fieldset>
               <legend class="sr-only">Author</legend>
@@ -36,8 +36,8 @@
               <legend class="sr-only">Price</legend>
               <b>Price: </b><textarea id = "price" placeholder="Enter the book's Price here..."></textarea>
           </fieldset>
-        <button type="button" class="edit_product">
-            Edit
+        <button type="submit">
+            Add Book
         </button>
       </form>
         </div>
