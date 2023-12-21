@@ -86,10 +86,11 @@ class ProductController extends Controller
         }catch(AuthorizationException $e){
             return redirect()->route('all-products');
         }*/
-        Product::create([
+        $price = preg_replace('/[^0-9]/', '', $request->price);
+        Product::create([   
             'name' => $request->name,
             'synopsis' => $request->synopsis,
-            'price' => intval($request->price),
+            'price' => intval($price),
             'stock' => intval($request->stock),
             'author' => $request->author,
             'editor' => $request->editor,
