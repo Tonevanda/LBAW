@@ -51,6 +51,7 @@ Route::controller(AuthenticatedController::class)->group(function () {
     Route::delete('/api/wishlist/{user_id}', 'wishlistDestroy')->name('wishlist.destroy');
     Route::post('/api/users/{user_id}', 'updateImage')->name('profileImage.update');
     Route::put('/api/users/block/{user_id}', 'toggleBlock')->middleware('admin')->name('user.toggle-block');
+    Route::delete('/api/users/delete/{user_id}', 'deleteUser')->middleware('admin')->name('deleteUser');
 });
 
 
