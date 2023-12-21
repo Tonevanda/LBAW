@@ -192,7 +192,7 @@ function addEventListeners() {
 
         let warning_tag = low_money_tag.querySelector('p');
         warning_tag.textContent = 'Please select a payment method for the remaining ' + remaining_money;
-        low_money_tag.querySelector('p:last-child').textContent = 'Pay for all the ' + money;
+        low_money_tag.querySelector('p:last-child').textContent = 'Pay for all the ' + money + ' with payment method only';
         let checkbox_pay_all = low_money_tag.querySelector('input');
         checkbox_pay_all.checked = false;
         warning_tag.style.display = 'block';
@@ -340,6 +340,10 @@ function addEventListeners() {
       });
     });
   }
+  const refund_cancel_forms = document.querySelectorAll('form.refund_cancel_purchase');
+  [].forEach.call(refund_cancel_forms, function(form){
+    form.addEventListener('submit', refundPurchaseRequest);
+  })
 
 }
 
@@ -508,6 +512,13 @@ function createReviewRequest(event){
   let description = this.querySelector('textarea[name=description]').value;
   let rating = this.querySelector('input[name=rating]').value;
   sendAjaxRequest('post', '/review/create/'+user_id, {user_id: user_id, product_id: product_id, title: title, description: description, rating: rating}, reviewCreateHandler);
+  event.preventDefault();
+}
+
+function refundPurchaseRequest(event){
+  const user_id = this.querySelector('input[name=user_id]').value;
+  const purchase_id = this.getAttribute('data-id');
+  sendAjaxRequest('put', '/refund/'+purchase_id, {user_id: user_id}, refundPurchaseHandler);
   event.preventDefault();
 }
 
@@ -705,6 +716,20 @@ function updateMoneyHandler(){
   }
 }
 
+function refundPurchaseHandler(){
+  if(this.status === 301){
+    let response = JSON.parse(this.responseText);
+    let = error_message = document.querySelector("div[data-id='" + response.purchase_id + "']");
+    error_message.textContent = response.message;
+    error_message.style.display = 'block';
+  }
+  else if(this.status===200){
+    let response = JSON.parse(this.responseText);
+    let form = document.querySelector('form[data-id="' + response +  '"]');
+    form.remove();
+  }
+}
+
 function updateLocationHandler(){
   if(this.status ===301){
     let response = JSON.parse(this.responseText);
@@ -802,15 +827,14 @@ function createReportHandler(){
 }
   
 function createCartProductHandler(){
-  if(this.status == 201){
-    console.log("added to shopping cart");
-    
-  }
   if(this.status == 301){
     let response = JSON.parse(this.responseText);
-    console.log(response);
-    document.getElementById('errorMessage').textContent = response;
-    document.getElementById('errorMessage').style.display = 'block';
+    let error_message_tag = document.querySelector("div[data-id='" + response.product_id + "']");
+    error_message_tag.textContent = response.message;
+    error_message_tag.style.display = 'block';
+  }
+  else if(this.status == 201){
+    
   }
 }
 
@@ -864,12 +888,17 @@ function deleteHomeWishlistProductHandler(){
   if(this.status == 301){
     let response = JSON.parse(this.responseText);
     console.log(response);
-    document.getElementById('errorDeleteWishlist').textContent = response;
-    document.getElementById('errorDeleteWishlist').style.display = 'block';
+    let error_message_tag = document.querySelector("div[data-id='" + response.product_id + "']");
+    error_message_tag.textContent = response.message;
+    error_message_tag.style.display = 'block';
   }
 }
 function deleteWishlistProductHandler(){
-  if(this.status == 200){
+  if(this.status == 301){
+    let response = JSON.parse(this.responseText);
+    console.log(response);
+  }
+  else if(this.status == 200){
     console.log(this)
     console.log("removed from wishlist");
     let response = JSON.parse(this.responseText);

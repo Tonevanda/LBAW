@@ -51,8 +51,15 @@
                     </fieldset>
                 </form>
             </div>
-            <div id="errorMessage" style="display: none; color: red; font-size: small;"></div>
-            <div id="errorDeleteWishlist" style="display: none; color: red; font-size: small;"></div>
+            <div data-id ="{{$product->id}}" style="display: none; color: red; font-size: small;"></div>
+        @else
+        <i class="fas fa-box-open icon-box-open" title="Stock" onclick="togglePopup()"></i>
+
+<!-- Pop-up content -->
+<div class="popup" id="stockPopup">
+    <p><b>In stock: </b>{{ $product->stock }}</p>
+    <button class="cancel" onclick="togglePopup()">Close</button>
+</div>
         @endif
     @endif
 </div>
