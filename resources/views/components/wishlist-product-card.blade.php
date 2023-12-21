@@ -15,12 +15,12 @@
             <p> {{ $product->synopsis }} </p>
             <p> {{ number_format(($product->price-($product->discount*$product->price/100))/100, 2, ',', '.')}}{{$currency->currency_symbol}} </p>
             @if (auth()->check() && !Auth::user()->isAdmin())
-            <form class = "remove_wishlist" method="" action="{{ route('wishlist.destroy', ['user_id' => $user->user_id]) }}">
+            <form class = "remove_wishlist" method="POST" action="{{ route('wishlist.destroy', ['user_id' => $user->user_id]) }}">
                 <fieldset>
                     <legend class="sr-only">Remove from Wishlist</legend>
                     {{ csrf_field() }}
-                    <input type="hidden" name="product_id" value="{{ $product->id }}" required>
-                    <input type="hidden" name="user_id" value="{{ Auth::user()->id }}" required>
+                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+                    <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
                     <button type="submit" name="remove-from-wishlist" class="cancel">
                         Remove
                     </button>
