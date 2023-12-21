@@ -15,7 +15,7 @@
           <fieldset>
             <legend class="sr-only">Name</legend>
             <b> Name </b>
-            <textarea id = "name" placeholder="Enter the book's Name here..."></textarea>
+            <textarea id = "name" placeholder="Enter the book's Name here..." required></textarea>
             <input type = "text" name = "name" hidden>
         </fieldset>
           <fieldset>
@@ -33,7 +33,7 @@
           <fieldset>
               <legend class="sr-only">Synopsis</legend>
               <b>Synopsis: </b>
-              <textarea id = "synopsis" placeholder="Enter the book's Synopsis here..."></textarea>
+              <textarea id = "synopsis" placeholder="Enter the book's Synopsis here..." required></textarea>
               <input type = "text" name = "synopsis" hidden>
           </fieldset>
           <fieldset>
@@ -45,13 +45,13 @@
           <fieldset>
               <legend class="sr-only">Price</legend>
               <b>Price: </b>
-              <textarea id = "price" placeholder="Enter the book's Price here..."></textarea>
+              <textarea id = "price" placeholder="Enter the book's Price here..." required></textarea>
               <input type = "text" name = "price" hidden>
           </fieldset>
           <fieldset>
             <legend class="sr-only">Stock</legend>
             <b>Stock: </b>
-            <textarea id = "stock" placeholder="Enter the book's Stock here..."></textarea>
+            <textarea id = "stock" placeholder="Enter the book's Stock here..." required></textarea>
             <input type = "text" name = "stock" hidden>
         </fieldset>
         <button type="submit">
