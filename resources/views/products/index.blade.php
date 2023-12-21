@@ -19,7 +19,7 @@
 <div class = "home-grid">
 @foreach ($products as $product)
 
-<x-product-card :product="$product" :user="$user" :currency_symbol="$currency_symbol" />
+<x-product-card :product="$product" :currency_symbol="$currency_symbol" />
 
 @endforeach
 </div>
