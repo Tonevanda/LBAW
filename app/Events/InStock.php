@@ -10,7 +10,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class PriceChange implements ShouldBroadcast
+class InStock
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -25,7 +25,7 @@ class PriceChange implements ShouldBroadcast
     {
         error_log($product_id);
         $this->product_id = $product_id;
-        $this->message = 'an item in your shopping cart has changed price';
+        $this->message = 'an item in your wishlist is back in stock';
 
     }
 
@@ -41,7 +41,6 @@ class PriceChange implements ShouldBroadcast
 
     // You should specify the name of the generated notification.
     public function broadcastAs() {
-        return 'notification-pricechange';
+        return 'in-dtock-notification';
     }
-
 }

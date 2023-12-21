@@ -6,16 +6,43 @@ cluster: "eu",
 encrypted: true
 });
 
-const channel = pusher.subscribe('users');
-console.log(channel);
-channel.bind('notification-pricechange', function(data) {
-  fetch('/shopping-cart/get/' + 101)
-  .then(response => response.json())
-  
-  console.log(`New notification: ${data.message}`);
-})
 
-Pusher.logToConsole = true;
+fetch('/user/get/' + 101)
+.then(response => response.json())
+.then(data => {
+  const id = data.id;
+  if (data.userType=="authenticated") {
+    const channel = pusher.subscribe('users');
+    let notification_item = document.querySelector('span.user_notificiations');
+    notification_number=Number(notification_item.textContent);
+    channel.bind('notification-pricechange', function(notification) {
+      fetch('/shopping-cart/get/' + id)
+      .then(response => response.json())
+      .then(data => {
+        if (data.shopping_cart.some(item => item.id == notification.product_id)) {
+          console.log(`New notification: ${notification.message}`);
+          notification_item.textContent++;
+        }
+      });
+      fetch('/wishlist/get/' + id)
+      .then(response => response.json())
+      .then(data => {
+        if (data.wishlist.some(item => item.id == notification.product_id)) {
+          console.log(`New notification: ${notification.message}`);
+          notification_item.textContent++;
+        }
+      });
+    })
+  }
+  else if(data.userType=="admin"){
+    const channel = pusher.subscribe('admins');
+    console.log(channel);
+    channel.bind('notification-pricechange', function(notification) {
+      console.log(`New notification`);
+    })
+  }
+});
+//Pusher.logToConsole = true;
 
 function addEventListeners() {
   let cartDeleter = document.querySelectorAll('form.remove_cart');
