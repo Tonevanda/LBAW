@@ -3,6 +3,7 @@
 ### 1. Installation
 
 Link to the repository: https://git.fe.up.pt/lbaw/lbaw2324/lbaw2315
+
 Docker command to start the image:
 ```shell
 docker run -it -p 8000:80 --name=lbaw2315 -e DB_DATABASE="lbaw2315" -e DB_SCHEMA="lbaw2315" -e DB_USERNAME="lbaw2315" -e DB_PASSWORD="nWHqyfsy" git.fe.up.pt:5050/lbaw/lbaw2324/lbaw2315
