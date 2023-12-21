@@ -675,8 +675,22 @@ form i.fa-heart:hover {
   padding-right: 1em;
 }
 
+.delete {
+  padding-left: 0;
+  padding-right:0;
+    color: red;
+    font-size: medium;
+    font-weight: 200;
+    text-transform: none;
+    letter-spacing: normal;
+    background: none; /* Set background to none */
+    border: none; /* Remove border if any */
+    /* Add any other styles you want to reset */
+}
+
 .block {
   padding-left: 0;
+  margin-bottom: 0;
   padding-right:0;
   padding-top: 1em;
     color: #003740c3;
@@ -695,6 +709,18 @@ form i.fa-heart:hover {
 }
 
 .block:focus {
+  background: none; /* Remove background on focus */
+  outline: none; /* Remove the focus outline */
+  color: #003740;
+  font-weight: bold;
+}
+
+.delete:hover {
+  background: none;
+  color: #003740;
+}
+
+.delete:focus {
   background: none; /* Remove background on focus */
   outline: none; /* Remove the focus outline */
   color: #003740;
@@ -1471,7 +1497,6 @@ li button[name="update-review"].visible{
 
 .wallet , .fa-dollar-sign {
   color: #ccc;
-
 }
 
 
