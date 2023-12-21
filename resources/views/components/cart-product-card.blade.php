@@ -29,7 +29,7 @@
             </button>
         </fieldset>
     </form>
-    <div id="errorDeleteCart" style="display: none; color: red; font-size: small;"></div>
+    <div class = "error_message" style="display: none; color: red; font-size: small;"></div>
     @endif
 </div>
 </div>

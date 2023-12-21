@@ -278,7 +278,7 @@ class AuthenticatedController extends Controller
         try {
             $this->authorize('removeFromCart', [Product::class, $data['cart_id']]);
         } catch (AuthorizationException $e) {
-            return response()->json($e->getMessage(), 301);
+            return response()->json(['message' => $e->getMessage(), 'cart_id' => $data['cart_id']], 301);
         }
         $user->shoppingCart()->wherePivot('id', $data['cart_id'])->detach();
         return response()->json($data['cart_id'],200);

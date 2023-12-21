@@ -858,9 +858,9 @@ function deleteCartProductHandler(){
   }
   if(this.status == 301){
     let response = JSON.parse(this.responseText);
-    console.log(response);
-    document.getElementById('errorDeleteCart').textContent = response;
-    document.getElementById('errorDeleteCart').style.display = 'block';
+    let error_message_tag = document.querySelector("div[data-id='" + response.cart_id + "'] div.error_message");
+    error_message_tag.textContent = response.message;
+    error_message_tag.style.display = 'block';
   }
 }
 
