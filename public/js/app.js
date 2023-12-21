@@ -709,7 +709,6 @@ function refundPurchaseHandler(){
     let = error_message = document.querySelector('div#errorMessage');
     error_message.textContent = response;
     error_message.style.display = 'block';
-    
   }
   else if(this.status===200){
     let response = JSON.parse(this.responseText);

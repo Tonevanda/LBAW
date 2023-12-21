@@ -125,7 +125,7 @@ CREATE TABLE purchase(
     isTracked BOOLEAN DEFAULT FALSE NOT NULL,
     orderedAt TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL,
     orderArrivedAt TIMESTAMP WITH TIME ZONE NOT NULL CONSTRAINT order_ck CHECK (orderArrivedAt > orderedAt),
-    isRefunded BOOLEAN DEFAULT FALSE NOT NULL
+    refundedAt TIMESTAMP WITH TIME ZONE CONSTRAINT refund_ck CHECK ((refundedAt IS NULL) OR (orderArrivedAt < refundedAt))
 );
 
 
@@ -299,7 +299,7 @@ DECLARE
 
 BEGIN
     BEGIN
-        IF NEW.stage_state = 'next' AND NEW.isRefunded = false THEN
+        IF NEW.stage_state = 'next' THEN
             EXECUTE 'SELECT stage_order FROM stage WHERE stage_state = $1' INTO stage_number USING OLD.stage_state;
             stage_number := stage_number + 1;
             EXECUTE 'SELECT stage_state FROM stage WHERE stage_order = $1' INTO next_stage USING stage_number;
@@ -879,8 +879,8 @@ INSERT INTO product_category(product_id, category_type) VALUES(47, 'classic');
 INSERT INTO product(name, synopsis, price, discount, stock, author, editor, language, image) VALUES('The Hitchhiker''s Guide to the Galaxy', 'A science fiction comedy series by Douglas Adams. It follows the misadventures of an unwitting human and his alien friend as they travel through space.', 220, 0, 16, 'Douglas Adams', 'Pan Books', 'English', 'the_hitchhikers_guide_to_the_galaxy.png');
 INSERT INTO product_category(product_id, category_type) VALUES(48, 'science fiction');
 
-INSERT INTO purchase (user_id, price, quantity, payment_type, destination, stage_state, isTracked, orderedAt, orderArrivedAt, isRefunded) 
-VALUES (60, 5000, 3, 'paypal', '123 Main St', 'start', TRUE, '2021-12-20T17:30:00Z', '2022-12-20T17:30:00Z', false);
+INSERT INTO purchase (user_id, price, quantity, payment_type, destination, stage_state, isTracked, orderedAt, orderArrivedAt, refundedAt) 
+VALUES (60, 5000, 3, 'paypal', '123 Main St', 'start', TRUE, '2021-12-20T17:30:00Z', '2022-12-20T17:30:00Z', '2023-10-20T17:30:00Z');
 
-INSERT INTO purchase (user_id, price, quantity, payment_type, destination, stage_state, isTracked, orderedAt, orderArrivedAt, isRefunded) 
-VALUES (70, 200, 3, 'paypal', '123 Main St', 'start', FALSE, DEFAULT, '2025-01-02T14:30:00Z', DEFAULT);
+INSERT INTO purchase (user_id, price, quantity, payment_type, destination, stage_state, isTracked, orderedAt, orderArrivedAt, refundedAt) 
+VALUES (70, 200, 3, 'paypal', '123 Main St', 'start', FALSE, DEFAULT, '2025-01-02T14:30:00Z', null);

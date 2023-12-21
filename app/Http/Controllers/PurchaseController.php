@@ -104,7 +104,7 @@ class PurchaseController extends Controller
         }
 
 
-        $purchase->update(['isrefunded' => true]);
+        $purchase->update(['refundedat' => now()->addMinutes(0, 2)->addSeconds(0, 30)]);
         
         return response()->json($purchase->id, 200);
     }
