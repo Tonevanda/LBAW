@@ -17,4 +17,10 @@
             @endif
         </button>
     </form>
+    <form method="" action="" class="delete_user" id="delete_user_form">
+        {{ csrf_field() }}
+        <button class="delete" type="submit" data-id="{{$user->id}}">
+            Delete
+        </button>
+    </form>
 </div>
