@@ -8,6 +8,13 @@ use Carbon\Carbon;
 
 @php
 $user = Auth::user();
+$currency_symbol = '€';
+if($user != null && !$user->isAdmin()){
+    $auth = $user->authenticated()->first();
+    $wallet = $auth->wallet()->first();
+    $currency_symbol = $wallet->currency()->first()->currency_symbol; 
+}
+
 
 @endphp
 
@@ -16,12 +23,13 @@ $user = Auth::user();
             <div class="purchase">
                 <div class="product-grid">
                     @foreach($purchase->products()->get() as $product)
-                        <x-history-product-card :product="$product" />
+                        <x-history-product-card :product="$product" :currency_symbol="$currency_symbol"/>
                     @endforeach
                 </div>
-                <p>Total Price: {{ $purchase->price }}</p>
+                <p>Total Price: {{ number_format($purchase->price/100, 2, ',', '.')}}{{$currency_symbol}}</p>
+                <p>Payment Method: {{ $purchase->payment_type }}</p>
                 <a href="#">
-                    <p>{{ Carbon::parse($purchase->orderedat)->format('d/m/Y H:i:s') }}</p>
+                    <p>{{ Carbon::parse($purchase->orderedat)->format('d/m/Y H:i:s') }} {{$purchase->destination}}</p>
                 </a>
                 @if (!$user->isAdmin() && $purchase->stage_state != 'delivered' && $purchase->isrefunded == false)
                     <form class = "refund_cancel_purchase" method = "" action = "" data-id = "{{$purchase->id}}">

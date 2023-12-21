@@ -1,10 +1,10 @@
-@props(['product'])
+@props(['product', 'currency_symbol'])
 <div class="product">
     <a href="{{ route('single-product', $product) }}">
         <div class = "product_image">
             <img src= "{{asset('images/product_images/' . $product->image)}}" alt="" />
         </div>
         <h2> {{ $product->name }} </h2>
-        <p> {{ $product->price }} </p>
+        <p> {{ number_format(($product->price-($product->price*$product->discount/100))/100, 2, ',', '.')}}{{$currency_symbol}} </p>
     </a>
 </div>
