@@ -43,8 +43,16 @@ CREATE TABLE users(
     password TEXT NOT NULL,
     email TEXT NOT NULL CONSTRAINT email_ck UNIQUE,
     country TEXT DEFAULT 'Portugal' NOT NULL,
-    profile_picture TEXT DEFAULT 'default.png' NOT NULL 
+    profile_picture TEXT DEFAULT 'default.png' NOT NULL,
+    remember_token VARCHAR(100)
 );
+
+CREATE TABLE password_reset_tokens (
+    email VARCHAR(255) PRIMARY KEY,
+    token VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP NULL
+);
+
 
 CREATE TABLE admin(
     admin_id INTEGER PRIMARY KEY REFERENCES users (id) ON UPDATE CASCADE
