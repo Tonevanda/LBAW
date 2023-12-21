@@ -70,18 +70,18 @@ class ProductController extends Controller
 
     public function createProduct(Request $request)
     {
-        /*$request->validate([
-            'name' => 'required|string|max:250',
-            'synopsis' => 'required|string|max:250',
-            'price' => 'required|numeric|min:0',
-            'stock' => 'required|numeric|min:0',
-            'author' => 'required|string|max:250',
-            'editor' => 'required|string|max:250',
-            'language' => 'required|string|max:250',
+        $request->validate([
+            'name' => 'required|string',
+            'synopsis' => 'required|string',
+            'price' => 'required|string',
+            //'stock' => 'required|numeric|min:0',
+            'author' => 'string',
+            'editor' => 'string',
+            'language' => 'string',
             #'image' => 'required|string|min:0',
             #'category' => 'required|string|max:250',
         ]);
-        try{
+        /*try{
             $this->authorize('create', Product::class);
         }catch(AuthorizationException $e){
             return redirect()->route('all-products');

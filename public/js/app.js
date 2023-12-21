@@ -350,6 +350,17 @@ function addEventListeners() {
   [].forEach.call(refund_cancel_forms, function(form){
     form.addEventListener('submit', refundPurchaseRequest);
   })
+  const add_product_button = document.querySelector('form.add_product button');
+  if(add_product_button != null){
+    add_product_button.addEventListener('click', function(){
+      const add_product_textareas = document.querySelectorAll('form.add_product textarea');
+      [].forEach.call(add_product_textareas, function(textarea){
+        const parent_formfield = textarea.parentNode;
+        let input = parent_formfield.querySelector('input');
+        input.value = textarea.value;
+      });
+    });
+  }
 
 }
 
