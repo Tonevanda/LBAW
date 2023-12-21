@@ -48,4 +48,12 @@ class AuthenticatedPolicy
         return true;
     }
 
+    public function deleteUser(User $user): bool
+    {
+        if(!$user->isAdmin()){
+            throw new AuthorizationException("Only admins can delete other users");
+        }
+        return true;
+    }
+
 }

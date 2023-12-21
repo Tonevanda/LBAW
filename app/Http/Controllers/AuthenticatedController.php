@@ -237,6 +237,17 @@ class AuthenticatedController extends Controller
         return redirect()->route('login');
     }
 
+    public function deleteUser($user_id){
+        $user = Authenticated::findOrFail($user_id);
+        try{
+            $this->authorize('deleteUser', $user);
+        }catch(AuthorizationException $e){
+            return response()->json($e->getMessage(), 301);
+        }
+        $user->delete();
+        return response()->json($user_id, 200);
+    }
+
     public function wishlistStore(Request $request, $user_id){
         $user = Authenticated::findOrFail($user_id);
         $data = $request->validate([
