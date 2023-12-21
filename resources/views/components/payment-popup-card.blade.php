@@ -50,10 +50,12 @@
         <fieldset>
             <legend>Payment Method</legend>
             <div class="low_money" style="display: none;">
-                <i class="fas fa-exclamation-triangle">Your Bibliophile Bliss Wallet balance is too low to cover this transaction!</i>
-                <p style="display: block;"></p>
+                <h6><i class="fas fa-exclamation-triangle">Your Bibliophile Bliss Wallet balance is too low to cover this transaction!</i></h6>
+                <p style="display: block; margin-bottom:0"></p>
+                <div class="checkbox-container">
                 <input type="checkbox">
                 <p></p>
+                </div>
             </div>
             <label for="payment_type">Choose a payment method:</label>
             <select name="payment_type" data-info="{{$payment_value}}">

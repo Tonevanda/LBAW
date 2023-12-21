@@ -90,10 +90,15 @@ if($user != NULL && !$user->isAdmin()){
                 </div>
         </main>
         <footer>
+            <div class="footer-left">
             <p><a href="{{ route('about_us')}}">About us</a></p>
             <p><a href="{{ route('contact_us') }}">Contact us</a></p>
+            <p class="copyright">&copy; 2023 Bibliophile's Bliss. All rights reserved.</p>
+            </div>
+            <div class="footer-right">
             <p><a href="{{ route('main_features') }}">Main Features</a></p>
-            <p>&copy; 2023 Bibliophile's Bliss. All rights reserved.</p>
+            <p><a href="{{ route('faq') }}">FAQ</a></p>
+        </div>
         </footer>
-    </body>
+        </body>
 </html>

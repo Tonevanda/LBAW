@@ -117,3 +117,7 @@ Route::get('/contact_us', function () {
 Route::get('/main_features', function () {
     return view('main_features');
 })->name('main_features');
+
+Route::get('/faq', function () {
+    return view('faq');
+})->name('faq');
