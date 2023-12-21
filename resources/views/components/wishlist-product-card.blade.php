@@ -1,4 +1,8 @@
 @props(['product', 'user'])
+@php 
+    $wallet = $user->wallet()->first();
+    $currency = $wallet->currency()->first();
+@endphp
 <div data-id="{{$product->id}}">
     <a href="{{ route('single-product', $product) }}">
         <div class="product-info">
@@ -8,7 +12,7 @@
         <div class="product-details">
         <h3> {{ $product->name }} </h3>
         <p> {{ $product->synopsis }} </p>
-        <p> {{ $product->price }} </p>
+        <p> {{ number_format(($product->price-($product->discount*$product->price/100))/100, 2, ',', '.')}}{{$currency->currency_symbol}} </p>
     </a>
     @if (auth()->check() && !Auth::user()->isAdmin())
     <form class = "remove_wishlist" method="" action="{{ route('wishlist.destroy', ['user_id' => $user->user_id]) }}">
