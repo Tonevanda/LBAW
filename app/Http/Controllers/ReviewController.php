@@ -41,7 +41,7 @@ class ReviewController extends Controller
         try{
             $this->authorize('destroy', $review);
         }catch(AuthorizationException $e){
-            return response()->json($e->getMessage(), 301);
+            return response()->json(['message' => $e->getMessage(), 'review_id' => $review_id], 301);
         }
         $review->delete();
         $data['review_id'] = $review_id;

@@ -82,31 +82,31 @@ class AuthenticatedController extends Controller
         $auth = Authenticated::findOrFail($user_id);
         $user = $auth->user()->first();
         if (Auth::user()->isAdmin()) {
-                $data = request()->validate([
-                    'name' => 'string|max:250',
-                    'email' => ['email', 'max:250', Rule::unique('users')->ignore($user->id)],
-                    'password' => ['nullable', 'min:8', 'confirmed'],
-                    'address' => 'string|max:250',
-                ]);
+            $data = request()->validate([
+                'name' => 'string|max:250',
+                'email' => ['email', 'max:250', Rule::unique('users')->ignore($user->id)],
+                'password' => ['nullable', 'min:8', 'confirmed'],
+                'address' => 'string|max:250',
+            ]);
         }
         else {
-                $data = request()->validate([
-                    'name' => 'string|max:250',
-                    'email' => ['email', 'max:250', Rule::unique('users')->ignore($user->id)],
-                    'old_password' => ['required', 'min:8', 'old_password'],
-                    'password' => ['nullable', 'min:8', 'confirmed'],
-                    'address' => 'string|max:250',
-                ]);
+            $data = request()->validate([
+                'name' => 'string|max:250',
+                'email' => ['email', 'max:250', Rule::unique('users')->ignore($user->id)],
+                'old_password' => ['required', 'min:8', 'old_password'],
+                'password' => ['nullable', 'min:8', 'confirmed'],
+                'address' => 'string|max:250',
+            ]);
         }
         if (!is_null($data['password'])) {
-                $data['password'] = Hash::make($data['password']);
+            $data['password'] = Hash::make($data['password']);
         } else {
-                unset($data['password']);
+            unset($data['password']);
         }
-            $auth->update($data);
-            $user->update($data); 
-            Auth::setUser($user->fresh());
-            return redirect()->route('profile', $user_id);
+        $auth->update($data);
+        $user->update($data); 
+        Auth::setUser($user->fresh());
+        return redirect()->route('profile', $user_id);
     }
 
  

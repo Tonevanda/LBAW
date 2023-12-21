@@ -598,10 +598,15 @@ CREATE TRIGGER insert_wallet_trigger
 
 
 INSERT INTO notification VALUES('Payment Notification','Your payment has been successful');
-INSERT INTO notification VALUES('In Stock Notification','An item on your wishlist is currently in stock');
-INSERT INTO notification VALUES('Out Of Stock Notification','An item on your shopping cart is currently out of stock');
 INSERT INTO notification VALUES('Purchase Information Notification','Thank you for purchasing at our store, this is your purchase information:');
 
+--- FALTAM TRIGGERS ---
+INSERT INTO notification VALUES('Changed Tracked Order','Your Tracked Order has been updated');
+INSERT INTO notification VALUES('Refunded or Canceled Order','Your Order has been refunded or canceled');
+--- FALTAM TRIGGERS ---
+
+INSERT INTO notification VALUES('In Stock Notification','An item on your wishlist is currently in stock');
+INSERT INTO notification VALUES('Out Of Stock Notification','An item on your shopping cart is currently out of stock');
 INSERT INTO notification VALUES('Price Change Wishlist Notification','An item on your Wishlist has had its price changed');
 INSERT INTO notification VALUES('Price Change Shopping Cart Notification','An item on your Shopping Cart has had its info changed');
 

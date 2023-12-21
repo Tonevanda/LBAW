@@ -371,15 +371,22 @@ main > header span {
   max-width: 20em;
   border: 1px solid #ccc;
 }
-.content > form .error {
-  color: #ff3333;
+
+.form-container .error{
+  color: red;
 }
-.content > form .success {
+.form-container .success {
   color: #106af1;
 }
 #content > form input {
   background-color: white;
 }
+
+.required {
+  /* Your styles here */
+  background-color: rgba(144, 203, 222, 0.132) !important;
+}
+
 
 @media (max-width: 70em) {
   #cards {
@@ -668,8 +675,22 @@ form i.fa-heart:hover {
   padding-right: 1em;
 }
 
+.delete {
+  padding-left: 0;
+  padding-right:0;
+    color: red;
+    font-size: medium;
+    font-weight: 200;
+    text-transform: none;
+    letter-spacing: normal;
+    background: none; /* Set background to none */
+    border: none; /* Remove border if any */
+    /* Add any other styles you want to reset */
+}
+
 .block {
   padding-left: 0;
+  margin-bottom: 0;
   padding-right:0;
   padding-top: 1em;
     color: #003740c3;
@@ -685,6 +706,25 @@ form i.fa-heart:hover {
 .block:hover {
   background: none;
   color: #003740;
+}
+
+.block:focus {
+  background: none; /* Remove background on focus */
+  outline: none; /* Remove the focus outline */
+  color: #003740;
+  font-weight: bold;
+}
+
+.delete:hover {
+  background: none;
+  color: #003740;
+}
+
+.delete:focus {
+  background: none; /* Remove background on focus */
+  outline: none; /* Remove the focus outline */
+  color: #003740;
+  font-weight: bold;
 }
 
 .report-review {
@@ -1263,6 +1303,10 @@ footer {
     color: #fff;
 }
 
+div.hidden_categories{
+  display: none;
+}
+
 footer p {
   color: #fff;
   padding-left: 20px;
@@ -1457,7 +1501,6 @@ li button[name="update-review"].visible{
 
 .wallet , .fa-dollar-sign {
   color: #ccc;
-
 }
 
 

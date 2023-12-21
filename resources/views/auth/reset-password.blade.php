@@ -1,7 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-
+<div class="form-page">
+  <div class="form-container">
+      <h3>Reset Password</h3>
 <form method="POST" action="{{ route('password.update') }}">
   {{ csrf_field() }}
 
@@ -45,5 +47,6 @@
   </button>
 
 </form>
-
+  </div>
+</div>
 @endsection
