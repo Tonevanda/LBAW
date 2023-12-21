@@ -352,9 +352,19 @@ function addEventListeners() {
   })
   const add_product_button = document.querySelector('form.add_product button');
   if(add_product_button != null){
-    add_product_button.addEventListener('click', function(){
+    add_product_button.addEventListener('click', function(event){
       const add_product_textareas = document.querySelectorAll('form.add_product textarea');
       [].forEach.call(add_product_textareas, function(textarea){
+        if(textarea.getAttribute('id') == 'price'){
+          if(!validateMoneyInput.bind(textarea)()){
+            event.preventDefault();
+          }
+        }
+        else if(textarea.getAttribute('id') == 'stock'){
+          if(!validateNumericInput.bind(textarea)()){
+            event.preventDefault();
+          }
+        }
         const parent_formfield = textarea.parentNode;
         let input = parent_formfield.querySelector('input');
         input.value = textarea.value;
@@ -1053,6 +1063,29 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 });
 
+function validateNumericInput(){
+  const value = this.value;
+  if(/^\d+$/.test(value)){
+    if(this.classList.contains('error'))
+      this.classList.remove('error');
+    return true;
+  }
+  if(!this.classList.contains('error'))
+        this.classList.add('error');
+  return false;
+}
+
+function validateMoneyInput(){
+  const value = this.value;
+  if(/^\d{1,},\d{2}€$/.test(value)){
+    if(this.classList.contains('error'))
+      this.classList.remove('error');
+    return true;
+  }
+  if(!this.classList.contains('error'))
+        this.classList.add('error');
+  return false;
+}
 
 function validatePhoneInput(){
   const value = this.value;
