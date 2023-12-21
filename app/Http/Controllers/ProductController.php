@@ -57,12 +57,16 @@ class ProductController extends Controller
         $product = Product::with('productStatistic')->findOrFail($product_id);
         $productRevenue = $product->purchaseProducts->sum('price');
         $reviews = $product->reviews()->get();
+        $product_category = $product->productCategories()->first()->category_type;
+        $categories = Category::all();
     
         return view('products.show', [
             'product' => $product,
             'reviews' => $reviews,
             'statistics' => $product->productStatistic,
             'productRevenue' => $productRevenue,
+            'product_category' => $product_category,
+            'categories' => $categories
         ]);
     }
 
@@ -120,13 +124,16 @@ class ProductController extends Controller
 
     public function updateProduct(Request $request, $product_id){
         $data = $request->validate([
-            'author' => 'required|string|max:250',
-            'editor' => 'required|string|max:250',
+            'author' => 'required|string|max:250|nullable',
+            'editor' => 'required|string|max:250|nullable',
             'synopsis' => 'required|string|max:250',
-            'language' => 'required|string|max:250',
+            'language' => 'required|string|max:250|nullable',
             'price' => 'required|string|min:0',
+            'category' => 'required|string',
+            'stock' => 'required|string',
             'image' => 'required|string'
         ]);
+        $data['stock'] = intval($data['stock']);
         $data['price'] = intval(preg_replace('/[^0-9]/', '', $request->price));
         try{
             $this->authorize('update', Product::class);
@@ -135,7 +142,16 @@ class ProductController extends Controller
         }
         $product=Product::findOrFail($product_id);
         $originalData = $product->toArray();
-        $product->update($data);
+        $product->update([
+            'synopsis' => $data['synopsis'],
+            'price' => $data['price'],
+            'stock' => $data['stock'],
+            'author' => $data['author'] == null ? 'anonymous' : $data['author'],
+            'editor' => $data['editor'] == null ? 'self-published' : $data['editor'],
+            'language' => $data['language'] == null ? 'english' : $data['language'],
+            'image' => $data['image']
+        ]);
+        $product->productCategories()->sync($data['category']);
         $updatedData = $product->toArray();
         if($originalData['price'] !== $updatedData['price']){
             event(new PriceChange($product_id));

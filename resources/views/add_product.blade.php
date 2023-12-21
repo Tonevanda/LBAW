@@ -77,7 +77,6 @@
           <legend class="sr-only">Category</legend>
           <b>Category: </b>
           <select id = "category" name = "category">
-            <option value = "" selected></option>
             @foreach ($categories as $category)
               <option value = "{{$category->category_type}}">{{$category->category_type}}</option>
             @endforeach

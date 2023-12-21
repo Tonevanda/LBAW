@@ -1303,6 +1303,10 @@ footer {
     color: #fff;
 }
 
+div.hidden_categories{
+  display: none;
+}
+
 footer p {
   color: #fff;
   padding-left: 20px;
