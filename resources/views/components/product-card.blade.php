@@ -12,6 +12,7 @@
             <p> <b>Old price: </b>{{ number_format($product->price/100, 2, ',', '.')}}{{$currency_symbol}} </p>
             <p> <b>Discount: </b>{{ $product->discount }} </p>
             <p> <b>Price with discount: </b>{{ number_format(($product->price-($product->discount*$product->price/100))/100, 2, ',', '.')}}{{$currency_symbol}} </p>
+            <p> <b>In stock: </b>{{ $product->stock }}</p>
         @endif
         <p> <b>In stock: </b>{{$product->stock}} </p>
     @if ($product->stock > 0 && $product->stock < 10)
@@ -53,13 +54,6 @@
             </div>
             <div data-id ="{{$product->id}}" style="display: none; color: red; font-size: small;"></div>
         @else
-        <i class="fas fa-box-open icon-box-open" title="Stock" onclick="togglePopup()"></i>
-
-<!-- Pop-up content -->
-<div class="popup" id="stockPopup">
-    <p><b>In stock: </b>{{ $product->stock }}</p>
-    <button class="cancel" onclick="togglePopup()">Close</button>
-</div>
         @endif
     @endif
 </div>
