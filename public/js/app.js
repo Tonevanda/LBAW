@@ -580,8 +580,7 @@ function deleteReviewHandler(){
   if(this.status == 301){
     let response = JSON.parse(this.responseText);
     console.log(response);
-    let message = "Failed to delete review.";
-    document.getElementById('errorDeleteReview').textContent = message;
+    document.getElementById('errorDeleteReview').textContent = response;
     document.getElementById('errorDeleteReview').style.display = 'block';
   }
   else if(this.status == 200){
@@ -673,8 +672,7 @@ function reviewCreateHandler(){
   if(this.status == 301){
     let response = JSON.parse(this.responseText);
     console.log(response);
-    let message = "Sorry, we were unable to submit your review.";
-    document.getElementById('errorReview').textContent = message;
+    document.getElementById('errorReview').textContent = response;
     document.getElementById('errorReview').style.display = 'block';
   }
   
@@ -684,8 +682,7 @@ function updateMoneyHandler(){
   if(this.status === 301){
     let response = JSON.parse(this.responseText);
     console.log(response);
-    let message = "We encountered an issue updating your funds.";
-    document.getElementById('errorMoneyUpdate').textContent = message;
+    document.getElementById('errorMoneyUpdate').textContent = response;
     document.getElementById('errorMoneyUpdate').style.display = 'block';
   }
   else if(this.status===200){
@@ -700,8 +697,7 @@ function updateLocationHandler(){
   if(this.status ===301){
     let response = JSON.parse(this.responseText);
     console.log(response);
-    let message = "Location update failed.";
-    document.getElementById('errorLocationUpdate').textContent = message;
+    document.getElementById('errorLocationUpdate').textContent = response;
     document.getElementById('errorLocationUpdate').style.display = 'block';
   }
   else if(this.status===200){
@@ -720,8 +716,7 @@ function createPurchaseHandler(){
   if(this.status === 301){
     let response = JSON.parse(this.responseText);
     console.log(response);
-    let message = "We encountered an issue processing your purchase.";
-    document.getElementById('errorCheckout').textContent = message;
+    document.getElementById('errorCheckout').textContent = response;
     document.getElementById('errorCheckout').style.display = 'block';
   }
   else if(this.status===200){
@@ -747,8 +742,7 @@ function reviewHandler(){
   else if(this.status == 301){
     let response = JSON.parse(this.responseText);
     console.log(response);
-    let message = "Unable to save your review changes.";
-    document.getElementById('errorReviewUpdate').textContent = message;
+    document.getElementById('errorReviewUpdate').textContent = response;
     document.getElementById('errorReviewUpdate').style.display = 'block';
   }
   else if(this.status == 200){
@@ -770,8 +764,7 @@ function createReportHandler(){
   if(this.status == 301){
     let response = JSON.parse(this.responseText);
     console.log(response);
-    let message = "Failed to create review report.";
-    document.getElementById('errorReport').textContent = message;
+    document.getElementById('errorReport').textContent = response;
     document.getElementById('errorReport').style.display = 'block';
   }
 }
@@ -784,8 +777,7 @@ function createCartProductHandler(){
   if(this.status == 301){
     let response = JSON.parse(this.responseText);
     console.log(response);
-    let message = "Product couldn't be added to your shopping cart.";
-    document.getElementById('errorMessage').textContent = message;
+    document.getElementById('errorMessage').textContent = response;
     document.getElementById('errorMessage').style.display = 'block';
   }
 }
@@ -811,8 +803,7 @@ function deleteCartProductHandler(){
   if(this.status == 301){
     let response = JSON.parse(this.responseText);
     console.log(response);
-    let message = "Failed to remove product from shopping cart.";
-    document.getElementById('errorDeleteCart').textContent = message;
+    document.getElementById('errorDeleteCart').textContent = response;
     document.getElementById('errorDeleteCart').style.display = 'block';
   }
 }
@@ -841,8 +832,7 @@ function deleteHomeWishlistProductHandler(){
   if(this.status == 301){
     let response = JSON.parse(this.responseText);
     console.log(response);
-    let message = "Failed to remove product from wishlist.";
-    document.getElementById('errorDeleteWishlist').textContent = message;
+    document.getElementById('errorDeleteWishlist').textContent = response;
     document.getElementById('errorDeleteWishlist').style.display = 'block';
   }
 }

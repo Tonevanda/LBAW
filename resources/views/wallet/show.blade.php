@@ -22,7 +22,7 @@
 
 <div class="ad_box">
 
-<p> Funds in your wallet can be used to purchase any book on Bibliophile Bliss.
+<p> Funds in your wallet can be used to purchase any book on Bibliophile's Bliss.
 
     You will have the opportunity to review your request before it is processed. </p>
 
@@ -51,7 +51,7 @@
 </div>
 </div>
 <div class="details_box"> 
-    <h3> Your Bibliophile Bliss Account </h3>
+    <h3> Your Bibliophile's Bliss Account </h3>
     <div class="ad_box">
         <div class="ad_wallet"> 
     <h4> Current Wallet Balance: {{ number_format($wallet->money/100, 2, ',', '.') }}{{$currency->currency_symbol}}</h4>
@@ -85,7 +85,7 @@
 
         <fieldset>
             <legend class="sr-only">Your Username</legend>
-            <p class="payment_info">Bibliophile Bliss Account: {{$user->name}}</p>
+            <p class="payment_info">Bibliophile's Bliss Account: {{$user->name}}</p>
             <p class="payment_info"></p>
         </fieldset>
 

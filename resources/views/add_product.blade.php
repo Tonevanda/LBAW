@@ -2,6 +2,10 @@
 
 @section('content')
 
+@php
+  use App\Models\Category;
+@endphp
+
 <div class="form-page">
   <div class="form-container">
       <h3>New Product</h3>
@@ -49,6 +53,16 @@
         {{ $errors->first('synopsis') }}
       </span>
     @endif
+  </fieldset>
+
+  <fieldset>
+    <legend class="sr-only">Category</legend>
+    <label for="category">Category</label>
+    <select name="category">
+        @foreach(Category::all() as $category)
+            <option value="{{$category->category_type}}" {{ request('category') == $category->category_type ? 'selected' : '' }}>{{$category->category_type}}</option>
+        @endforeach
+    </select>
   </fieldset>
 
   <fieldset>
