@@ -216,7 +216,7 @@ class AuthenticatedController extends Controller
         try {
             $this->authorize('addToCart', [$product, $user_id]);
         } catch (AuthorizationException $e) {
-            return response()->json($e->getMessage(), 301);
+            return response()->json(['message' => $e->getMessage(), 'product_id' => $product->id], 301);
         }
         $user->shoppingCart()->attach($data['product_id']);
         return response()->json([], 201);
@@ -239,7 +239,7 @@ class AuthenticatedController extends Controller
         try{
             $this->authorize('addToWishlist', [$product, $user_id]);
         }catch(AuthorizationException $e){
-            return response()->json([], 301);
+            return response()->json(['message' => $e->getMessage(), 'product_id' => $product->id], 301);
         }
         $user->wishlist()->attach($data['product_id']);
         return response()->json([], 201);
@@ -254,7 +254,7 @@ class AuthenticatedController extends Controller
         try {
             $this->authorize('removeFromWishlist', $product);
         } catch (AuthorizationException $e) {
-            return response()->json($e->getMessage(), 301);
+            return response()->json(['message' => $e->getMessage(), 'product_id' => $product->id], 301);
         }
         $user->wishlist()->wherePivot('id', $user->wishlist->where('id', $product->id)->first()->pivot->id)->detach();
         return response()->json($data['product_id'], 200);

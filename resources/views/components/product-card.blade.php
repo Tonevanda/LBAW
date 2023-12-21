@@ -40,8 +40,7 @@
                     </button>                                       
                 </form>
             </div>
-            <div id="errorMessage" style="display: none; color: red; font-size: small;"></div>
-            <div id="errorDeleteWishlist" style="display: none; color: red; font-size: small;"></div>
+            <div data-id ="{{$product->id}}" style="display: none; color: red; font-size: small;"></div>
         @else
         <i class="fas fa-box-open icon-box-open" title="Stock" onclick="togglePopup()"></i>
 

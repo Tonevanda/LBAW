@@ -798,16 +798,14 @@ function createReportHandler(){
 }
   
 function createCartProductHandler(){
-  if(this.status == 201){
-    console.log("added to shopping cart");
-    
-  }
   if(this.status == 301){
     let response = JSON.parse(this.responseText);
-    console.log(response);
-    let message = "Product couldn't be added to your shopping cart.";
-    document.getElementById('errorMessage').textContent = message;
-    document.getElementById('errorMessage').style.display = 'block';
+    let error_message_tag = document.querySelector("div[data-id='" + response.product_id + "']");
+    error_message_tag.textContent = response.message;
+    error_message_tag.style.display = 'block';
+  }
+  else if(this.status == 201){
+    
   }
 }
 
@@ -862,13 +860,17 @@ function deleteHomeWishlistProductHandler(){
   if(this.status == 301){
     let response = JSON.parse(this.responseText);
     console.log(response);
-    let message = "Failed to remove product from wishlist.";
-    document.getElementById('errorDeleteWishlist').textContent = message;
-    document.getElementById('errorDeleteWishlist').style.display = 'block';
+    let error_message_tag = document.querySelector("div[data-id='" + response.product_id + "']");
+    error_message_tag.textContent = response.message;
+    error_message_tag.style.display = 'block';
   }
 }
 function deleteWishlistProductHandler(){
-  if(this.status == 200){
+  if(this.status == 301){
+    let response = JSON.parse(this.responseText);
+    console.log(response);
+  }
+  else if(this.status == 200){
     console.log(this)
     console.log("removed from wishlist");
     let response = JSON.parse(this.responseText);
