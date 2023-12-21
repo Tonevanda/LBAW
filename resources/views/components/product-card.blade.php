@@ -4,7 +4,7 @@
 <div class="product" id="product-{{ $product->id }}">
     <a href="{{ route('single-product', $product->id) }}">
     <div class = "product_image" title="Read more about this">
-        <img src= "{{asset('images/product_images/' . $product->image)}}" alt="" />
+        <img src= "{{asset('images/product_images/' . $product->image)}}" alt="{{$product->name}} image" />
     </div>
     <h2> {{ $product->name }} </h2>
         <p> <b>Price: </b>{{ number_format(($product->price-($product->discount*$product->price/100))/100, 2, ',', '.')}}{{$currency_symbol}} </p>
