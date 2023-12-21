@@ -75,9 +75,9 @@ class ProductController extends Controller
             'synopsis' => 'required|string',
             'price' => 'required|string',
             'stock' => 'required|string',
-            'author' => 'string',
-            'editor' => 'string',
-            'language' => 'string',
+            'author' => 'string|nullable',
+            'editor' => 'string|nullable',
+            'language' => 'string|nullable',
             #'image' => 'required|string|min:0',
             #'category' => 'required|string|max:250',
         ]);
@@ -87,14 +87,15 @@ class ProductController extends Controller
             return redirect()->route('all-products');
         }*/
         $price = preg_replace('/[^0-9]/', '', $request->price);
+
         Product::create([   
             'name' => $request->name,
             'synopsis' => $request->synopsis,
             'price' => intval($price),
             'stock' => intval($request->stock),
-            'author' => $request->author,
-            'editor' => $request->editor,
-            'language' => $request->language,
+            'author' => $request->author == null ? 'anonymous' : $request->author,
+            'editor' => $request->editor == null ? 'self-published' : $request->editor,
+            'language' => $request->language == null ? 'english' : $request->language,
             #'image' => $request->image,
             #'category' => $request->category
         ]);
