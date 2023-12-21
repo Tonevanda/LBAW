@@ -21,6 +21,7 @@ class Kernel extends ConsoleKernel
         $schedule->call(function() {
             error_log(now());
             $purchases = Purchase::where('orderarrivedat', '<=', now())
+                                        ->where('isrefunded', '=', false)
                                         ->where('stage_state', '!=', 'delivered')
                                         ->get();
             foreach($purchases as $purchase){
@@ -30,6 +31,7 @@ class Kernel extends ConsoleKernel
                     'stage_state' => 'next',
                     'orderarrivedat' => $new_date
                 ]);
+                error_log("hello");
             }           
         })->everyMinute();
 

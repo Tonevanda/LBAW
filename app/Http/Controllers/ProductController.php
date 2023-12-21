@@ -43,7 +43,7 @@ class ProductController extends Controller
             }
             $search_filter = 'tsvectors @@ to_tsquery(\'english\', ?)';
         };
-        $products = Product::Filter($filters, $category_filter, $search_filter, $name_filter)->paginate(12);
+        $products = Product::Filter($filters, $category_filter, $search_filter, $name_filter)->paginate(12)->appends(request()->query());
         return view('products.index', ['products' => $products]);
     }
 

@@ -299,10 +299,12 @@ DECLARE
 
 BEGIN
     BEGIN
-        EXECUTE 'SELECT stage_order FROM stage WHERE stage_state = $1' INTO stage_number USING OLD.stage_state;
-        stage_number := stage_number + 1;
-        EXECUTE 'SELECT stage_state FROM stage WHERE stage_order = $1' INTO next_stage USING stage_number;
-        NEW.stage_state := next_stage;
+        IF NEW.stage_state = 'next' AND NEW.isRefunded = false THEN
+            EXECUTE 'SELECT stage_order FROM stage WHERE stage_state = $1' INTO stage_number USING OLD.stage_state;
+            stage_number := stage_number + 1;
+            EXECUTE 'SELECT stage_state FROM stage WHERE stage_order = $1' INTO next_stage USING stage_number;
+            NEW.stage_state := next_stage;
+        END IF;
     EXCEPTION
         WHEN others THEN
             RAISE EXCEPTION 'Something wrong when updating order_stage';
@@ -318,6 +320,7 @@ CREATE TRIGGER manage_purchase_stage_state_update_trigger
         EXECUTE PROCEDURE manage_purchase_stage_state_update();
 
 ---- END MANAGE PURCHASE STAGE STATE UPDATE TRIGGER  ----
+
 
 ---- BEGIN MANAGE INITIATE PRODUCT STATISTICS TRIGGER (TRIGGER03) ----
 
@@ -876,8 +879,8 @@ INSERT INTO product_category(product_id, category_type) VALUES(47, 'classic');
 INSERT INTO product(name, synopsis, price, discount, stock, author, editor, language, image) VALUES('The Hitchhiker''s Guide to the Galaxy', 'A science fiction comedy series by Douglas Adams. It follows the misadventures of an unwitting human and his alien friend as they travel through space.', 220, 0, 16, 'Douglas Adams', 'Pan Books', 'English', 'the_hitchhikers_guide_to_the_galaxy.png');
 INSERT INTO product_category(product_id, category_type) VALUES(48, 'science fiction');
 
-INSERT INTO purchase (user_id, price, quantity, payment_type, destination, stage_state, isTracked, orderedAt, orderArrivedAt) 
-VALUES (60, 5000, 3, 'paypal', '123 Main St', 'start', TRUE, '2021-12-20T17:30:00Z', '2022-12-20T17:30:00Z');
+INSERT INTO purchase (user_id, price, quantity, payment_type, destination, stage_state, isTracked, orderedAt, orderArrivedAt, isRefunded) 
+VALUES (60, 5000, 3, 'paypal', '123 Main St', 'start', TRUE, '2021-12-20T17:30:00Z', '2022-12-20T17:30:00Z', false);
 
-INSERT INTO purchase (user_id, price, quantity, payment_type, destination, stage_state, isTracked, orderedAt, orderArrivedAt) 
-VALUES (70, 200, 3, 'paypal', '123 Main St', 'start', FALSE, DEFAULT, '2025-01-02T14:30:00Z');
+INSERT INTO purchase (user_id, price, quantity, payment_type, destination, stage_state, isTracked, orderedAt, orderArrivedAt, isRefunded) 
+VALUES (70, 200, 3, 'paypal', '123 Main St', 'start', FALSE, DEFAULT, '2025-01-02T14:30:00Z', DEFAULT);
