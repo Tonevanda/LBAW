@@ -371,15 +371,22 @@ main > header span {
   max-width: 20em;
   border: 1px solid #ccc;
 }
-.content > form .error {
-  color: #ff3333;
+
+.form-container .error{
+  color: red;
 }
-.content > form .success {
+.form-container .success {
   color: #106af1;
 }
 #content > form input {
   background-color: white;
 }
+
+.required {
+  /* Your styles here */
+  background-color: rgba(144, 203, 222, 0.132) !important;
+}
+
 
 @media (max-width: 70em) {
   #cards {
@@ -685,6 +692,13 @@ form i.fa-heart:hover {
 .block:hover {
   background: none;
   color: #003740;
+}
+
+.block:focus {
+  background: none; /* Remove background on focus */
+  outline: none; /* Remove the focus outline */
+  color: #003740;
+  font-weight: bold;
 }
 
 .report-review {

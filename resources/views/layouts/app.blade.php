@@ -56,10 +56,9 @@ if($user != NULL && !$user->isAdmin()){
                     <a title="Wallet" class="buttonss" href="{{ route('wallet',$user->id)}}">
                         <i class="fas fa-wallet"></i><span class="header-text" id = "user_money"> {{number_format($wallet->money/100, 2, ',', '.')}}{{$currency->currency_symbol}}</span>
                     </a> 
-                    <a class="buttonss" href="{{ route('notifications',$user->id) }}">
+                    <a title="Notifications" class="buttonss" href="{{ route('notifications',$user->id) }}">
                         <i class="fas fa-bell"></i>
                         <span class=user_notificiations>{{$user->authenticated()->first()->notifications()->count()}}</span> 
-                        <span class="header-text">Notifications</span>
                     </a>   
                         <a class="buttonss" href="{{ route('shopping-cart',$user->id) }}">
                             <i class="fas fa-shopping-cart"></i> <span class="header-text">Shopping Cart</span>
@@ -80,8 +79,8 @@ if($user != NULL && !$user->isAdmin()){
                         </div>                        
                     @endif
                 @else 
-                    <a class="button button-outline" href="{{ route('login') }}">Login</a>
-                    <a class="button button-outline" href="{{ route('register') }}">Register</a>
+                    <a class="button-s" href="{{ route('login') }}">Login</a>
+                    <a class="button-s" href="{{ route('register') }}">Register</a>
                 @endif
                 </div>
             </header>

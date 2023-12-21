@@ -15,33 +15,31 @@
         {{ csrf_field() }}
 
         <input type="text" name="user_id" data-info="{{$user->id}}" hidden>
-        <!-- Your form content here -->
-        <h3 class="title">Payment Information</h3>
         <fieldset>
             <legend>Billing information</legend>
             <div class="shipping-address">
                 <div class="column">
                     <label for="name">Name</label>
-                    <input id="name"type="text" name="name" placeholder="Enter name" data-info="{{$auth->name == NULL ? '' : $auth->name}}">
+                    <input class="required" id="name"type="text" name="name" placeholder="Enter name" data-info="{{$auth->name == NULL ? '' : $auth->name}}">
 
                     <label for="address">Billing address</label>
-                    <input id="address"type="text" name="address" placeholder="Enter Billing address" data-info="{{$auth->address == NULL ? '' : $auth->address}}">
+                    <input class="required" id="address"type="text" name="address" placeholder="Enter Billing address" data-info="{{$auth->address == NULL ? '' : $auth->address}}">
 
                     <label for="country">Country</label>
-                    <select id="country" name="country" data-info="{{$user->country}}">
+                    <select class="required" id="country" name="country" data-info="{{$user->country}}">
                         <option value="{{$user->country}}">{{$user->country}}</option>
                         <option value="Other">Other</option>
                     </select>
                 </div>
                 <div class="column">
                     <label for="city">City</label>
-                    <input id="city"type="text" name="city" placeholder="Enter city" data-info="{{$auth->city == NULL ? '' : $auth->city}}">
+                    <input class="required" id="city"type="text" name="city" placeholder="Enter city" data-info="{{$auth->city == NULL ? '' : $auth->city}}">
 
                     <label for="postal_code">Postal Code</label>
-                    <input id="postal_code" type="text" name="postal_code" placeholder="Enter Postal Code" data-info="{{$auth->postal_code == NULL ? '' : $auth->postal_code}}">
+                    <input class="required" id="postal_code" type="text" name="postal_code" placeholder="Enter Postal Code" data-info="{{$auth->postal_code == NULL ? '' : $auth->postal_code}}">
 
                     <label for="phone">Phone Number</label>
-                    <input id="phone" type="text" name="phone" placeholder="Enter Phone Number" data-info="{{$auth->phone_number == NULL ? '' : $auth->phone_number}}">
+                    <input class="required" id="phone" type="text" name="phone" placeholder="Enter Phone Number" data-info="{{$auth->phone_number == NULL ? '' : $auth->phone_number}}">
                 </div>
             </div>
         </fieldset>
@@ -50,7 +48,7 @@
         <fieldset>
             <legend>Payment Method</legend>
             <div class="low_money" style="display: none;">
-                <h6><i class="fas fa-exclamation-triangle">Your Bibliophile Bliss Wallet balance is too low to cover this transaction!</i></h6>
+                <h6><i class="fas fa-exclamation-triangle"> Your Bibliophile Bliss Wallet balance is too low to cover this transaction!</i></h6>
                 <p style="display: block; margin-bottom:0"></p>
                 <div class="checkbox-container">
                 <input type="checkbox">
