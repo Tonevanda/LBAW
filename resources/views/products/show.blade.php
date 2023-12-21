@@ -65,9 +65,7 @@
                     {{ csrf_field() }}
                     <input type="hidden" name="product_id" value="{{ $product->id }}" required>
                     <input type="hidden" name="user_id" value="{{ Auth::user()->id }}" required>
-                    <button id="heartButton" class="heart-button" type="submit" name="add-to-wishlist">
-                            <i class="fas fa-heart"></i>
-                    </button>
+                    <i class="fas fa-heart" title="Add to wishlist"></i>
                 </form>
             </div>
             @else
