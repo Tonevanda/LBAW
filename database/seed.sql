@@ -83,6 +83,7 @@ CREATE TABLE authenticated_notification(
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES authenticated (user_id) ON UPDATE CASCADE ON DELETE CASCADE,
     notification_type TEXT REFERENCES notification (notification_type) ON UPDATE CASCADE ON DELETE CASCADE,
+    target_id INTEGER, 
     date TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL,
     isNew BOOLEAN DEFAULT TRUE  NOT NULL
 );
@@ -354,7 +355,7 @@ CREATE OR REPLACE FUNCTION payment_successfull_notification() RETURNS TRIGGER AS
 $BODY$
 BEGIN
     BEGIN
-        EXECUTE 'INSERT INTO authenticated_notification (user_id, notification_type, date, isNew) VALUES ($1, $2, DEFAULT, DEFAULT)' USING NEW.user_id, 'payment_notification';
+        EXECUTE 'INSERT INTO authenticated_notification (user_id, notification_type, target_id, date, isNew) VALUES ($1, $2, 1, DEFAULT, DEFAULT)' USING NEW.user_id, 'Payment Notification';
     EXCEPTION
         WHEN others THEN
             RAISE EXCEPTION 'Something wrong when sending payment successfull notification';
@@ -383,13 +384,7 @@ BEGIN
         IF OLD.stock = 0 AND NEW.stock != OLD.stock THEN
             FOR user_id IN EXECUTE 'SELECT user_id FROM wishlist WHERE product_id = $1 GROUP BY user_id' USING NEW.id
             LOOP
-                EXECUTE 'INSERT INTO authenticated_notification (user_id, notification_type, date, isNew) VALUES ($1, $2, DEFAULT, DEFAULT)' USING user_id, 'instock_notification';
-            END LOOP;
-        END IF;
-        IF OLD.stock != NEW.stock AND NEW.stock = 0 THEN
-            FOR user_id IN EXECUTE 'SELECT user_id FROM shopping_cart WHERE product_id = $1 GROUP BY user_id' USING NEW.id
-            LOOP
-                EXECUTE 'INSERT INTO authenticated_notification (user_id, notification_type, date, isNew) VALUES ($1, $2, DEFAULT, DEFAULT)' USING user_id, 'ofstock_notification';
+                EXECUTE 'INSERT INTO authenticated_notification (user_id, notification_type, target_id, date, isNew) VALUES ($1, $2, $3, DEFAULT, DEFAULT)' USING user_id, 'In Stock Notification',NEW.id;
             END LOOP;
         END IF;
     EXCEPTION
@@ -402,9 +397,63 @@ $BODY$
 LANGUAGE plpgsql;
 
 CREATE TRIGGER instock_notification_trigger
-        AFTER UPDATE ON product
-        FOR EACH ROW
-        EXECUTE PROCEDURE instock_notification();
+    AFTER UPDATE ON product
+    FOR EACH ROW
+    EXECUTE PROCEDURE instock_notification();
+
+    
+CREATE OR REPLACE FUNCTION nostock_notification() RETURNS TRIGGER AS
+$BODY$
+DECLARE
+    user_id INTEGER;
+
+BEGIN
+    BEGIN
+        IF OLD.stock != NEW.stock AND NEW.stock = 0 THEN
+            FOR user_id IN EXECUTE 'SELECT user_id FROM shopping_cart WHERE product_id = $1 GROUP BY user_id' USING NEW.id
+            LOOP
+                EXECUTE 'INSERT INTO authenticated_notification (user_id, notification_type, target_id, date, isNew) VALUES ($1, $2, $3, DEFAULT, DEFAULT)' USING user_id, 'Out Of Stock Notification',NEW.id;
+            END LOOP;
+        END IF;
+    EXCEPTION
+        WHEN others THEN
+            RAISE EXCEPTION 'Something wrong when sending in stock notification';
+    END;
+    RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER nostock_notification_trigger
+    AFTER UPDATE ON product
+    FOR EACH ROW
+    EXECUTE PROCEDURE nostock_notification();
+
+
+CREATE OR REPLACE FUNCTION changeproduct_notification() RETURNS TRIGGER AS
+$BODY$
+DECLARE
+    user_id INTEGER;
+
+BEGIN
+    BEGIN
+        FOR user_id IN EXECUTE 'SELECT user_id FROM shopping_cart WHERE product_id = $1 GROUP BY user_id' USING NEW.id
+        LOOP
+            EXECUTE 'INSERT INTO authenticated_notification (user_id, notification_type, target_id, date, isNew) VALUES ($1, $2, $3, DEFAULT, DEFAULT)' USING user_id, 'Product Change Notification',NEW.id;
+        END LOOP;
+    EXCEPTION
+        WHEN others THEN
+            RAISE EXCEPTION 'Something wrong when sending in stock notification';
+    END;
+    RETURN NEW;
+END
+$BODY$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER changeproduct_notification_trigger
+    AFTER UPDATE ON product
+    FOR EACH ROW
+    EXECUTE PROCEDURE changeproduct_notification();
 
 ---- END INSTOCK NOTIFICATION TRIGGER ----
 
@@ -416,7 +465,7 @@ BEGIN
     BEGIN
         IF NEW.isTracked = TRUE THEN
             IF NEW.isTracked != OLD.isTracked THEN
-                EXECUTE 'INSERT INTO authenticated_notification (user_id, notification_type, date, isNew) VALUES ($1, $2, DEFAULT, DEFAULT)' USING NEW.user_id, 'purchaseinfo_notification';
+                EXECUTE 'INSERT INTO authenticated_notification (user_id, notification_type, target_id, date, isNew) VALUES ($1, $2, 3, DEFAULT, DEFAULT)' USING NEW.user_id, 'Purchase Information Notification';
             END IF;
         END IF;
     EXCEPTION
@@ -447,7 +496,7 @@ BEGIN
         IF NEW.price - (NEW.price*NEW.discount/100) != OLD.price - (OLD.price*OLD.discount/100) THEN
             FOR user_id IN EXECUTE 'SELECT user_id FROM shopping_cart WHERE product_id = $1 GROUP BY user_id' USING NEW.id
             LOOP
-                EXECUTE 'INSERT INTO authenticated_notification (user_id, notification_type, date, isNew) VALUES ($1, $2, DEFAULT, DEFAULT)' USING user_id, 'pricechange_notification';
+                EXECUTE 'INSERT INTO authenticated_notification (user_id, notification_type, target_id, date, isNew) VALUES ($1, $2, 3, DEFAULT, DEFAULT)' USING user_id, 'Price Change Notification';
             END LOOP;
         END IF;
     EXCEPTION
@@ -528,11 +577,12 @@ CREATE TRIGGER insert_wallet_trigger
 
 
 
-INSERT INTO notification VALUES('payment_notification','Your payment has been successful');
-INSERT INTO notification VALUES('instock_notification','An item on your wishlist is currently in stock');
-INSERT INTO notification VALUES('ofstock_notification','An item on your shopping cart is currently out of stock');
-INSERT INTO notification VALUES('purchaseinfo_notification','Thank you for purchasing at our store, this is your purchase information:');
-INSERT INTO notification VALUES('pricechange_notification','An item on your wishlist has had its price changed');
+INSERT INTO notification VALUES('Payment Notification','Your payment has been successful');
+INSERT INTO notification VALUES('In Stock Notification','An item on your wishlist is currently in stock');
+INSERT INTO notification VALUES('Out Of Stock Notification','An item on your shopping cart is currently out of stock');
+INSERT INTO notification VALUES('Purchase Information Notification','Thank you for purchasing at our store, this is your purchase information:');
+INSERT INTO notification VALUES('Price Change Notification','An item on your wishlist has had its price changed');
+INSERT INTO notification VALUES('Product Change Notification','An item on your shoppingcart has had its info changed');
 
 INSERT INTO currency VALUES('euro');
 INSERT INTO currency VALUES('pound');

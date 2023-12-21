@@ -176,6 +176,13 @@ class AuthenticatedController extends Controller
         return response()->json(['wishlist' => $wishlist]);
     }
 
+    public function getShoppingCart($user_id){
+        $user = Authenticated::findOrFail($user_id);
+        // Get the user's shopping cart from the database
+        $shopping_cart = $user->shoppingCart()->get();
+        // Return the shopping cart as a JSON response
+        return response()->json(['shopping_cart' => $shopping_cart]); 
+    }
     public function create(Request $request)
     {
 

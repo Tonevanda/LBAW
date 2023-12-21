@@ -1,17 +1,22 @@
 let money;
 
 
-const pusher = new Pusher("d9bbd171e0110783c3ad", {
-  cluster: "eu",
-  encrypted: true
-  });
+const pusher = new Pusher("2c7cbe6273c479512671", {
+cluster: "eu",
+encrypted: true
+});
 
-  const channel = pusher.subscribe('lbaw');
-  console.log(channel);
-  channel.bind('notification-pricechange', function(data) {
+const channel = pusher.subscribe('users');
+console.log(channel);
+channel.bind('notification-pricechange', function(data) {
+  fetch('/shopping-cart/get/' + 101)
+  .then(response => response.json())
+  
   console.log(`New notification: ${data.message}`);
-  })
-  //Pusher.logToConsole = true;
+})
+
+Pusher.logToConsole = true;
+
 function addEventListeners() {
   let cartDeleter = document.querySelectorAll('form.remove_cart');
   [].forEach.call(cartDeleter, function(deleter){
@@ -34,8 +39,12 @@ function addEventListeners() {
   
   let priceFilter = document.querySelector('form.products_search input[name=price]');
   let priceShow = document.querySelector('form.products_search div');
-  const user_money = document.querySelector('span#user_money').textContent;
-  const currency_symbol = user_money.charAt(user_money.length-1);
+  const user_money_tag = document.querySelector('span#user_money');
+  let currency_symbol = '€';
+  if(user_money_tag != null){
+    const user_money = user_money_tag.textContent;
+    currency_symbol = user_money.charAt(user_money.length-1);
+  }
   if(priceFilter != null && priceShow != null){
     if(deformat_money(priceShow.textContent, currency_symbol) == 500)priceShow.textContent = `MAX`;
     priceFilter.addEventListener('input', function () {
@@ -943,7 +952,7 @@ window.onload = function() {
   console.log(forms);
   let user_id = forms[0].querySelector('input[name=user_id]').value;
   // Send an AJAX request to the server to get all the products in the user's wishlist
-  fetch('/wishlist/test/' + user_id)
+  fetch('/wishlist/get/' + user_id)
   .then(response => response.json())
   .then(data => {
     forms.forEach(form => {
@@ -1038,6 +1047,5 @@ var port = process.env.PORT || 5000;
 app.listen(port);
 */
 addEventListeners();
-  
   
 

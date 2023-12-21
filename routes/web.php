@@ -88,7 +88,8 @@ Route::controller(AuthenticatedController::class)->group(function () {
     Route::put('/users/{user_id}', 'update')->name('profile.update');
     Route::put('/users/location/{user_id}', 'updateLocation')->name('profile.updateLocation');
     Route::get('/purchase-history/{user_id}', 'showPurchases')->name('purchase_history');
-    Route::get('/wishlist/test/{user_id}', 'getWishlist')->name('getWishlist');
+    Route::get('/wishlist/get/{user_id}', 'getWishlist')->name('getWishlist');
+    Route::get('/shopping-cart/get/{user_id}', 'getShoppingCart')->name('getShoppingCart');
     Route::get('/account_details/{user_id}', 'showAccountDetails')->name('account_details');
     Route::get('/notifications/{user_id}', 'showNotifications')->name('notifications');
 });

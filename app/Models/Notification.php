@@ -9,21 +9,16 @@ class Notification extends Model
 {
     use HasFactory;
 
-    protected $table = 'authenticated_notification';
+    protected $table = 'notification';
 
-    protected $fillable = ['user_id', 'notification_type', 'date', 'isnew'];
+    protected $fillable = ['notification_type', 'description'];
 
     public $timestamps = false;
 
-    protected $primaryKey = 'id';
+    protected $primaryKey = 'notification_type';
 
     public function user()
     {
-        return $this->belongsTo(Authenticated::class, 'user_id');
-    }
-
-    public function notificationType()
-    {
-        return $this->belongsTo(NotificationType::class, 'notification_type');
+        return $this->belongsToMany(Authenticated::class, 'authenticated_notification', 'notification_type', 'user_id')->withPivot('id');
     }
 }

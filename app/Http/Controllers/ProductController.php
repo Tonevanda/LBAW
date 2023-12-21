@@ -112,14 +112,19 @@ class ProductController extends Controller
             #'image' => 'required|string|min:0',
             #'category' => 'required|string|max:250',
         ]);
+        $data['price'] = (int) $data['price'];
         try{
             $this->authorize('update', Product::class);
         }catch(AuthorizationException $e){
             return redirect()->route('all-products');
         }
         $product=Product::findOrFail($product_id);
+        $originalData = $product->toArray();
         $product->update($data);
-        event(new PriceChange(4));
+        $updatedData = $product->toArray();
+        if($originalData !== $updatedData){
+            event(new PriceChange($product_id));
+        }
         return redirect()->route('all-products');
     }
 
