@@ -548,6 +548,29 @@ input[type=password]:focus {
   margin-bottom: 1em;
 }
 
+.faq {
+  background-color: white;
+  padding: 3em;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1em;
+}
+
+.faq:first-of-type {
+  margin-top: 3em;
+}
+
+.faq:last-of-type {
+  margin-bottom: 3em;
+}
+.faq ul {
+  font-size: large;
+}
+
+.faq li {
+  padding-top: 0.5em;
+  font-size: medium;
+}
+
 .edit {
   font-size: smaller;
   color: #003740;
@@ -739,6 +762,11 @@ table {
 @media (min-width: 900px) {
   .product-grid {
     grid-template-columns: repeat(3, 2fr);
+  }
+  .faq {
+    margin-left: 5em;
+    margin-right: 5em;
+    padding: 3em 4em;
   }
 }
 

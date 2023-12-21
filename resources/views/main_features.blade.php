@@ -15,6 +15,6 @@
 </div>
 <p> It's not just a bookshop; every click is an invitation to a new adventure. </p>
 <p><a class = "button" href="{{ url('/') }}">Shop Now</a></p>
-<p class = "reach_out">Get to know us better - visit our <a class = "blue" href="{{ route('contact_us') }}">About us </a> page.</p>
+<p class = "reach_out">Get to know us better - visit our <a class = "blue" href="{{ route('about_us') }}">About us </a> page.</p>
 </div>
 @endsection
