@@ -19,7 +19,7 @@ $user_info = $user->user()->first();
     <div class = "user_image">
       <img src ="{{asset('images/user_images/' . $user_info->profile_picture)}}" alt="{{$user_info->name}}'s' profile picture" />
       <div class="small">
-      <i class="fas fa-edit"></i>
+      <i class="fas fa-edit"></i> Change Profile Picture
       </div>
     </div>
 

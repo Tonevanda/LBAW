@@ -16,6 +16,15 @@ body {
   overflow-x: hidden; 
 }
 
+.heart-button {
+  background: none;
+  border: none;
+}
+
+.heart-button:hover {
+  background: none;
+}
+
 main {
   flex: 1;
   display: flex;
@@ -657,6 +666,25 @@ form i.fa-heart:hover {
 .edit-review i {
   padding-left: 3em;
   padding-right: 1em;
+}
+
+.block {
+  padding-left: 0;
+  padding-right:0;
+  padding-top: 1em;
+    color: #003740c3;
+    font-size: medium;
+    font-weight: 200;
+    text-transform: none;
+    letter-spacing: normal;
+    background: none; /* Set background to none */
+    border: none; /* Remove border if any */
+    /* Add any other styles you want to reset */
+}
+
+.block:hover {
+  background: none;
+  color: #003740;
 }
 
 .report-review {
