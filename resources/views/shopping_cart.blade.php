@@ -62,38 +62,35 @@
 <div id="fullScreenPopup2" class="popup-form" style="display: none;">
     <form class = "checkout_form" method="" action="">
         {{ csrf_field() }}
-        <div class="shipping-address">
+        <div class="user-details-container">
             <div class="column">
-                <p>Total cost of shopping cart</p>
-
+                <p><b>Total cost of shopping cart</b></p>
             </div>
             <div class="column">
                 <p></p>
             </div>
         </div>
 
-        <p class = "payment_info">Bibliophile Bliss Account: {{$user->name}}</p>
+        <div class="pay-address">
+            <p class = "payment_info">Bibliophile Bliss Account: {{$user->name}}</p>
         <p class = "payment_info"></p>
-
-        <div class="shipping-address">
             <div class="column">
                 <p class = "payment_info"></p>
                 <p class = "payment_info"></p>
 
             </div>
             <div class="column">
-                <button name="back"> Change </button>
                 <p class = "payment_info"></p>
+                <button class="button-form" name="back"> Change </button>
             </div>
         </div>
 
-        <input type="checkbox" name="tracked">
-        <p>Track the purchase to know more about it before it reaches you</p>
+        <input type="checkbox" name="tracked"> Track the purchase to know more about it before it reaches you
 
 
 
         <div class="navigation-buttons">
-            <button name="cancel2">Cancel</button>
+            <button class="cancel" name="cancel2">Cancel</button>
             <button type = "submit">Confirm Payment</button>
         </div>
         <div id="errorCheckout" style="display: none; color: red; font-size: small;"></div>

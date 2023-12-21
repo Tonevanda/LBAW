@@ -130,11 +130,11 @@
                     <form class = "edit_review" method="" action="">
                         {{ csrf_field() }}
                         <input type="hidden" name="review_id" value="{{ $userReview->id }}" required>
+                        <p><b>Rate: </b>{{ $userReview->rating }} </p>
                         <label>Title</label>
                         <textarea type="text" name="title" data-info = "{{$userReview->title}}" value = "{{$userReview->title}}" required readonly>{{ $userReview->title }}</textarea>
                         <label>Description</label>
-                        <textarea type="text" name="description" data-info = "{{$userReview->description}}" value = "{{$userReview->description}}" required readonly>{{ $userReview->description }}</textarea>
-                        {{ $userReview->rating }}
+                        <textarea type="text" name="description" data-info = "{{$userReview->description}}" value = "{{$userReview->description}}" required readonly>{{ $userReview->description }}</textarea>                                           
                         <button type="submit" name="update-review">
                             Save
                         </button>
@@ -163,21 +163,22 @@
                 @endphp
                 @if(!auth()->check() || Auth::user()->id!==$user->id)
                     <li class="list-group-item" data-id="{{$review->id}}">
-                        <strong>
-                            {{--add pfp later--}}
-                            {{ \Carbon\Carbon::parse($review->date)->format('Y-m-d')}}
-                            {{ $user->name}}
-                            {{ $review->title}}
-                        </strong>
-                        <div class = "user_image">
+                        <div class="user-details-container">
+                        <div class = "user-image">
                             <img src ="{{asset('images/user_images/' . $user->profile_picture)}}" alt="" />
                         </div>
                         <p class = "user_name"> {{$user->name}} </p>
+                        <p class="small-center">{{ \Carbon\Carbon::parse($review->date)->format('Y-m-d')}}</p>
+                        </div>
+                        <div class="star-rating">
+                            @for ($i = 1; $i <= 5; $i++)
+                            <i class="fa{{ $i <= $review->rating ? 's' : 'r' }} fa-star"></i>
+                          @endfor   
+                            </div>
                         <label>Title</label>
                         <textarea type="text" name="title" required readonly>{{ $review->title }}</textarea>
                         <label>Description</label>
                         <textarea type="text" name="description" required readonly>{{ $review->description }}</textarea>
-                        {{ $review->rating }}
                         @if(auth()->check())
                             @if(Auth::user()->isAdmin())
                                 <form class = "delete_review" method="" action="{{ route('review.destroy', ['review_id' => $review->id]) }}">
@@ -194,7 +195,7 @@
                                     {{ csrf_field() }}
                                     <input type="hidden" name="product_id" value="{{ $product->id }}" required>
                                     <input type="hidden" name="review_id" value="{{ $review->id }}" required>
-                                    <button type="submit" name="report-review" class="button button-outline">
+                                    <button type="submit" name="report-review" class="report-review">
                                         Report
                                     </button>
                                     <div id="errorReport" style="display: none; color: red; font-size: small;"></div>

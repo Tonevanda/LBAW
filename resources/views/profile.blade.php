@@ -8,15 +8,17 @@ $user_info = $user->user()->first();
 <script>
   var assetBaseUrl = "{{ asset('images/user_images') }}";
 </script>
-<div class="form-page">
-  <div class="form-container">
-      <h3>Profile</h3>
+<div class="profile-container">
+  <div class="forms-container">
+    <div class="form-pic">
 <form class="profile_pic" method="POST" action="{{route('profileImage.update', ['user_id' => $user->user_id])}}" enctype="multipart/form-data">
   {{ csrf_field() }}
   @method('PUT')
   <div class = "user_image">
     <img src ="{{asset('images/user_images/' . $user_info->profile_picture)}}" alt="" />
-    <i class="fas fa-edit"></i>
+  <div class="small">
+    <i class="fas fa-edit"></i> Change Profile Picture
+  </div>
   </div>
 
   <input type="file" name="profile_picture" hidden>
@@ -34,9 +36,9 @@ $user_info = $user->user()->first();
 
 
 </form>
+</div>
 
-
-<form method="POST" action="{{ route('profile.update', ['user_id' => $user->user_id]) }}">
+<form class="profile" method="POST" action="{{ route('profile.update', ['user_id' => $user->user_id]) }}">
   {{ csrf_field() }}
   @method('PUT')
 
@@ -83,11 +85,13 @@ $user_info = $user->user()->first();
 
     <label for="password-confirm">Confirm Password</label>
     <input id="password-confirm" type="password" placeholder="Re-enter your new password" name="password_confirmation">
+    <div class="profile-button">
     <button type="submit" name="update" value="{{ true }}">
       update
     </button>
+    </div>
 
 </form>
-  </div>
+</div>
 </div>
 @endsection

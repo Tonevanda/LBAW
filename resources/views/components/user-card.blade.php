@@ -2,7 +2,7 @@
 
 <div class="user">
     <a href="{{ route('profile', $user->id) }}">
-        <h2> {{ $user->name }} </h2>
+        <h3> {{ $user->name }} </h3>
         <p> {{ $user->email }} </p>
     </a>
 </div>
