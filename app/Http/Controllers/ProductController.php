@@ -10,7 +10,6 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\DB;
 use App\Events\PriceChange;
 use App\Models\Category;
-
 use App\Events\InStock;
 use App\Events\OutOfStock;
 class ProductController extends Controller

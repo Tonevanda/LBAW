@@ -7,6 +7,8 @@ use App\Models\Product;
 use App\Models\Purchase;
 use Illuminate\Console\Scheduling\Schedule;
 use App\Http\Controllers\PurchaseController;
+use App\Events\TrackedOrderChanged;
+use App\Events\RefundOrCancel;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 class Kernel extends ConsoleKernel
@@ -33,7 +35,7 @@ class Kernel extends ConsoleKernel
                     'orderarrivedat' => $new_date
                 ]);
                 //notification for changed track order
-                error_log("hello");
+                event(new TrackedOrderChanged(1));
             }           
         })->everyMinute();
 
@@ -43,7 +45,7 @@ class Kernel extends ConsoleKernel
             foreach($purchases as $purchase){
                 $purchase->delete();
                 //notification for refunding or canceling purchase
-                error_log("goodbye");
+                event(new RefundOrCancel(1));
             }           
         })->everyMinute();
 
